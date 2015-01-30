@@ -40,12 +40,13 @@ int main(){
 			SDL_RenderDrawLine(render, (x1/z1)+250, (y1/z1)+250, (x2/z2)+250, (y2/z2)+250);
 		}
 		paint();
-		getchar();
-//		SDL_Event evnt;
-//		SDL_WaitEvent(&evnt);
-//		if(evnt.type == SDL_QUIT){
-//			running = 0;
-//		}
+		SDL_Event evnt;
+		do {
+			SDL_WaitEvent(&evnt);
+		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+		if (evnt.type == SDL_QUIT){
+			running = 0;
+		}
 	}
 	SDL_DestroyRenderer(render);
 	SDL_DestroyWindow(window);
