@@ -7,7 +7,6 @@ void loadmesh(char name[20], mesh *final){
 	fscanf(fp, "%d", &final->points);
 	fscanf(fp, "%d", &final->triangles);
 	fscanf(fp, "%d", &final->rays);
-	fscanf(fp, "%d %d %d", &final->centermass.x, &final->centermass.y, &final->centermass.z);
 	final->pointmatrix = calloc(sizeof(point), final->points);
 	final->raymatrix = calloc(sizeof(ray), final->rays);
 	final->trianglematrix = calloc(sizeof(triangle), final->triangles);

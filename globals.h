@@ -19,7 +19,6 @@ typedef struct ray{
 }ray;
 typedef struct mesh{
 	int triangles, rays, points;
-	point centermass;
 	triangle *trianglematrix;
 	ray *raymatrix;
 	point *pointmatrix;
