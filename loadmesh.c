@@ -1,6 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "globals.h"
+void loadshadow(mesh *pattern, shadow *target, x, y, z){
+	target->centermass.x = x;
+	target->centermass.y = y;
+	target->centermass.z = z;
+	target->pattern = pattern;
+	target->mass = mesh->mass;
+	target->triangles = mesh->triangles;
+	target->rays = mesh->rays;
+	target->points = mesh->points;
+	target->rotvm = 0;
+	target->rotcp = 0;
+	target->vx = 0;
+	target->vy = 0;
+	target->vz = 0;
+	target->pointmatrix = calloc(sizeof(point), pattern->points);
+	movemesh(target);
+}
 void loadmesh(char name[20], mesh *final){
 	FILE *fp;
 	fp = fopen(name, "r");
