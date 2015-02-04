@@ -15,7 +15,7 @@ int main(){
 //
 	mesh *mesh1;
 	mesh1 = malloc(sizeof(mesh));
-	loadmesh("mesh1", mesh1, 0, 0, 1000);
+	loadmesh("square", mesh1, 0, 0, 1000);
 	mesh1->vx = 100;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	window = SDL_CreateWindow("Relign, BITCHES! Finally used that name! BLAM!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
