@@ -1,30 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "globals.h"
-void loadshadow(mesh *pattern, shadow *target, x, y, z){
-	target->centermass.x = x;
-	target->centermass.y = y;
-	target->centermass.z = z;
-	target->pattern = pattern;
-	target->mass = mesh->mass;
-	target->triangles = mesh->triangles;
-	target->rays = mesh->rays;
-	target->points = mesh->points;
-	target->rotvm = 0;
-	target->rotcp = 0;
-	target->vx = 0;
-	target->vy = 0;
-	target->vz = 0;
-	target->pointmatrix = calloc(sizeof(point), pattern->points);
-	movemesh(target);
-}
-void loadmesh(char name[20], mesh *final){
+void loadmesh(char name[20], mesh *final, int centerx, int centery, int centerz){
+	final->centermass.x = centerx;
+	final->centermass.y = centery;
+	final->centermass.z = centerz;
 	FILE *fp;
 	fp = fopen(name, "r");
 	fscanf(fp, "%d", &final->points);
 	fscanf(fp, "%d", &final->triangles);
 	fscanf(fp, "%d", &final->rays);
 	final->pointmatrix = calloc(sizeof(point), final->points);
+	final->cpointmatrix = calloc(sizeof(point), final->points);
 	final->raymatrix = calloc(sizeof(ray), final->rays);
 	final->trianglematrix = calloc(sizeof(triangle), final->triangles);
 	int raycount = 0, trianglecount = 0, pointcount = 0, temp, corner, one, two;
@@ -33,7 +20,7 @@ void loadmesh(char name[20], mesh *final){
 		for(corner = 0; corner < 3; corner++){
 			fscanf(fp, "%d %d %d", &x, &y, &z);
 			temp = 0;
-			while(temp < pointcount && !(x == final->pointmatrix[temp].x && y == final->pointmatrix[temp].y && z == final->pointmatrix[temp].z)){
+			while(temp < pointcount && !(x == final->cpointmatrix[temp].x && y == final->cpointmatrix[temp].y && z == final->cpointmatrix[temp].z)){
 				temp++;
 			}
 			if(temp >= final->points){
@@ -41,11 +28,9 @@ void loadmesh(char name[20], mesh *final){
 				return;
 			}
 			if(temp == pointcount){
-//				if(news == 4) news = corner;//news variable: 4 is no new points, 0-2 is one point new, 3 is create all rays (2 or 3 new points) 
-//				else news = 3;
-				final->pointmatrix[temp].x = x;
-				final->pointmatrix[temp].y = y;
-				final->pointmatrix[temp].z = z;
+				final->cpointmatrix[temp].x = x;
+				final->cpointmatrix[temp].y = y;
+				final->cpointmatrix[temp].z = z;
 				pointcount++;
 //				printf("%d %d %d\n", x, y, z);
 			}
@@ -64,34 +49,7 @@ void loadmesh(char name[20], mesh *final){
 				raycount++;
 			}
 		}
-/*		if(news < 3){
-			printf("3 > %d?\n", news);
-			final->raymatrix[raycount].ends[0] = final->trianglematrix[trianglecount].points[news];
-			final->raymatrix[raycount].ends[1] = final->trianglematrix[trianglecount].points[(news+1)%3];
-			printf("%d %d\n", final->raymatrix[raycount].ends[0], final->raymatrix[raycount].ends[1]);
-			raycount++;
-			final->raymatrix[raycount].ends[0] = final->trianglematrix[trianglecount].points[news];
-			final->raymatrix[raycount].ends[1] = final->trianglematrix[trianglecount].points[(news+2)%3];
-			printf("%d %d\n", final->raymatrix[raycount].ends[0], final->raymatrix[raycount].ends[1]);
-			raycount++;
-		}
-		else if(news == 3){
-			printf("3 = %d?\n", news);
-			final->raymatrix[raycount].ends[0] = final->trianglematrix[trianglecount].points[0];
-			final->raymatrix[raycount].ends[1] = final->trianglematrix[trianglecount].points[1];
-			printf("%d %d\n", final->raymatrix[raycount].ends[0], final->raymatrix[raycount].ends[1]);
-			raycount++;
-			final->raymatrix[raycount].ends[0] = final->trianglematrix[trianglecount].points[1];
-			final->raymatrix[raycount].ends[1] = final->trianglematrix[trianglecount].points[2];
-			printf("%d %d\n", final->raymatrix[raycount].ends[0], final->raymatrix[raycount].ends[1]);
-			raycount++;
-			final->raymatrix[raycount].ends[0] = final->trianglematrix[trianglecount].points[2];
-			final->raymatrix[raycount].ends[1] = final->trianglematrix[trianglecount].points[0];
-			printf("%d %d\n", final->raymatrix[raycount].ends[0], final->raymatrix[raycount].ends[1]);
-			raycount++;
-		}
-		printf("%d\n", raycount);
-		news = 4;*/
 	}
 	fclose(fp);
+	movemesh(final);
 }

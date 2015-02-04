@@ -18,23 +18,16 @@ typedef struct ray{
 	int ends[2];
 }ray;
 typedef struct mesh{
+	point *cpointmatrix;//constant point matrix
+	int rotvx, rotvy, rotvz, rotvm, rotcp;//rotation vector x, y, z, magnitude, current position(as each tick will be newly rotated from the pattern)
+	int vx, vy, vz;//velocity
 	int mass;
 	int triangles, rays, points;
 	triangle *trianglematrix;
 	ray *raymatrix;
+	point centermass;//coordinates of center of mass in the "real world"
 	point *pointmatrix;
 }mesh;
-typedef struct shadow{
-	mesh *pattern;
-	int rotvx, rotvy, rotvz, rotvm, rotcp;//rotation vector x, y, z, magnitude, current position(as each tick will be newly rotated from the pattern)
-	int vx, vy, vz;//velocity
-//should I change some of these to floats? IDK, im much more comfortable with ints...
-
-	point centermass;//coordinates of center of mass in the "real world"
-//	lol, just gonna put the same variables as in mesh here too... will that increase speed?
-	point *pointmatrix;
-}shadow;
-extern void movemesh(shadow *target);
-extern void loadshadow(mesh *pattern, shadow *target, x, y, z);
-extern void loadmesh(char name[20], mesh *final);
+extern void movemesh(mesh *target);
+extern void loadmesh(char name[20], mesh *final, int x, int y, int z);
 extern int intersect_triangle(double orig[3], double dir[3], double vert0[3], double vert1[3], double vert2[3], double *t, double *u, double *v);
