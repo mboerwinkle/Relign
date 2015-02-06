@@ -15,10 +15,10 @@ int main(){
 	mesh *square, *tetrahedron, *meshes[2];
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
-	loadmesh("square", square, -500, -500, 1000);
-	loadmesh("square", tetrahedron, 500, 500, 1000);
-	square->vx = -500;
-	tetrahedron->vx = 1000;
+	loadmesh("square", square, -600, 100, 1000);
+	loadmesh("mesh1", tetrahedron, 600, 0, 1000);
+	square->vx = 20;
+	tetrahedron->vy = 0;
 	meshes[0] = square;
 	meshes[1] = tetrahedron;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
