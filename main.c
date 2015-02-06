@@ -12,14 +12,13 @@ static void paint(){
 }
 
 int main(){
-//
 	mesh *square, *tetrahedron, *meshes[2];
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
-	loadmesh("square", square, 0, 0, 1000);
-	loadmesh("mesh1", tetrahedron, 0, 0, 1000);
-	square->vx = 5;
-	tetrahedron->vy = 10;
+	loadmesh("square", square, -500, -500, 1000);
+	loadmesh("square", tetrahedron, 500, 500, 1000);
+	square->vx = -500;
+	tetrahedron->vx = 1000;
 	meshes[0] = square;
 	meshes[1] = tetrahedron;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
@@ -29,27 +28,31 @@ int main(){
 		return 1;
 	}
 	render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	int temp, raycounter, x, y, z, x1, y1, z1, x2, y2, z2;
+	int temp, raycounter, color;
+	double x, y, z, x1, y1, z1, x2, y2, z2;
 	mesh *mesh1;
 	while(running){
+		color = 0;
+		color = collisions(square, tetrahedron);
 		for(temp = 0; temp < 2; temp++){
 			mesh1 = meshes[temp];
 			movemesh(mesh1);
-			x = mesh1->centermass.x;
-			y = mesh1->centermass.y;
-			z = mesh1->centermass.z;
-			SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+			x = mesh1->centermass[0];
+			y = mesh1->centermass[1];
+			z = mesh1->centermass[2];
+			if(!color) SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+			else SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
 			for(raycounter = mesh1->rays-1; raycounter >= 0; raycounter--){
-				x1 = x + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]].x;
-				y1 = (y + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]].y);
-				z1 = z + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]].z;
-				x2 = x + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]].x;
-				y2 = (y + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]].y);
-				z2 = z + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]].z;
-				SDL_RenderDrawLine(render, (100*x1/z1)+250, (100*y1/z1)+250, (100*x2/z2)+250, (100*y2/z2)+250);
+				x1 = x + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3+0];
+				y1 = y + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3+1];
+				z1 = z + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3+2];
+				x2 = x + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3+0];
+				y2 = y + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3+1];
+				z2 = z + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3+2];
+				SDL_RenderDrawLine(render, (int)(100*x1/z1)+250, (int)(100*y1/z1)+250, (int)(100*x2/z2)+250, (int)(100*y2/z2)+250);
 			}
 			SDL_SetRenderDrawColor(render, 0, 0, 255, 255);
-			SDL_RenderDrawPoint(render, x*100/z+250, y*100/z+250);
+			SDL_RenderDrawPoint(render, (int)(x*100/z+250), (int)(y*100/z+250));
 		}
 		paint();
 		SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
