@@ -16,7 +16,7 @@ int main(){
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
 	loadmesh("square", square, -600, 100, 1000);
-	loadmesh("mesh1", tetrahedron, 600, 0, 1000);
+	loadmesh("square", tetrahedron, 600, 0, 1000);
 	square->vx = 20;
 	tetrahedron->vy = 0;
 	meshes[0] = square;
@@ -40,8 +40,8 @@ int main(){
 			x = mesh1->centermass[0];
 			y = mesh1->centermass[1];
 			z = mesh1->centermass[2];
-			if(!color) SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
-			else SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
+			if(!color) SDL_SetRenderDrawColor(render, 10, 255, 55, 255);
+			else SDL_SetRenderDrawColor(render, 255, 10, 10, 255);
 			for(raycounter = mesh1->rays-1; raycounter >= 0; raycounter--){
 				x1 = x + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3+0];
 				y1 = y + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3+1];
@@ -51,7 +51,7 @@ int main(){
 				z2 = z + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3+2];
 				SDL_RenderDrawLine(render, (int)(100*x1/z1)+250, (int)(100*y1/z1)+250, (int)(100*x2/z2)+250, (int)(100*y2/z2)+250);
 			}
-			SDL_SetRenderDrawColor(render, 0, 0, 255, 255);
+			SDL_SetRenderDrawColor(render, 100, 100, 255, 255);
 			SDL_RenderDrawPoint(render, (int)(x*100/z+250), (int)(y*100/z+250));
 		}
 		paint();
