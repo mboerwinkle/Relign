@@ -15,10 +15,10 @@ int main(){
 	mesh *square, *tetrahedron, *meshes[2];
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
-	loadmesh("square", square, -600, 100, 1000);
+	loadmesh("icoso", square, -6, 1, 10);
 	loadmesh("square", tetrahedron, 600, 0, 1000);
-	square->vx = 20;
-	tetrahedron->vy = 0;
+	square->vx = 0.5;
+	tetrahedron->vy = 2;
 	meshes[0] = square;
 	meshes[1] = tetrahedron;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
@@ -55,7 +55,7 @@ int main(){
 			SDL_RenderDrawPoint(render, (int)(x*100/z+250), (int)(y*100/z+250));
 		}
 		paint();
-		SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
+		SDL_SetRenderDrawColor(render, 0, 0, 0, 100);
 		SDL_RenderClear(render);
 		SDL_Event evnt;
 		do {
