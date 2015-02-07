@@ -33,7 +33,6 @@ int main(){
 	while(running){
 		color = 0;
 		color = collisions(square, tetrahedron);
-		if(color) square->vx *= -1;
 		for(temp = 0; temp < 2; temp++){
 			mesh1 = meshes[temp];
 			movemesh(mesh1);
