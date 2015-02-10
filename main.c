@@ -90,9 +90,9 @@ int main(){
 		SDL_SetRenderDrawColor(render, 0, 0, 0, 100);
 		SDL_RenderClear(render);
 		SDL_Event evnt;
-		do {
+//		do {
 			SDL_PollEvent(&evnt);
-		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+//		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if (evnt.type == SDL_QUIT){
 			running = 0;
 		}
