@@ -87,7 +87,7 @@ int main(){
 			#endif
 		}
 		paint();
-		SDL_SetRenderDrawColor(render, 0, 0, 0, 100);
+		SDL_SetRenderDrawColor(render, 255, 255, 255, 100);
 		SDL_RenderClear(render);
 		SDL_Event evnt;
 //		do {
