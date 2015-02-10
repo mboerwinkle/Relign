@@ -1,10 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "globals.h"
 void loadmesh(char name[20], mesh *final, double centerx, double centery, double centerz){
 	final->centermass[0] = centerx;
 	final->centermass[1] = centery;
 	final->centermass[2] = centerz;
+	final->rot[0] = 0;
+	final->rot[1] = 0;
+	final->rot[2] = 1;
+	final->rot[3] = 0;
+	final->rotationspeed = 0;
+	printf("%lf\n", final->rotationspeed);
+	final->vx = 0;
+	final->vy = 0;
+	final->vz = 0;
+	final->mass = 1;
 	FILE *fp;
 	fp = fopen(name, "r");
 	if(EOF == fscanf(fp, "%d %d %d", &final->points, &final->triangles, &final->rays)) puts("file read failed");

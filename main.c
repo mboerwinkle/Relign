@@ -15,12 +15,14 @@ int main(){
 	mesh *square, *tetrahedron, *meshes[2];
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
-	loadmesh("icoso", square, -6, 0, 5);
-	loadmesh("square", tetrahedron, 6, 1, 10);
-	square->vx = 0.5;
-	square->vy = 0.1;
+	loadmesh("icoso", square, -7, 0, 5);
+	loadmesh("square", tetrahedron, 1, 0, 10);
 	meshes[0] = square;
 	meshes[1] = tetrahedron;
+	tetrahedron->rotationspeed = 0.1;
+	tetrahedron->rot[0] = 0.5;
+	tetrahedron->rot[1] = 2;
+	tetrahedron->rot[2] = 1;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	window = SDL_CreateWindow("Relign, BITCHES! Finally used that name! BLAM!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
 	if(window == NULL){
