@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
+#include <time.h>
 #include "globals.h"
 
 static SDL_Window* window;
@@ -12,6 +13,11 @@ static void paint(){
 }
 
 int main(){
+	srandom(time(NULL));
+	struct timespec t = {.tv_sec=0};
+	struct timespec lastTime = {.tv_sec = 0, .tv_nsec = 0};
+	struct timespec otherTime = {.tv_sec = 0, .tv_nsec = 0};
+ 
 	mesh *square, *tetrahedron, *meshes[2];
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
@@ -60,12 +66,19 @@ int main(){
 		SDL_SetRenderDrawColor(render, 0, 0, 0, 100);
 		SDL_RenderClear(render);
 		SDL_Event evnt;
-		do {
-			SDL_WaitEvent(&evnt);
-		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+//		do {
+			SDL_PollEvent(&evnt);
+//		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if (evnt.type == SDL_QUIT){
 			running = 0;
 		}
+		clock_gettime(CLOCK_MONOTONIC, &otherTime);
+		int32_t sleep = (int32_t)25000000 - (otherTime.tv_nsec-lastTime.tv_nsec) - 1000000000l*(otherTime.tv_sec-lastTime.tv_sec);
+		if(sleep > 0){
+			t.tv_nsec = sleep;
+			nanosleep(&t, NULL);
+		}
+		clock_gettime(CLOCK_MONOTONIC, &lastTime);
 	}
 	SDL_DestroyRenderer(render);
 	SDL_DestroyWindow(window);
