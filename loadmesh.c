@@ -11,7 +11,6 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 	final->rot[2] = 1;
 	final->rot[3] = 0;
 	final->rotationspeed = 0;
-	printf("%lf\n", final->rotationspeed);
 	final->vx = 0;
 	final->vy = 0;
 	final->vz = 0;
@@ -19,13 +18,11 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 	FILE *fp;
 	fp = fopen(name, "r");
 	if(EOF == fscanf(fp, "%d %d %d", &final->points, &final->triangles, &final->rays)) puts("file read failed");
-//	final->metapointmatrix = calloc(sizeof(*), final->points);
 	final->pointmatrix = calloc(sizeof(double)*3, final->points);
 	final->cpointmatrix = calloc(sizeof(double)*3, final->points);
 	final->raymatrix = calloc(sizeof(ray), final->rays);
 	final->trianglematrix = calloc(sizeof(triangle), final->triangles);
 	int raycount = 0, trianglecount = 0, pointcount = 0, temp, corner, one, two;
-//	for(temp = 0; temp < final->points; temp++) final->metapointmatrix[temp] = final->pointmatrix[temp*3];
 	double x, y, z;
 	for(trianglecount = 0; trianglecount < final->triangles; trianglecount++){
 		for(corner = 0; corner < 3; corner++){
@@ -43,7 +40,6 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 				final->cpointmatrix[temp*3+1] = y;
 				final->cpointmatrix[temp*3+2] = z;
 				pointcount++;
-//				printf("%d %d %d\n", x, y, z);
 			}
 			final->trianglematrix[trianglecount].points[corner] = temp;
 		}

@@ -22,19 +22,18 @@ int main(){
 	mesh *square, *tetrahedron, *meshes[2];
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
-	loadmesh("meshtest1", square, 2, 5, 10);
-	loadmesh("meshtest2", tetrahedron, 2, -5, 10);
+	loadmesh("square", square, 2, 5, 10);
+	loadmesh("icoso", tetrahedron, 2, -3, 10);
 	meshes[0] = square;
 	meshes[1] = tetrahedron;
-	tetrahedron->rotationspeed = 0.0;
+	tetrahedron->rotationspeed = 0.02;
 	tetrahedron->rot[0] = 0;
 	tetrahedron->rot[1] = 0;
 	tetrahedron->rot[2] = -1;
-	square->rotationspeed = 0.0;
+	square->rotationspeed = 0.01;
 	square->rot[0] = 0;
 	square->rot[1] = 0;
 	square->rot[2] = 1;
-	square->vy = -0.1;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	window = SDL_CreateWindow("Relign, BITCHES! Finally used that name! BLAM!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
 	if(window == NULL){
