@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <time.h>
 #include "globals.h"
-#define ANAGLYPH
+//#define ANAGLYPH
 
 static SDL_Window* window;
 static SDL_Renderer* render;
@@ -22,18 +22,19 @@ int main(){
 	mesh *square, *tetrahedron, *meshes[2];
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
-	loadmesh("icoso", square, -7, 0, 5);
-	loadmesh("square", tetrahedron, 1, 0, 10);
+	loadmesh("meshtest1", square, 2, 5, 10);
+	loadmesh("meshtest2", tetrahedron, 2, -5, 10);
 	meshes[0] = square;
 	meshes[1] = tetrahedron;
-	tetrahedron->rotationspeed = 0.1;
-	tetrahedron->rot[0] = 0.5;
-	tetrahedron->rot[1] = 2;
-	tetrahedron->rot[2] = 1;
-	square->rotationspeed = 0.01;
-	square->rot[0] = 3;
-	square->rot[1] = 1;
-	square->rot[2] = 0;
+	tetrahedron->rotationspeed = 0.0;
+	tetrahedron->rot[0] = 0;
+	tetrahedron->rot[1] = 0;
+	tetrahedron->rot[2] = -1;
+	square->rotationspeed = 0.0;
+	square->rot[0] = 0;
+	square->rot[1] = 0;
+	square->rot[2] = 1;
+	square->vy = -0.1;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	window = SDL_CreateWindow("Relign, BITCHES! Finally used that name! BLAM!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
 	if(window == NULL){
@@ -41,12 +42,12 @@ int main(){
 		return 1;
 	}
 	render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	int temp, raycounter, color;
+	int temp, raycounter;
 	double x, y, z, x1, y1, z1, x2, y2, z2;
 	mesh *mesh1;
+	double *col;
 	while(running){
-		color = 0;
-		color = collisions(square, tetrahedron);
+		col = collisions(square, tetrahedron);
 		for(temp = 0; temp < 2; temp++){
 			mesh1 = meshes[temp];
 			movemesh(mesh1);
@@ -70,9 +71,8 @@ int main(){
 			SDL_RenderDrawPoint(render, (int)((100*x-50)/z+250), (int)(y*100/z+250));
 			SDL_SetRenderDrawColor(render, 0, 0, 255, 125);
 			SDL_RenderDrawPoint(render, (int)((100*x+50)/z+250), (int)(y*100/z+250));
-				#else
-			if(!color) SDL_SetRenderDrawColor(render, 10, 255, 55, 255);
-			else SDL_SetRenderDrawColor(render, 255, 10, 10, 255);
+			#else
+			SDL_SetRenderDrawColor(render, 0, 100, 10, 100);
 			for(raycounter = mesh1->rays-1; raycounter >= 0; raycounter--){
 				x1 = x + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3+0];
 				y1 = y + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3+1];
@@ -86,13 +86,22 @@ int main(){
 			SDL_RenderDrawPoint(render, (int)(x*100/z+250), (int)(y*100/z+250));
 			#endif
 		}
+		if(col != NULL){
+			SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+			SDL_RenderDrawPoint(render, (int)(col[0]*100/col[2])+250, (int)(col[1]*100/col[2])+250);
+			free(col);
+		}
 		paint();
-		SDL_SetRenderDrawColor(render, 255, 255, 255, 100);
+		#ifdef ANAGLYPH
+		SDL_SetRenderDrawColor(render, 255, 255, 255, 255);//you need a white background for anaglyph...
+		#else
+		SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
+		#endif
 		SDL_RenderClear(render);
 		SDL_Event evnt;
-//		do {
+		do {
 			SDL_PollEvent(&evnt);
-//		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if (evnt.type == SDL_QUIT){
 			running = 0;
 		}

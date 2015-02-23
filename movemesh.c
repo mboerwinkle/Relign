@@ -5,7 +5,7 @@
 
 void movemesh(mesh *target){
 	target->rot[3] += target->rotationspeed;
-	if(target->rot[3] >= (M_PI)) target->rot[3] -= (2*M_PI);
+	if(target->rot[3] >= (2*M_PI)) target->rot[3] -= (2*M_PI);
 	int temp;
 	double m00, m01, m02, m10, m11, m12, m20, m21, m22;//rotation matrix www.euclideanspace.com/maths/geomety/rotations/conversions/quaternionToMatrix/index.htm
 	double qx = target->rot[0]*sin(target->rot[3]/2);

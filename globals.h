@@ -27,5 +27,5 @@ typedef struct mesh{
 }mesh;
 extern void movemesh(mesh *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);
-extern int collisions(mesh *one, mesh *two);
+extern double* collisions(mesh *one, mesh *two);
 extern int intersect_triangle(double orig[3], double dir[3], double vert0[3], double vert1[3], double vert2[3],  double *t, double *u, double *v, double offsetx, double offsety, double offsetz);
