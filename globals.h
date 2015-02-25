@@ -22,7 +22,7 @@ typedef struct mesh{
 	int triangles, rays, points;
 	triangle *trianglematrix;
 	ray *raymatrix;
-	double centermass[3];//coordinates of center of mass in the "real world"
+	double centermass[3], radius;//coordinates of center of mass in the "real world"
 	double *pointmatrix;
 }mesh;
 extern void movemesh(mesh *target);

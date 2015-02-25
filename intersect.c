@@ -4,12 +4,19 @@
 #include "globals.h"
 static double orig[3], dir[3], t, u, v;
 
+double distance(double dir[3], double point[3]){
+	double distb = sqrt(point[0]*point[0]+point[1]*point[1]+point[2]*point[2]);
+	double dista = sqrt((point[0]-dir[0])*(point[0]-dir[0])+(point[1]-dir[1])*(point[1]-dir[1])+(point[2]-dir[2])*(point[2]-dir[2]));
+	double distc = sqrt(dir[0]*dir[0]+dir[1]*dir[1]+dir[2]*dir[2]);
+	return dista*sin(acos((dista*dista+distc*distc-distb*distb)/(2*dista*distc)));
+}
+
 double * collisions(mesh *one, mesh *two){
 	double z;//the third barycentric coordinate
 	double *pone, *ptwo, *pthree;
 	int temp, tempray, temptri;
 	double *col = NULL; //estimated center of collision
-	int howmany = 0;
+	int howmany = 0;//not to be confused with the wack-ass corn...
 	mesh *tempmesh;
 	double offsetx, offsety, offsetz;
 	for(temp = 0; temp < 2; temp++){
@@ -19,7 +26,7 @@ double * collisions(mesh *one, mesh *two){
 		for(tempray = one->rays-1; tempray >=0; tempray--){
 			for(temptri = two->triangles-1; temptri >=0; temptri--){
 				if(intersect_triangle(&one->pointmatrix[one->raymatrix[tempray].ends[0]*3], &one->pointmatrix[one->raymatrix[tempray].ends[1]*3], &two->pointmatrix[two->trianglematrix[temptri].points[0]*3], &two->pointmatrix[two->trianglematrix[temptri].points[1]*3], &two->pointmatrix[two->trianglematrix[temptri].points[2]*3], &t, &u, &v, offsetx, offsety, offsetz)){
-					if(col == NULL) col = calloc(sizeof(double), 3);
+					if(col == NULL) col = calloc(sizeof(double), 6);//first 3 for point of collision, next 3 for force
 					z = 1-(u+v);//find the third barycentric coordinate
 					pone = &two->pointmatrix[two->trianglematrix[temptri].points[0]*3];
 					ptwo = &two->pointmatrix[two->trianglematrix[temptri].points[1]*3];
@@ -28,12 +35,46 @@ double * collisions(mesh *one, mesh *two){
 					col[1] = (z*pone[1]+u*ptwo[1]+v*pthree[1]+two->centermass[1]+col[1]*howmany)/(howmany+1);
 					col[2] = (z*pone[2]+u*ptwo[2]+v*pthree[2]+two->centermass[2]+col[2]*howmany)/(howmany+1);
 					howmany++;
+					
 				}
 			}
 		}
 		tempmesh = one;
 		one = two;
 		two = tempmesh;
+	}
+	if(col != NULL){
+		double colloc[3];
+		col[3] = 0+one->vx-two->vx;
+		col[4] = 0+one->vy-two->vy;
+		col[5] = 0+one->vz-two->vz;
+		for(temp = 0; temp < 2; temp++){
+			colloc[0] = col[0] - one->centermass[0];
+			colloc[1] = col[1] - one->centermass[1];
+			colloc[2] = col[2] - one->centermass[2];
+			if(!(one->rot[0] == 0 && one->rot[1] == 0 && one->rot[2] == 0)){
+				if(sqrt(one->rot[0]*one->rot[0]+one->rot[1]*one->rot[1]+one->rot[2]*one->rot[2]) != 1){
+					double change = 1/sqrt(one->rot[0]*one->rot[0]+one->rot[1]*one->rot[1]+one->rot[2]*one->rot[2]);
+					one->rot[0] *= change;
+					one->rot[1] *= change;
+					one->rot[2] *= change;
+					if(change < 0){
+						puts("wot?");
+						one->rotationspeed *= -1;
+						one->rot[3] += M_PI;
+						if(one->rot[3] >= 2*M_PI) one->rot[3] -= 2*M_PI;
+					}
+				}
+			}
+			double speed = one->rotationspeed*(distance(one->rot, colloc)/one->radius);//speed of rotation of collision point
+			col[3] += one->rot[1]*speed*col[2]-one->rot[2]*speed*col[1];
+			col[4] += one->rot[2]*speed*col[0]-one->rot[0]*speed*col[2];
+			col[5] += one->rot[0]*speed*col[1]-one->rot[1]*speed*col[0];
+			tempmesh = one;
+			one = two;
+			two = tempmesh;
+//		sqrt((col[0]-one->centermass[0])*(col[0]-one->centermass[0])+(col[1]-one->centermass[1])*(col[1]-one->centermass[1])+(col[2]-one->centermass[2])*(col[2]-one->centermass[2]));
+		}
 	}
 	return col;
 }

@@ -15,6 +15,7 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 	final->vy = 0;
 	final->vz = 0;
 	final->mass = 1;
+	final->radius = 0;
 	FILE *fp;
 	fp = fopen(name, "r");
 	if(EOF == fscanf(fp, "%d %d %d", &final->points, &final->triangles, &final->rays)) puts("file read failed");
@@ -39,6 +40,7 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 				final->cpointmatrix[temp*3+0] = x;
 				final->cpointmatrix[temp*3+1] = y;
 				final->cpointmatrix[temp*3+2] = z;
+				if(sqrt(x*x+y*y+z*z) > final->radius) final->radius = sqrt(x*x+y*y+z*z);
 				pointcount++;
 			}
 			final->trianglematrix[trianglecount].points[corner] = temp;

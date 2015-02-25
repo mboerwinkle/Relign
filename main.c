@@ -23,19 +23,19 @@ int main(){
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
 	loadmesh("square", square, 2, 5, 10);
-	loadmesh("icoso", tetrahedron, 2, -3, 10);
+	loadmesh("square", tetrahedron, 2, -3, 10);
 	meshes[0] = square;
 	meshes[1] = tetrahedron;
-	tetrahedron->rotationspeed = 0.02;
+	tetrahedron->rotationspeed = 0.0;
 	tetrahedron->rot[0] = 0;
 	tetrahedron->rot[1] = 0;
-	tetrahedron->rot[2] = -1;
+	tetrahedron->rot[2] = 1;
 	square->rotationspeed = 0.01;
 	square->rot[0] = 0;
 	square->rot[1] = 0;
 	square->rot[2] = 1;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
-	window = SDL_CreateWindow("Relign, BITCHES! Finally used that name! BLAM!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
+	window = SDL_CreateWindow("Relign - Wunderbar", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
 	if(window == NULL){
 		SDL_Quit();
 		return 1;
@@ -87,7 +87,8 @@ int main(){
 		}
 		if(col != NULL){
 			SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
-			SDL_RenderDrawPoint(render, (int)(col[0]*100/col[2])+250, (int)(col[1]*100/col[2])+250);
+			SDL_RenderDrawLine(render, (int)(col[0]*100/col[2])+250, (int)(col[1]*100/col[2])+250, (int)((col[0]+col[3]*100)*100/(col[2]+col[5]*100)+250), (int)((col[1]+col[4]*100)*100/(col[2]+col[5]*100)+250));
+//			printf("%lf %lf\n", ((col[0]+col[3])*100/(col[2]+col[5])+250), ((col[1]+col[4])*100/(col[2]+col[5])+250));
 			free(col);
 		}
 		paint();
@@ -98,9 +99,9 @@ int main(){
 		#endif
 		SDL_RenderClear(render);
 		SDL_Event evnt;
-		do {
+//		do {
 			SDL_PollEvent(&evnt);
-		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+//		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if (evnt.type == SDL_QUIT){
 			running = 0;
 		}
