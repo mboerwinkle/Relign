@@ -4,7 +4,7 @@
 #include "globals.h"
 
 void movemesh(mesh *target){
-	target->rot[3] += target->rotationspeed;
+	target->rot[3] += 0.01 * sqrt(target->rot[0]*target->rot[0]+target->rot[1]*target->rot[1]+target->rot[2]*target->rot[2]);
 	if(target->rot[3] >= (2*M_PI)) target->rot[3] -= (2*M_PI);
 	int temp;
 	double m00, m01, m02, m10, m11, m12, m20, m21, m22;//rotation matrix www.euclideanspace.com/maths/geomety/rotations/conversions/quaternionToMatrix/index.htm

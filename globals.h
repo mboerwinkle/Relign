@@ -16,7 +16,7 @@ typedef struct ray{
 }ray;
 typedef struct mesh{
 	double *cpointmatrix;//constant point matrix
-	double rot[4], rotationspeed;//rotation vector x, y, z, magnitude, current position(as each tick will be newly rotated from the pattern)
+	double rot[4];//rotation vector x, y, z, magnitude, current position(as each tick will be newly rotated from the pattern)
 	double vx, vy, vz;//velocity
 	double mass;
 	int triangles, rays, points;

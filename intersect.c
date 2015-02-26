@@ -4,11 +4,22 @@
 #include "globals.h"
 static double orig[3], dir[3], t, u, v;
 
-double distance(double dir[3], double point[3]){
-	double distb = sqrt(point[0]*point[0]+point[1]*point[1]+point[2]*point[2]);
-	double dista = sqrt((point[0]-dir[0])*(point[0]-dir[0])+(point[1]-dir[1])*(point[1]-dir[1])+(point[2]-dir[2])*(point[2]-dir[2]));
-	double distc = sqrt(dir[0]*dir[0]+dir[1]*dir[1]+dir[2]*dir[2]);
-	return dista*sin(acos((dista*dista+distc*distc-distb*distb)/(2*dista*distc)));
+void norm(double * target){
+	double howmuch = sqrt(target[0]*target[0]+target[1]*target[1]+target[2]*target[2]);
+	target[0] = target[0] / howmuch;
+	target[1] = target[1] / howmuch;
+	target[2] = target[2] / howmuch;
+}
+
+double distance(double vect[3], double point[3]){
+	double a[3] = {vect[0], vect[1], vect[2]};
+	double b[3] = {point[0], point[1], point[2]};
+	double distb = sqrt(b[0]*b[0] + b[1]*b[1] + b[2]*b[2]);
+	double dista = sqrt(a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
+	double angle = acos(DOT(a, b)/(dista*distb));
+	double ans = sin(angle)*distb;
+//	if(isnan(ans) || !isfinite(ans)) return 0;
+	return ans;
 }
 
 double * collisions(mesh *one, mesh *two){
@@ -26,7 +37,7 @@ double * collisions(mesh *one, mesh *two){
 		for(tempray = one->rays-1; tempray >=0; tempray--){
 			for(temptri = two->triangles-1; temptri >=0; temptri--){
 				if(intersect_triangle(&one->pointmatrix[one->raymatrix[tempray].ends[0]*3], &one->pointmatrix[one->raymatrix[tempray].ends[1]*3], &two->pointmatrix[two->trianglematrix[temptri].points[0]*3], &two->pointmatrix[two->trianglematrix[temptri].points[1]*3], &two->pointmatrix[two->trianglematrix[temptri].points[2]*3], &t, &u, &v, offsetx, offsety, offsetz)){
-					if(col == NULL) col = calloc(sizeof(double), 6);//first 3 for point of collision, next 3 for force
+					if(col == NULL) col = calloc(sizeof(double), 6);//first 3 for point of collision, next 9 for force
 					z = 1-(u+v);//find the third barycentric coordinate
 					pone = &two->pointmatrix[two->trianglematrix[temptri].points[0]*3];
 					ptwo = &two->pointmatrix[two->trianglematrix[temptri].points[1]*3];
@@ -44,11 +55,87 @@ double * collisions(mesh *one, mesh *two){
 		two = tempmesh;
 	}
 	if(col != NULL){
+		double rotationspeed;
 		double colloc[3];
 		col[3] = 0+one->vx-two->vx;
 		col[4] = 0+one->vy-two->vy;
 		col[5] = 0+one->vz-two->vz;
-		for(temp = 0; temp < 2; temp++){
+
+		double speed;
+		double uv[3];
+		if(!(one->rot[0] == 0 && one->rot[1] == 0 && one->rot[2] == 0)){
+			rotationspeed = sqrt(one->rot[0]*one->rot[0]+one->rot[1]*one->rot[1]+one->rot[2]*one->rot[2]);
+			colloc[0] = col[0] - one->centermass[0];
+			colloc[1] = col[1] - one->centermass[1];
+			colloc[2] = col[2] - one->centermass[2];
+			speed = rotationspeed*(distance(one->rot, colloc)/one->radius);//speed of rotation of collision point
+			uv[0] = (one->rot[1]*col[2]-one->rot[2]*col[1]);
+			uv[1] = (one->rot[2]*col[0]-one->rot[0]*col[2]);
+			uv[2] = (one->rot[0]*col[1]-one->rot[1]*col[0]);
+			norm(uv);
+			col[3] += uv[0]*speed;
+			col[4] += uv[1]*speed;
+			col[5] += uv[2]*speed;
+		}
+
+		if(!(two->rot[0] == 0 && two->rot[1] == 0 && two->rot[2] == 0)){
+			rotationspeed = sqrt(two->rot[0]*two->rot[0]+two->rot[1]*two->rot[1]+two->rot[2]*two->rot[2]);
+			colloc[0] = col[0] - two->centermass[0];
+			colloc[1] = col[1] - two->centermass[1];
+			colloc[2] = col[2] - two->centermass[2];
+			speed = rotationspeed*(distance(two->rot, colloc)/two->radius);
+			uv[0] = (two->rot[1]*col[2]-two->rot[2]*col[1]);
+			uv[1] = (two->rot[2]*col[0]-two->rot[0]*col[2]);
+			uv[2] = (two->rot[0]*col[1]-two->rot[1]*col[0]);
+			norm(uv);
+			col[3] -= uv[0]*speed;
+			col[4] -= uv[1]*speed;
+			col[5] -= uv[2]*speed;
+		}
+			rotationspeed = sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]);
+			
+			colloc[0] = col[0] - one->centermass[0];
+			colloc[1] = col[1] - one->centermass[1];
+			colloc[2] = col[2] - one->centermass[2];
+			z = distance(&col[3], colloc)/one->radius;//from here on, z is used for 1 divided by the quantity of force for rotation
+			printf("z %lf\n", z);
+			printf("0 %lf\n", col[3]);
+			printf("1 %lf\n", col[4]);
+			printf("2 %lf\n", col[5]);
+			printf("rad %lf\n\n", one->radius);
+			one->vx -= col[3]*(1-z)*(one->mass/two->mass);
+			one->vy -= col[4]*(1-z)*(one->mass/two->mass);
+			one->vz -= col[5]*(1-z)*(one->mass/two->mass);
+			uv[0] = col[4]*colloc[2]-col[5]*colloc[1]; 
+			uv[1] = col[5]*colloc[0]-col[3]*colloc[2];
+			uv[2] = col[3]*colloc[1]-col[4]*colloc[0];
+			norm(uv);
+			two->rot[0] -= uv[0]*z*rotationspeed;
+			two->rot[1] -= uv[1]*z*rotationspeed;
+			two->rot[2] -= uv[2]*z*rotationspeed;
+			
+
+			colloc[0] = col[0] - two->centermass[0];
+			colloc[1] = col[1] - two->centermass[1];
+			colloc[2] = col[2] - two->centermass[2];
+			z = distance(&col[3], colloc)/two->radius;//from here on, z is used for 1 divided by the quantity of force for rotation
+			printf("%lf\n", z);
+			printf("0 %lf\n", col[3]);
+			printf("1 %lf\n", col[4]);
+			printf("2 %lf\n", col[5]);
+			printf("rad %lf\n\n", two->radius);
+			two->vx += col[3]*(1-z)*(two->mass/one->mass);
+			two->vy += col[4]*(1-z)*(two->mass/one->mass);
+			two->vz += col[5]*(1-z)*(two->mass/one->mass);
+			uv[0] = col[4]*colloc[2]-col[5]*colloc[1]; 
+			uv[1] = col[5]*colloc[0]-col[3]*colloc[2];
+			uv[2] = col[3]*colloc[1]-col[4]*colloc[0];
+			norm(uv);
+			one->rot[0] += uv[0]*z*rotationspeed;
+			one->rot[1] += uv[1]*z*rotationspeed;
+			one->rot[2] += uv[2]*z*rotationspeed;
+			
+/*		for(temp = 0; temp < 2; temp++){
 			colloc[0] = col[0] - one->centermass[0];
 			colloc[1] = col[1] - one->centermass[1];
 			colloc[2] = col[2] - one->centermass[2];
@@ -75,6 +162,21 @@ double * collisions(mesh *one, mesh *two){
 			two = tempmesh;
 //		sqrt((col[0]-one->centermass[0])*(col[0]-one->centermass[0])+(col[1]-one->centermass[1])*(col[1]-one->centermass[1])+(col[2]-one->centermass[2])*(col[2]-one->centermass[2]));
 		}
+		for(temp = 0; temp < 2; temp++){
+			colloc[0] = two->centermass[0] - col[0];
+			colloc[1] = two->centermass[1] - col[1];
+			colloc[2] = two->centermass[2] - col[2];
+			z = distance(&col[3], colloc)/two->radius;//from here on, z is used for 1 divided by the quantity of force for rotation
+			two->vx += col[3]*(1-z)*(two->mass/one->mass);
+			two->vy += col[4]*(1-z)*(two->mass/one->mass);
+			two->vz += col[5]*(1-z)*(two->mass/one->mass);
+			col[3] *= -1;
+			col[4] *= -1;
+			col[5] *= -1;
+			tempmesh = one;
+			one = two;
+			two = tempmesh;
+		}*/
 	}
 	return col;
 }

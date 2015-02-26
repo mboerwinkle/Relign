@@ -10,7 +10,6 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 	final->rot[1] = 0;
 	final->rot[2] = 1;
 	final->rot[3] = 0;
-	final->rotationspeed = 0;
 	final->vx = 0;
 	final->vy = 0;
 	final->vz = 0;
