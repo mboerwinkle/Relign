@@ -39,6 +39,9 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 				final->cpointmatrix[temp*3+0] = x;
 				final->cpointmatrix[temp*3+1] = y;
 				final->cpointmatrix[temp*3+2] = z;
+				final->pointmatrix[temp*3+0] = x;
+				final->pointmatrix[temp*3+1] = y;
+				final->pointmatrix[temp*3+2] = z;
 				if(sqrt(x*x+y*y+z*z) > final->radius) final->radius = sqrt(x*x+y*y+z*z);
 				pointcount++;
 			}
@@ -59,5 +62,4 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 		}
 	}
 	fclose(fp);
-	movemesh(final);
 }

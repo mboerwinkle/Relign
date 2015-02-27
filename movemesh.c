@@ -4,8 +4,9 @@
 #include "globals.h"
 
 void movemesh(mesh *target){
-	target->rot[3] += 0.01 * sqrt(target->rot[0]*target->rot[0]+target->rot[1]*target->rot[1]+target->rot[2]*target->rot[2]);
-	if(target->rot[3] >= (2*M_PI)) target->rot[3] -= (2*M_PI);
+	target->rot[3] = sqrt(target->rot[0]*target->rot[0]+target->rot[1]*target->rot[1]+target->rot[2]*target->rot[2]);
+	if(target->rot[3] >= M_PI) target->rot[3] -= (2*M_PI);
+	printf("%lf\n", target->rot[3]);
 	int temp;
 	double m00, m01, m02, m10, m11, m12, m20, m21, m22;//rotation matrix www.euclideanspace.com/maths/geomety/rotations/conversions/quaternionToMatrix/index.htm
 	double qx = target->rot[0]*sin(target->rot[3]/2);
@@ -37,9 +38,9 @@ void movemesh(mesh *target){
 	m12 = 2.0 * (tmp1 - tmp2)*invs; 
 	double x, y, z;
 	for(temp = target->points-1; temp >= 0; temp--){
-		x = target->cpointmatrix[temp*3+0];
-		y = target->cpointmatrix[temp*3+1];
-		z = target->cpointmatrix[temp*3+2];
+		x = target->pointmatrix[temp*3+0];
+		y = target->pointmatrix[temp*3+1];
+		z = target->pointmatrix[temp*3+2];
 		target->pointmatrix[temp*3+0] = (m00*x+m01*y+m02*z);
 		target->pointmatrix[temp*3+1] = (m10*x+m11*y+m12*z);
 		target->pointmatrix[temp*3+2] = (m20*x+m21*y+m22*z);
@@ -47,5 +48,4 @@ void movemesh(mesh *target){
 	target->centermass[0] += target->vx;
 	target->centermass[1] += target->vy;
 	target->centermass[2] += target->vz;
-//	printf("%d %d %d\n", target->centermass.x, target->centermass.y, target->centermass.z);
 }

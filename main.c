@@ -22,18 +22,18 @@ int main(){
 	mesh *square, *tetrahedron, *meshes[2];
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
-	loadmesh("square", square, 10, 0, 100);
-	loadmesh("square", tetrahedron, -10, 0, 100);
+	loadmesh("square", square, 10, 0, 30);
+	loadmesh("square", tetrahedron, -5, 0, 30);
 	meshes[0] = square;
 	meshes[1] = tetrahedron;
 	tetrahedron->rot[0] = 0;
 	tetrahedron->rot[1] = 0;
-	tetrahedron->rot[2] = 1;
-	tetrahedron->vx = 0.02;
+	tetrahedron->rot[2] = 0;
+	tetrahedron->vx = 0.1;
 	square->rot[0] = 0;
 	square->rot[1] = 0;
-	square->rot[2] = 0;
-	square->vy = 0.0;
+	square->rot[2] = 1;
+	square->vy = 0;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	window = SDL_CreateWindow("Relign - Wunderbar", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
 	if(window == NULL){
@@ -99,9 +99,9 @@ int main(){
 		#endif
 		SDL_RenderClear(render);
 		SDL_Event evnt;
-//		do {
+		do {
 			SDL_PollEvent(&evnt);
-//		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if (evnt.type == SDL_QUIT){
 			running = 0;
 		}

@@ -98,11 +98,11 @@ double * collisions(mesh *one, mesh *two){
 			colloc[1] = col[1] - one->centermass[1];
 			colloc[2] = col[2] - one->centermass[2];
 			z = distance(&col[3], colloc)/one->radius;//from here on, z is used for 1 divided by the quantity of force for rotation
-			printf("z %lf\n", z);
+/*			printf("z %lf\n", z);
 			printf("0 %lf\n", col[3]);
 			printf("1 %lf\n", col[4]);
 			printf("2 %lf\n", col[5]);
-			printf("rad %lf\n\n", one->radius);
+			printf("rad %lf\n\n", one->radius);*/
 			one->vx -= col[3]*(1-z)*(one->mass/two->mass);
 			one->vy -= col[4]*(1-z)*(one->mass/two->mass);
 			one->vz -= col[5]*(1-z)*(one->mass/two->mass);
@@ -119,11 +119,11 @@ double * collisions(mesh *one, mesh *two){
 			colloc[1] = col[1] - two->centermass[1];
 			colloc[2] = col[2] - two->centermass[2];
 			z = distance(&col[3], colloc)/two->radius;//from here on, z is used for 1 divided by the quantity of force for rotation
-			printf("%lf\n", z);
+/*			printf("%lf\n", z);
 			printf("0 %lf\n", col[3]);
 			printf("1 %lf\n", col[4]);
 			printf("2 %lf\n", col[5]);
-			printf("rad %lf\n\n", two->radius);
+			printf("rad %lf\n\n", two->radius);*/
 			two->vx += col[3]*(1-z)*(two->mass/one->mass);
 			two->vy += col[4]*(1-z)*(two->mass/one->mass);
 			two->vz += col[5]*(1-z)*(two->mass/one->mass);
@@ -131,9 +131,9 @@ double * collisions(mesh *one, mesh *two){
 			uv[1] = col[5]*colloc[0]-col[3]*colloc[2];
 			uv[2] = col[3]*colloc[1]-col[4]*colloc[0];
 			norm(uv);
-			one->rot[0] += uv[0]*z*rotationspeed;
-			one->rot[1] += uv[1]*z*rotationspeed;
-			one->rot[2] += uv[2]*z*rotationspeed;
+			one->rot[0] -= uv[0]*z*rotationspeed;
+			one->rot[1] -= uv[1]*z*rotationspeed;
+			one->rot[2] -= uv[2]*z*rotationspeed;
 			
 /*		for(temp = 0; temp < 2; temp++){
 			colloc[0] = col[0] - one->centermass[0];
