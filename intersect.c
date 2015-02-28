@@ -131,9 +131,9 @@ double * collisions(mesh *one, mesh *two){
 			uv[1] = col[5]*colloc[0]-col[3]*colloc[2];
 			uv[2] = col[3]*colloc[1]-col[4]*colloc[0];
 			norm(uv);
-			one->rot[0] -= uv[0]*z*rotationspeed;
-			one->rot[1] -= uv[1]*z*rotationspeed;
-			one->rot[2] -= uv[2]*z*rotationspeed;
+			one->rot[0] += uv[0]*z*rotationspeed;
+			one->rot[1] += uv[1]*z*rotationspeed;
+			one->rot[2] += uv[2]*z*rotationspeed;
 			
 /*		for(temp = 0; temp < 2; temp++){
 			colloc[0] = col[0] - one->centermass[0];
