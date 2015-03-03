@@ -22,18 +22,18 @@ int main(){
 	mesh *square, *tetrahedron, *meshes[2];
 	square = malloc(sizeof(mesh));
 	tetrahedron = malloc(sizeof(mesh));
-	loadmesh("square", square, 10, 0, 30);
-	loadmesh("square", tetrahedron, -5, 0, 30);
+	loadmesh("tree", square, 10, 19, 80);
+	loadmesh("square", tetrahedron, 10, 0, 30);
 	meshes[0] = square;
 	meshes[1] = tetrahedron;
-	tetrahedron->rot[0] = 0;
+	tetrahedron->rot[0] = 0.1;
 	tetrahedron->rot[1] = 0;
 	tetrahedron->rot[2] = 0;
-	tetrahedron->vx = 0.07;
+	tetrahedron->vx = 0.0;
 	square->rot[0] = 0;
 	square->rot[1] = 0;
-	square->rot[2] = 0.2;
-	square->vy = 0;
+	square->rot[2] = 0;
+	square->vz = -0.2;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	window = SDL_CreateWindow("Relign - Wunderbar", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
 	if(window == NULL){

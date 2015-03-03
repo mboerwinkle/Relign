@@ -73,9 +73,9 @@ double * collisions(mesh *one, mesh *two){
 			uv[1] = (one->rot[2]*col[0]-one->rot[0]*col[2]);
 			uv[2] = (one->rot[0]*col[1]-one->rot[1]*col[0]);
 			norm(uv);
-			col[3] += uv[0]*speed;
-			col[4] += uv[1]*speed;
-			col[5] += uv[2]*speed;
+			col[3] -= uv[0]*speed;
+			col[4] -= uv[1]*speed;
+			col[5] -= uv[2]*speed;
 		}
 
 		if(!(two->rot[0] == 0 && two->rot[1] == 0 && two->rot[2] == 0)){
@@ -88,9 +88,9 @@ double * collisions(mesh *one, mesh *two){
 			uv[1] = (two->rot[2]*col[0]-two->rot[0]*col[2]);
 			uv[2] = (two->rot[0]*col[1]-two->rot[1]*col[0]);
 			norm(uv);
-			col[3] -= uv[0]*speed;
-			col[4] -= uv[1]*speed;
-			col[5] -= uv[2]*speed;
+			col[3] += uv[0]*speed;
+			col[4] += uv[1]*speed;
+			col[5] += uv[2]*speed;
 		}
 			rotationspeed = sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]);
 			
@@ -110,9 +110,9 @@ double * collisions(mesh *one, mesh *two){
 			uv[1] = col[5]*colloc[0]-col[3]*colloc[2];
 			uv[2] = col[3]*colloc[1]-col[4]*colloc[0];
 			norm(uv);
-			two->rot[0] -= uv[0]*z*rotationspeed;
-			two->rot[1] -= uv[1]*z*rotationspeed;
-			two->rot[2] -= uv[2]*z*rotationspeed;
+			two->rot[0] += uv[0]*z*rotationspeed;
+			two->rot[1] += uv[1]*z*rotationspeed;
+			two->rot[2] += uv[2]*z*rotationspeed;
 			
 
 			colloc[0] = col[0] - two->centermass[0];
@@ -131,9 +131,9 @@ double * collisions(mesh *one, mesh *two){
 			uv[1] = col[5]*colloc[0]-col[3]*colloc[2];
 			uv[2] = col[3]*colloc[1]-col[4]*colloc[0];
 			norm(uv);
-			one->rot[0] += uv[0]*z*rotationspeed;
-			one->rot[1] += uv[1]*z*rotationspeed;
-			one->rot[2] += uv[2]*z*rotationspeed;
+			one->rot[0] -= uv[0]*z*rotationspeed;
+			one->rot[1] -= uv[1]*z*rotationspeed;
+			one->rot[2] -= uv[2]*z*rotationspeed;
 			
 /*		for(temp = 0; temp < 2; temp++){
 			colloc[0] = col[0] - one->centermass[0];
