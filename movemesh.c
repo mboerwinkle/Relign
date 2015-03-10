@@ -4,9 +4,9 @@
 #include "globals.h"
 
 void movemesh(mesh *target){
-	target->rot[3] = sqrt(target->rot[0]*target->rot[0]+target->rot[1]*target->rot[1]+target->rot[2]*target->rot[2]);
-	if(target->rot[3] >= M_PI) target->rot[3] -= (2*M_PI);
-	printf("%lf\n", target->rot[3]);
+	target->rot[3] = sqrt(target->rot[0]*target->rot[0]+target->rot[1]*target->rot[1]+target->rot[2]*target->rot[2]);//maybe calculate this each time velocity altered?
+//	if(target->rot[3] >= M_PI) target->rot[3] -= (2*M_PI);
+	if(isnan(target->rot[3] || !isfinite(target->rot[3]))) puts("error");
 	int temp;
 	double m00, m01, m02, m10, m11, m12, m20, m21, m22;//rotation matrix www.euclideanspace.com/maths/geomety/rotations/conversions/quaternionToMatrix/index.htm
 	double qx = target->rot[0]*sin(target->rot[3]/2);
@@ -41,11 +41,11 @@ void movemesh(mesh *target){
 		x = target->pointmatrix[temp*3+0];
 		y = target->pointmatrix[temp*3+1];
 		z = target->pointmatrix[temp*3+2];
-		target->pointmatrix[temp*3+0] = (m00*x+m01*y+m02*z);
-		target->pointmatrix[temp*3+1] = (m10*x+m11*y+m12*z);
-		target->pointmatrix[temp*3+2] = (m20*x+m21*y+m22*z);
+		target->pointmatrix2[temp*3+0] = (m00*x+m01*y+m02*z);
+		target->pointmatrix2[temp*3+1] = (m10*x+m11*y+m12*z);
+		target->pointmatrix2[temp*3+2] = (m20*x+m21*y+m22*z);
 	}
-	target->centermass[0] += target->vx;
-	target->centermass[1] += target->vy;
-	target->centermass[2] += target->vz;
+	target->centermass2[0] += target->vx;
+	target->centermass2[1] += target->vy;
+	target->centermass2[2] += target->vz;
 }

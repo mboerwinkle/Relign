@@ -19,21 +19,14 @@ int main(){
 	struct timespec lastTime = {.tv_sec = 0, .tv_nsec = 0};
 	struct timespec otherTime = {.tv_sec = 0, .tv_nsec = 0};
  
-	mesh *square, *tetrahedron, *meshes[2];
-	square = malloc(sizeof(mesh));
-	tetrahedron = malloc(sizeof(mesh));
-	loadmesh("tree", square, 10, 19, 80);
-	loadmesh("square", tetrahedron, 10, 0, 30);
-	meshes[0] = square;
-	meshes[1] = tetrahedron;
-	tetrahedron->rot[0] = 0.1;
-	tetrahedron->rot[1] = 0;
-	tetrahedron->rot[2] = 0;
-	tetrahedron->vx = 0.0;
-	square->rot[0] = 0;
-	square->rot[1] = 0;
-	square->rot[2] = 0;
-	square->vz = -0.2;
+	mesh *meshes;
+	int meshcount = 0;
+	meshes = calloc(sizeof(mesh), 5);
+	loadmesh("square", &meshes[1], 0, 0, 50);
+	meshcount++;
+	loadmesh("square", &meshes[0], 9, 0, 70);
+	meshcount++;
+	meshes[1].moves = 0;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	window = SDL_CreateWindow("Relign - Wunderbar", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
 	if(window == NULL){
@@ -41,15 +34,46 @@ int main(){
 		return 1;
 	}
 	render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	int temp, raycounter;
+	int temp, temp2, raycounter;
 	double x, y, z, x1, y1, z1, x2, y2, z2;
 	mesh *mesh1;
 	double *col;
+	double *temppoint;
 	while(running){
-		col = collisions(square, tetrahedron);
-		for(temp = 0; temp < 2; temp++){
-			mesh1 = meshes[temp];
+		for(temp = 0; temp < meshcount; temp++){
+			mesh1 = &meshes[temp];
+			if(mesh1->moves){
+				mesh1->vz2 = (mesh1->vz - GRAVITY/FRAMERATE) * DRAG;
+				mesh1->vx2 = mesh1->vx * DRAG;
+				mesh1->vy2 = mesh1->vy * DRAG;
+				mesh1->rot2[0] = mesh1->rot[0] * DRAG;
+				mesh1->rot2[1] = mesh1->rot[1] * DRAG;
+				mesh1->rot2[2] = mesh1->rot[2] * DRAG;
+				mesh1->centermass = mesh1->centermass2;
+			}
 			movemesh(mesh1);
+			for(temp2 = temp-1; temp2 >= 0; temp2--){
+				col = collisions(mesh1, &meshes[temp2]);
+				if(col != NULL){
+					SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+					SDL_RenderDrawLine(render, (int)(col[0]*100/col[2])+250, (int)(col[1]*100/col[2])+250, (int)((col[0]+col[3]*100)*100/(col[2]+col[5]*100)+250), (int)((col[1]+col[4]*100)*100/(col[2]+col[5]*100)+250));
+//					printf("%lf %lf\n", ((col[0]+col[3])*100/(col[2]+col[5])+250), ((col[1]+col[4])*100/(col[2]+col[5])+250));
+					free(col);
+				}
+			}
+			temppoint = mesh1->rot;
+			mesh1->rot = mesh1->rot2;
+			mesh1->rot2 = temppoint;
+
+			temppoint = mesh1->pointmatrix;
+			mesh1->pointmatrix = mesh1->pointmatrix2;
+			mesh1->pointmatrix2 = temppoint;
+
+			mesh1->vx = mesh1->vx2;
+			mesh1->vy = mesh1->vy2;
+			mesh1->vz = mesh1->vz2;
+			
+
 			x = mesh1->centermass[0];
 			y = mesh1->centermass[1];
 			z = mesh1->centermass[2];
@@ -85,12 +109,6 @@ int main(){
 			SDL_RenderDrawPoint(render, (int)(x*100/z+250), (int)(y*100/z+250));
 			#endif
 		}
-		if(col != NULL){
-			SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
-			SDL_RenderDrawLine(render, (int)(col[0]*100/col[2])+250, (int)(col[1]*100/col[2])+250, (int)((col[0]+col[3]*100)*100/(col[2]+col[5]*100)+250), (int)((col[1]+col[4]*100)*100/(col[2]+col[5]*100)+250));
-//			printf("%lf %lf\n", ((col[0]+col[3])*100/(col[2]+col[5])+250), ((col[1]+col[4])*100/(col[2]+col[5])+250));
-			free(col);
-		}
 		paint();
 		#ifdef ANAGLYPH
 		SDL_SetRenderDrawColor(render, 255, 255, 255, 255);//you need a white background for anaglyph...
@@ -99,14 +117,14 @@ int main(){
 		#endif
 		SDL_RenderClear(render);
 		SDL_Event evnt;
-//		do {
+		do {
 			SDL_PollEvent(&evnt);
-//		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if (evnt.type == SDL_QUIT){
 			running = 0;
 		}
 		clock_gettime(CLOCK_MONOTONIC, &otherTime);
-		int32_t sleep = (int32_t)25000000 - (otherTime.tv_nsec-lastTime.tv_nsec) - 1000000000l*(otherTime.tv_sec-lastTime.tv_sec);
+		int32_t sleep = (int32_t)(1000000000/FRAMERATE) - (otherTime.tv_nsec-lastTime.tv_nsec) - 1000000000l*(otherTime.tv_sec-lastTime.tv_sec);
 		if(sleep > 0){
 			t.tv_nsec = sleep;
 			nanosleep(&t, NULL);

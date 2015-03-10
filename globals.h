@@ -1,4 +1,7 @@
 #define EPSILON 0.000001
+#define FRAMERATE 40//IN HERTZ LOL
+#define GRAVITY 9.8
+#define DRAG 0.99 //wtf physix 0-1 higher is weakerr
 #define CROSS(dest, v1, v2)\
 	dest[0]=v1[1]*v2[2]-v1[2]*v2[1];\
 	dest[1]=v1[2]*v2[0]-v1[0]*v2[2];\
@@ -15,16 +18,22 @@ typedef struct ray{
 	int ends[2];
 }ray;
 typedef struct mesh{
-	double *cpointmatrix;//constant point matrix
-	double rot[4];//rotation vector x, y, z, magnitude, current position(as each tick will be newly rotated from the pattern)
-	double vx, vy, vz;//velocity
-	double mass;
+	int moves;
+	double *cpointmatrix;//constant point matrix CURRENTLY NOT USED
+	double *rot, *rot2;//rotation vector x, y, z, magnitude, current position(as each tick will be newly rotated from the pattern)
+	double vx, vy, vz, vx2, vy2, vz2;//velocity
+	double mass, drag;
 	int triangles, rays, points;
 	triangle *trianglematrix;
 	ray *raymatrix;
-	double centermass[3], radius;//coordinates of center of mass in the "real world"
-	double *pointmatrix;
+	double *centermass, *centermass2, radius;//coordinates of center of mass in the "real world"
+	double *pointmatrix, *pointmatrix2;
 }mesh;
+typedef struct player{
+	double center[3];
+	double vx, vy, vz;
+	double view[3];
+}player;
 extern void movemesh(mesh *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);
 extern double* collisions(mesh *one, mesh *two);

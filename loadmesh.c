@@ -3,22 +3,38 @@
 #include <math.h>
 #include "globals.h"
 void loadmesh(char name[20], mesh *final, double centerx, double centery, double centerz){
+	final->centermass = calloc(sizeof(double), 3);
+	final->centermass2 = calloc(sizeof(double), 3);
 	final->centermass[0] = centerx;
 	final->centermass[1] = centery;
 	final->centermass[2] = centerz;
+	final->centermass2[0] = centerx;
+	final->centermass2[1] = centery;
+	final->centermass2[2] = centerz;
+	final->rot = calloc(sizeof(double), 4);
+	final->rot2 = calloc(sizeof(double), 4);
 	final->rot[0] = 0;
 	final->rot[1] = 0;
-	final->rot[2] = 1;
+	final->rot[2] = 0;
 	final->rot[3] = 0;
+	final->rot2[0] = 0;
+	final->rot2[1] = 0;
+	final->rot2[2] = 0;
+	final->rot2[3] = 0;
 	final->vx = 0;
 	final->vy = 0;
 	final->vz = 0;
+	final->vx2 = 0;
+	final->vy2 = 0;
+	final->vz2 = 0;
+	final->moves = 1;
 	final->mass = 1;
 	final->radius = 0;
 	FILE *fp;
 	fp = fopen(name, "r");
 	if(EOF == fscanf(fp, "%d %d %d", &final->points, &final->triangles, &final->rays)) puts("file read failed");
 	final->pointmatrix = calloc(sizeof(double)*3, final->points);
+	final->pointmatrix2 = calloc(sizeof(double)*3, final->points);
 	final->cpointmatrix = calloc(sizeof(double)*3, final->points);
 	final->raymatrix = calloc(sizeof(ray), final->rays);
 	final->trianglematrix = calloc(sizeof(triangle), final->triangles);
@@ -42,6 +58,9 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 				final->pointmatrix[temp*3+0] = x;
 				final->pointmatrix[temp*3+1] = y;
 				final->pointmatrix[temp*3+2] = z;
+				final->pointmatrix2[temp*3+0] = x;
+				final->pointmatrix2[temp*3+1] = y;
+				final->pointmatrix2[temp*3+2] = z;
 				if(sqrt(x*x+y*y+z*z) > final->radius) final->radius = sqrt(x*x+y*y+z*z);
 				pointcount++;
 			}
@@ -61,5 +80,6 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 			}
 		}
 	}
+//	final->drag = ;
 	fclose(fp);
 }

@@ -5,6 +5,10 @@
 static double orig[3], dir[3], t, u, v;
 
 void norm(double * target){
+/*	if(isnan(target[0]) || !isfinite(target[0]));
+	if(isnan(target[1]) || !isfinite(target[1]));
+	if(isnan(target[2]) || !isfinite(target[2]));*/
+	if(target[0] == 0 && target[1] == 0 && target[2] == 0) return;
 	double howmuch = sqrt(target[0]*target[0]+target[1]*target[1]+target[2]*target[2]);
 	target[0] = target[0] / howmuch;
 	target[1] = target[1] / howmuch;
@@ -18,7 +22,7 @@ double distance(double vect[3], double point[3]){
 	double dista = sqrt(a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
 	double angle = acos(DOT(a, b)/(dista*distb));
 	double ans = sin(angle)*distb;
-//	if(isnan(ans) || !isfinite(ans)) return 0;
+	if(isnan(ans) || !isfinite(ans)) return 0;
 	return ans;
 }
 
@@ -31,20 +35,20 @@ double * collisions(mesh *one, mesh *two){
 	mesh *tempmesh;
 	double offsetx, offsety, offsetz;
 	for(temp = 0; temp < 2; temp++){
-		offsetx = one->centermass[0]-two->centermass[0];
-		offsety = one->centermass[1]-two->centermass[1];
-		offsetz = one->centermass[2]-two->centermass[2];
+		offsetx = one->centermass2[0]-two->centermass2[0];
+		offsety = one->centermass2[1]-two->centermass2[1];
+		offsetz = one->centermass2[2]-two->centermass2[2];
 		for(tempray = one->rays-1; tempray >=0; tempray--){
 			for(temptri = two->triangles-1; temptri >=0; temptri--){
-				if(intersect_triangle(&one->pointmatrix[one->raymatrix[tempray].ends[0]*3], &one->pointmatrix[one->raymatrix[tempray].ends[1]*3], &two->pointmatrix[two->trianglematrix[temptri].points[0]*3], &two->pointmatrix[two->trianglematrix[temptri].points[1]*3], &two->pointmatrix[two->trianglematrix[temptri].points[2]*3], &t, &u, &v, offsetx, offsety, offsetz)){
+				if(intersect_triangle(&one->pointmatrix2[one->raymatrix[tempray].ends[0]*3], &one->pointmatrix2[one->raymatrix[tempray].ends[1]*3], &two->pointmatrix2[two->trianglematrix[temptri].points[0]*3], &two->pointmatrix2[two->trianglematrix[temptri].points[1]*3], &two->pointmatrix2[two->trianglematrix[temptri].points[2]*3], &t, &u, &v, offsetx, offsety, offsetz)){
 					if(col == NULL) col = calloc(sizeof(double), 6);//first 3 for point of collision, next 9 for force
 					z = 1-(u+v);//find the third barycentric coordinate
-					pone = &two->pointmatrix[two->trianglematrix[temptri].points[0]*3];
-					ptwo = &two->pointmatrix[two->trianglematrix[temptri].points[1]*3];
-					pthree = &two->pointmatrix[two->trianglematrix[temptri].points[2]*3];
-					col[0] = (z*pone[0]+u*ptwo[0]+v*pthree[0]+two->centermass[0]+col[0]*howmany)/(howmany+1);
-					col[1] = (z*pone[1]+u*ptwo[1]+v*pthree[1]+two->centermass[1]+col[1]*howmany)/(howmany+1);
-					col[2] = (z*pone[2]+u*ptwo[2]+v*pthree[2]+two->centermass[2]+col[2]*howmany)/(howmany+1);
+					pone = &two->pointmatrix2[two->trianglematrix[temptri].points[0]*3];
+					ptwo = &two->pointmatrix2[two->trianglematrix[temptri].points[1]*3];
+					pthree = &two->pointmatrix2[two->trianglematrix[temptri].points[2]*3];
+					col[0] = (z*pone[0]+u*ptwo[0]+v*pthree[0]+two->centermass2[0]+col[0]*howmany)/(howmany+1);
+					col[1] = (z*pone[1]+u*ptwo[1]+v*pthree[1]+two->centermass2[1]+col[1]*howmany)/(howmany+1);
+					col[2] = (z*pone[2]+u*ptwo[2]+v*pthree[2]+two->centermass2[2]+col[2]*howmany)/(howmany+1);
 					howmany++;
 					
 				}
@@ -76,6 +80,8 @@ double * collisions(mesh *one, mesh *two){
 			col[3] -= uv[0]*speed;
 			col[4] -= uv[1]*speed;
 			col[5] -= uv[2]*speed;
+			if(isnan(speed) || !isfinite(speed)) puts("speed");
+			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed1");
 		}
 
 		if(!(two->rot[0] == 0 && two->rot[1] == 0 && two->rot[2] == 0)){
@@ -91,9 +97,13 @@ double * collisions(mesh *one, mesh *two){
 			col[3] += uv[0]*speed;
 			col[4] += uv[1]*speed;
 			col[5] += uv[2]*speed;
+			if(isnan(speed) || !isfinite(speed)) puts("speed");
+			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed2");
 		}
-			rotationspeed = sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]);
-			
+		printf("%lf\n", one->rot[0]*one->rot[0]+one->rot[1]*one->rot[1]+one->rot[2]*one->rot[2]);
+		rotationspeed = sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]);
+		if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed3");
+		if(one->moves){	
 			colloc[0] = col[0] - one->centermass[0];
 			colloc[1] = col[1] - one->centermass[1];
 			colloc[2] = col[2] - one->centermass[2];
@@ -103,18 +113,18 @@ double * collisions(mesh *one, mesh *two){
 			printf("1 %lf\n", col[4]);
 			printf("2 %lf\n", col[5]);
 			printf("rad %lf\n\n", one->radius);*/
-			one->vx -= col[3]*(1-z)*(one->mass/two->mass);
-			one->vy -= col[4]*(1-z)*(one->mass/two->mass);
-			one->vz -= col[5]*(1-z)*(one->mass/two->mass);
+			one->vx -= col[3]*(1-z)/one->mass;
+			one->vy -= col[4]*(1-z)/one->mass;
+			one->vz -= col[5]*(1-z)/one->mass;
 			uv[0] = col[4]*colloc[2]-col[5]*colloc[1]; 
 			uv[1] = col[5]*colloc[0]-col[3]*colloc[2];
 			uv[2] = col[3]*colloc[1]-col[4]*colloc[0];
 			norm(uv);
-			two->rot[0] += uv[0]*z*rotationspeed;
-			two->rot[1] += uv[1]*z*rotationspeed;
-			two->rot[2] += uv[2]*z*rotationspeed;
-			
-
+			one->rot[0] += z*uv[0]*rotationspeed/one->mass;
+			one->rot[1] += z*uv[1]*rotationspeed/one->mass;
+			one->rot[2] += z*uv[2]*rotationspeed/one->mass;
+		}
+		if(two->moves){
 			colloc[0] = col[0] - two->centermass[0];
 			colloc[1] = col[1] - two->centermass[1];
 			colloc[2] = col[2] - two->centermass[2];
@@ -124,17 +134,17 @@ double * collisions(mesh *one, mesh *two){
 			printf("1 %lf\n", col[4]);
 			printf("2 %lf\n", col[5]);
 			printf("rad %lf\n\n", two->radius);*/
-			two->vx += col[3]*(1-z)*(two->mass/one->mass);
-			two->vy += col[4]*(1-z)*(two->mass/one->mass);
-			two->vz += col[5]*(1-z)*(two->mass/one->mass);
+			two->vx += col[3]*(1-z)/two->mass;
+			two->vy += col[4]*(1-z)/two->mass;
+			two->vz += col[5]*(1-z)/two->mass;
 			uv[0] = col[4]*colloc[2]-col[5]*colloc[1]; 
 			uv[1] = col[5]*colloc[0]-col[3]*colloc[2];
 			uv[2] = col[3]*colloc[1]-col[4]*colloc[0];
 			norm(uv);
-			one->rot[0] -= uv[0]*z*rotationspeed;
-			one->rot[1] -= uv[1]*z*rotationspeed;
-			one->rot[2] -= uv[2]*z*rotationspeed;
-			
+			two->rot[0] -= z*uv[0]*rotationspeed/two->mass;
+			two->rot[1] -= z*uv[1]*rotationspeed/two->mass;
+			two->rot[2] -= z*uv[2]*rotationspeed/two->mass;
+		}
 /*		for(temp = 0; temp < 2; temp++){
 			colloc[0] = col[0] - one->centermass[0];
 			colloc[1] = col[1] - one->centermass[1];
