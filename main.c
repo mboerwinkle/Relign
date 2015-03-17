@@ -21,11 +21,13 @@ int main(){
 	mesh *meshes;
 	int meshcount = 0;
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("square", &meshes[1], 0, 0, 30);
+	loadmesh("tree", &meshes[1], 0, 0, 20);
 	meshcount++;
 	loadmesh("ground", &meshes[0], 0, 0, 50);
 	meshcount++;
 	meshes[0].moves = 0;
+	meshes[1].rot[1] = 0.7;
+	meshes[1].rot[2] = 0.3;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	window = SDL_CreateWindow("Relign - Wunderbar", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
 	if(window == NULL){
