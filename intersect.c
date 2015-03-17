@@ -80,8 +80,8 @@ double * collisions(mesh *one, mesh *two){
 			col[3] -= uv[0]*speed;
 			col[4] -= uv[1]*speed;
 			col[5] -= uv[2]*speed;
-			if(isnan(speed) || !isfinite(speed)) puts("speed");
-			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed1");
+			if(isnan(speed) || !isfinite(speed)) puts("speed error");
+			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed1 error");
 		}
 
 		if(!(two->rot[0] == 0 && two->rot[1] == 0 && two->rot[2] == 0)){
@@ -97,96 +97,68 @@ double * collisions(mesh *one, mesh *two){
 			col[3] += uv[0]*speed;
 			col[4] += uv[1]*speed;
 			col[5] += uv[2]*speed;
-			if(isnan(speed) || !isfinite(speed)) puts("speed");
-			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed2");
+			if(isnan(speed) || !isfinite(speed)) puts("speed error");
+			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed2 error");
 		}
-		printf("%lf\n", one->rot[0]*one->rot[0]+one->rot[1]*one->rot[1]+one->rot[2]*one->rot[2]);
-		rotationspeed = sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]);
-		if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed3");
+		double velocity[3], rotation[3];
 		if(one->moves){	
 			colloc[0] = col[0] - one->centermass[0];
 			colloc[1] = col[1] - one->centermass[1];
 			colloc[2] = col[2] - one->centermass[2];
-			z = distance(&col[3], colloc)/one->radius;//from here on, z is used for 1 divided by the quantity of force for rotation
-/*			printf("z %lf\n", z);
-			printf("0 %lf\n", col[3]);
-			printf("1 %lf\n", col[4]);
-			printf("2 %lf\n", col[5]);
-			printf("rad %lf\n\n", one->radius);*/
-			one->vx -= col[3]*(1-z)/one->mass;
-			one->vy -= col[4]*(1-z)/one->mass;
-			one->vz -= col[5]*(1-z)/one->mass;
-			uv[0] = col[4]*colloc[2]-col[5]*colloc[1]; 
-			uv[1] = col[5]*colloc[0]-col[3]*colloc[2];
-			uv[2] = col[3]*colloc[1]-col[4]*colloc[0];
+			velocity[0] = -colloc[0];
+			velocity[1] = -colloc[1];
+			velocity[2] = -colloc[2];
+			norm(velocity);
+			speed = DOT(velocity, (&col[3]));
+			printf("%lf\n", speed);
+			velocity[0] *= speed;
+			velocity[1] *= speed;
+			velocity[2] *= speed;
+			rotation[0] = col[3]-velocity[0];
+			rotation[1] = col[4]-velocity[1];
+			rotation[2] = col[5]-velocity[2];
+			one->vx2 -= velocity[0];
+			one->vy2 -= velocity[1];
+			one->vz2 -= velocity[2];
+			rotationspeed = sqrt(rotation[0]*rotation[0]+rotation[1]*rotation[1]+rotation[2]*rotation[2]);
+			uv[0] = rotation[1]*colloc[2]-rotation[2]*colloc[1];
+			uv[1] = rotation[2]*colloc[0]-rotation[0]*colloc[2];
+			uv[2] = rotation[0]*colloc[1]-rotation[1]*colloc[0];
 			norm(uv);
-			one->rot[0] += z*uv[0]*rotationspeed/one->mass;
-			one->rot[1] += z*uv[1]*rotationspeed/one->mass;
-			one->rot[2] += z*uv[2]*rotationspeed/one->mass;
+			one->rot2[0] += uv[0]*rotationspeed;
+			one->rot2[1] += uv[1]*rotationspeed;
+			one->rot2[2] += uv[2]*rotationspeed;
 		}
 		if(two->moves){
-			colloc[0] = col[0] - two->centermass[0];
-			colloc[1] = col[1] - two->centermass[1];
-			colloc[2] = col[2] - two->centermass[2];
-			z = distance(&col[3], colloc)/two->radius;//from here on, z is used for 1 divided by the quantity of force for rotation
-/*			printf("%lf\n", z);
-			printf("0 %lf\n", col[3]);
-			printf("1 %lf\n", col[4]);
-			printf("2 %lf\n", col[5]);
-			printf("rad %lf\n\n", two->radius);*/
-			two->vx += col[3]*(1-z)/two->mass;
-			two->vy += col[4]*(1-z)/two->mass;
-			two->vz += col[5]*(1-z)/two->mass;
-			uv[0] = col[4]*colloc[2]-col[5]*colloc[1]; 
-			uv[1] = col[5]*colloc[0]-col[3]*colloc[2];
-			uv[2] = col[3]*colloc[1]-col[4]*colloc[0];
-			norm(uv);
-			two->rot[0] -= z*uv[0]*rotationspeed/two->mass;
-			two->rot[1] -= z*uv[1]*rotationspeed/two->mass;
-			two->rot[2] -= z*uv[2]*rotationspeed/two->mass;
-		}
-/*		for(temp = 0; temp < 2; temp++){
-			colloc[0] = col[0] - one->centermass[0];
-			colloc[1] = col[1] - one->centermass[1];
-			colloc[2] = col[2] - one->centermass[2];
-			if(!(one->rot[0] == 0 && one->rot[1] == 0 && one->rot[2] == 0)){
-				if(sqrt(one->rot[0]*one->rot[0]+one->rot[1]*one->rot[1]+one->rot[2]*one->rot[2]) != 1){
-					double change = 1/sqrt(one->rot[0]*one->rot[0]+one->rot[1]*one->rot[1]+one->rot[2]*one->rot[2]);
-					one->rot[0] *= change;
-					one->rot[1] *= change;
-					one->rot[2] *= change;
-					if(change < 0){
-						puts("wot?");
-						one->rotationspeed *= -1;
-						one->rot[3] += M_PI;
-						if(one->rot[3] >= 2*M_PI) one->rot[3] -= 2*M_PI;
-					}
-				}
-			}
-			double speed = one->rotationspeed*(distance(one->rot, colloc)/one->radius);//speed of rotation of collision point
-			col[3] += one->rot[1]*speed*col[2]-one->rot[2]*speed*col[1];
-			col[4] += one->rot[2]*speed*col[0]-one->rot[0]*speed*col[2];
-			col[5] += one->rot[0]*speed*col[1]-one->rot[1]*speed*col[0];
-			tempmesh = one;
-			one = two;
-			two = tempmesh;
-//		sqrt((col[0]-one->centermass[0])*(col[0]-one->centermass[0])+(col[1]-one->centermass[1])*(col[1]-one->centermass[1])+(col[2]-one->centermass[2])*(col[2]-one->centermass[2]));
-		}
-		for(temp = 0; temp < 2; temp++){
-			colloc[0] = two->centermass[0] - col[0];
-			colloc[1] = two->centermass[1] - col[1];
-			colloc[2] = two->centermass[2] - col[2];
-			z = distance(&col[3], colloc)/two->radius;//from here on, z is used for 1 divided by the quantity of force for rotation
-			two->vx += col[3]*(1-z)*(two->mass/one->mass);
-			two->vy += col[4]*(1-z)*(two->mass/one->mass);
-			two->vz += col[5]*(1-z)*(two->mass/one->mass);
 			col[3] *= -1;
 			col[4] *= -1;
 			col[5] *= -1;
-			tempmesh = one;
-			one = two;
-			two = tempmesh;
-		}*/
+			colloc[0] = col[0] - two->centermass[0];
+			colloc[1] = col[1] - two->centermass[1];
+			colloc[2] = col[2] - two->centermass[2];
+			velocity[0] = -colloc[0];
+			velocity[1] = -colloc[1];
+			velocity[2] = -colloc[2];
+			norm(velocity);
+			speed = DOT(velocity, (&col[3]));
+			velocity[0] *= speed;
+			velocity[1] *= speed;
+			velocity[2] *= speed;
+			rotation[0] = col[3]-velocity[0];
+			rotation[1] = col[4]-velocity[1];
+			rotation[2] = col[5]-velocity[2];
+			two->vx2 -= velocity[0];
+			two->vy2 -= velocity[1];
+			two->vz2 -= velocity[2];
+			rotationspeed = sqrt(rotation[0]*rotation[0]+rotation[1]*rotation[1]+rotation[2]*rotation[2]);
+			uv[0] = rotation[1]*colloc[2]-rotation[2]*colloc[1];
+			uv[1] = rotation[2]*colloc[0]-rotation[0]*colloc[2];
+			uv[2] = rotation[0]*colloc[1]-rotation[1]*colloc[0];
+			norm(uv);
+			two->rot2[0] += uv[0]*rotationspeed;
+			two->rot2[1] += uv[1]*rotationspeed;
+			two->rot2[2] += uv[2]*rotationspeed;
+		}
 	}
 	return col;
 }

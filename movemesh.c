@@ -45,7 +45,7 @@ void movemesh(mesh *target){
 		target->pointmatrix2[temp*3+1] = (m10*x+m11*y+m12*z);
 		target->pointmatrix2[temp*3+2] = (m20*x+m21*y+m22*z);
 	}
-	target->centermass2[0] += target->vx;
-	target->centermass2[1] += target->vy;
-	target->centermass2[2] += target->vz;
+	target->centermass2[0] = target->centermass[0]+target->vx;
+	target->centermass2[1] = target->centermass[1]+target->vy;
+	target->centermass2[2] = target->centermass[2]+target->vz;
 }

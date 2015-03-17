@@ -30,6 +30,7 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 	final->moves = 1;
 	final->mass = 1;
 	final->radius = 0;
+	final->collision = 0;
 	FILE *fp;
 	fp = fopen(name, "r");
 	if(EOF == fscanf(fp, "%d %d %d", &final->points, &final->triangles, &final->rays)) puts("file read failed");
