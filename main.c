@@ -23,7 +23,7 @@ int main(){
 	meshes = calloc(sizeof(mesh), 5);
 	loadmesh("square", &meshes[1], 0, 0, 30);
 	meshcount++;
-	loadmesh("ground", &meshes[0], 0, 0, 50);
+	loadmesh("square", &meshes[0], 0, 0, 50);
 	meshcount++;
 	meshes[0].moves = 0;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
@@ -107,9 +107,9 @@ int main(){
 		}
 		paint();
 		SDL_Event evnt;
-		do {
+//		do {
 			SDL_PollEvent(&evnt);
-		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+//		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if (evnt.type == SDL_QUIT){
 			running = 0;
 		}

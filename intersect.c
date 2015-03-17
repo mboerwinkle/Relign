@@ -110,7 +110,6 @@ double * collisions(mesh *one, mesh *two){
 			velocity[2] = -colloc[2];
 			norm(velocity);
 			speed = DOT(velocity, (&col[3]));
-			printf("%lf\n", speed);
 			velocity[0] *= speed;
 			velocity[1] *= speed;
 			velocity[2] *= speed;
