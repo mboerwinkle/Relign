@@ -1,7 +1,7 @@
 #define EPSILON 0.000001
 #define FRAMERATE 40//IN HERTZ LOL
-#define GRAVITY 0//9.8//standard earth.. 1.6 for moon. 3.7 for mars
-#define DRAG 1 //wtf physix 0-1 higher is weakerr
+#define GRAVITY -9.8//9.8//standard earth.. 1.6 for moon. 3.7 for mars
+#define DRAG 0.97 //wtf physix 0-1 higher is weakerr
 #define CROSS(dest, v1, v2)\
 	dest[0]=v1[1]*v2[2]-v1[2]*v2[1];\
 	dest[1]=v1[2]*v2[0]-v1[0]*v2[2];\

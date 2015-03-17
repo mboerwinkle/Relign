@@ -23,7 +23,7 @@ int main(){
 	meshes = calloc(sizeof(mesh), 5);
 	loadmesh("square", &meshes[1], 0, 0, 30);
 	meshcount++;
-	loadmesh("square", &meshes[0], 0, 0, 50);
+	loadmesh("ground", &meshes[0], 0, 0, 50);
 	meshcount++;
 	meshes[0].moves = 0;
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
@@ -43,17 +43,6 @@ int main(){
 		SDL_RenderClear(render);
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = &meshes[temp];
-			if(mesh1->moves){
-				mesh1->vz2 = (mesh1->vz - GRAVITY/FRAMERATE) * DRAG;
-				mesh1->vx2 = mesh1->vx * DRAG;
-				mesh1->vy2 = mesh1->vy * DRAG;
-				mesh1->rot2[0] = mesh1->rot[0] * DRAG;
-				mesh1->rot2[1] = mesh1->rot[1] * DRAG;
-				mesh1->rot2[2] = mesh1->rot[2] * DRAG;
-			}
-		}
-		for(temp = 0; temp < meshcount; temp++){
-			mesh1 = &meshes[temp];
 			movemesh(mesh1);
 			mesh1->collision = 0;
 			for(temp2 = temp-1; temp2 >= 0; temp2--){
@@ -67,6 +56,17 @@ int main(){
 					mesh1->collision = 1;
 					meshes[temp2].collision = 1;
 				}
+			}
+		}
+		for(temp = 0; temp < meshcount; temp++){
+			mesh1 = &meshes[temp];
+			if(mesh1->moves){
+				mesh1->vz2 = (mesh1->vz - GRAVITY/FRAMERATE) * DRAG;
+				mesh1->vx2 = mesh1->vx * DRAG;
+				mesh1->vy2 = mesh1->vy * DRAG;
+				mesh1->rot2[0] = mesh1->rot[0] * DRAG;
+				mesh1->rot2[1] = mesh1->rot[1] * DRAG;
+				mesh1->rot2[2] = mesh1->rot[2] * DRAG;
 			}
 		}
 		for(temp = 0; temp < meshcount; temp++){
@@ -107,9 +107,9 @@ int main(){
 		}
 		paint();
 		SDL_Event evnt;
-//		do {
+		do {
 			SDL_PollEvent(&evnt);
-//		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if (evnt.type == SDL_QUIT){
 			running = 0;
 		}
