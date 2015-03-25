@@ -17,11 +17,15 @@ int main(){
 	struct timespec otherTime = {.tv_sec = 0, .tv_nsec = 0};
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("square", &meshes[1], -5, 6, 10);
+	loadmesh("square", &meshes[0], 0, 0, 10);
 	meshcount++;
-	loadmesh("square", &meshes[0], 0, 0, 30);
+	loadmesh("ground", &meshes[1], 0, 0, 30);
 	meshcount++;
-	meshes[1].vz = 0.4;
+	meshes[1].moves = 0;
+//	meshes[1].mass = 6000000000;
+	meshes[0].mass = 1;
+	meshes[0].vz = 2;
+//	meshes[0].moves =1;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
 	}
