@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "globals.h"
-static double orig[3], dir[3], t, u, v;
+static double orig[3], dir[3], t, u, v, col[6];
 
 void norm(double * target){
 /*	if(isnan(target[0]) || !isfinite(target[0]));
@@ -26,11 +26,11 @@ double distance(double vect[3], double point[3]){
 	return ans;
 }
 
-double * collisions(mesh *one, mesh *two){
+int collisions(mesh *one, mesh *two){
+	int collides = 0;
 	double z;//the third barycentric coordinate
 	double *pone, *ptwo, *pthree;
 	int temp, tempray, temptri;
-	double *col = NULL; //estimated center of collision
 	int howmany = 0;//not to be confused with the wack-ass corn...
 	mesh *tempmesh;
 	double offsetx, offsety, offsetz;
@@ -41,7 +41,7 @@ double * collisions(mesh *one, mesh *two){
 		for(tempray = one->rays-1; tempray >=0; tempray--){
 			for(temptri = two->triangles-1; temptri >=0; temptri--){
 				if(intersect_triangle(&one->pointmatrix2[one->raymatrix[tempray].ends[0]*3], &one->pointmatrix2[one->raymatrix[tempray].ends[1]*3], &two->pointmatrix2[two->trianglematrix[temptri].points[0]*3], &two->pointmatrix2[two->trianglematrix[temptri].points[1]*3], &two->pointmatrix2[two->trianglematrix[temptri].points[2]*3], &t, &u, &v, offsetx, offsety, offsetz)){
-					if(col == NULL) col = calloc(sizeof(double), 6);//first 3 for point of collision, next 9 for force
+					collides = 1;
 					z = 1-(u+v);//find the third barycentric coordinate
 					pone = &two->pointmatrix2[two->trianglematrix[temptri].points[0]*3];
 					ptwo = &two->pointmatrix2[two->trianglematrix[temptri].points[1]*3];
@@ -58,7 +58,7 @@ double * collisions(mesh *one, mesh *two){
 		one = two;
 		two = tempmesh;
 	}
-	if(col != NULL){
+	if(collides){
 		double rotationspeed;
 		double colloc[3];
 		col[3] = 0+one->vx-two->vx;
@@ -110,6 +110,7 @@ double * collisions(mesh *one, mesh *two){
 			velocity[2] = -colloc[2];
 			norm(velocity);
 			speed = DOT(velocity, (&col[3]));
+			printf("speed %lf\n", speed);
 			velocity[0] *= speed;
 			velocity[1] *= speed;
 			velocity[2] *= speed;
@@ -159,7 +160,10 @@ double * collisions(mesh *one, mesh *two){
 			two->rot2[2] += uv[2]*rotationspeed;
 		}
 	}
-	return col;
+	SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+	SDL_RenderDrawLine(render, (int)(100*col[0]/col[2])+250, (int)(100*col[1]/col[2])+250, (int)(100*col[3]/col[5])+250, (int)(100*col[4]/col[5])+250);
+	printf("%lf %lf %lf\n%lf\n\n", col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
+	return collides;
 }
 
 int intersect_triangle(double end1[3], double end2[3], double vert0[3], double vert1[3], double vert2[3], double *t, double *u, double *v, double offsetx, double offsety, double offsetz){
@@ -174,7 +178,6 @@ int intersect_triangle(double end1[3], double end2[3], double vert0[3], double v
 	orig[2] = end1[2] + offsetz;
 	double edge1[3], edge2[3], tvec[3], pvec[3], qvec[3];
 	double det, inv_det;
-
 	/* find vectors for two edges sharing vert0 */
 	SUB(edge1, vert1, vert0);
 	SUB(edge2, vert2, vert0);

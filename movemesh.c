@@ -4,6 +4,7 @@
 #include "globals.h"
 
 void movemesh(mesh *target){
+//FIX THIS SHIT, SUPER INEFFICIENT
 	target->rot[3] = sqrt(target->rot[0]*target->rot[0]+target->rot[1]*target->rot[1]+target->rot[2]*target->rot[2]);//maybe calculate this each time velocity altered?
 //	if(target->rot[3] >= M_PI) target->rot[3] -= (2*M_PI);
 	if(isnan(target->rot[3] || !isfinite(target->rot[3]))) puts("error");
