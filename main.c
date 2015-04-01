@@ -17,7 +17,7 @@ int main(){
 	struct timespec otherTime = {.tv_sec = 0, .tv_nsec = 0};
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("plus.rrm", &meshes[0], 0, 0, 5);
+	loadmesh("square", &meshes[0], 0, 0, 5);
 	meshcount++;
 	loadmesh("ground", &meshes[1], 0, 0, 30);
 	meshcount++;
