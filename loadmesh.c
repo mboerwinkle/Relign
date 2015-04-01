@@ -76,11 +76,11 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 				final->pointmatrix2[temp*3+2] = z;
 				if(sqrt(x*x+y*y+z*z) > final->radius) final->radius = sqrt(x*x+y*y+z*z);
 			}
-			final->trianglematrix[final->triangles].points[corner] = temp;
+			final->trianglematrix[final->triangles-1].points[corner] = temp;
 		}
 		for(corner =  0; corner < 3; corner++){
-			one = final->trianglematrix[final->triangles].points[corner];
-			two = final->trianglematrix[final->triangles].points[(corner+1)%3];
+			one = final->trianglematrix[final->triangles-1].points[corner];
+			two = final->trianglematrix[final->triangles-1].points[(corner+1)%3];
 			temp = 0;
 			while(temp < final->rays && !((one == final->raymatrix[temp].ends[0] && two == final->raymatrix[temp].ends[1]) || (two == final->raymatrix[temp].ends[0] && one == final->raymatrix[temp].ends[1]))){
 				temp++;
