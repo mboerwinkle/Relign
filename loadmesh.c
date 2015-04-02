@@ -40,7 +40,6 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 	final->trianglematrix = NULL;
 	final->raymatrix = NULL;
 	FILE *fp;
-	void *temppoint;
 	fp = fopen(name, "r");
 	int temp, corner, one, two, run = 1;
 	double x3[3], y3[3], z3[3], x, y, z;
@@ -58,10 +57,7 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 			}
 			if(temp == final->points){
 				final->points++;
-				printf("pointer being passed is %p\n", final->pointmatrix2);
-				temppoint = realloc(final->pointmatrix2, (final->points*sizeof(double)*3));
-				printf("pointer recieved is %p\n", temppoint);
-				final->pointmatrix2 = temppoint;
+				final->pointmatrix2 = realloc(final->pointmatrix2, (final->points*sizeof(double)*3));
 				final->cpointmatrix = realloc(final->cpointmatrix, (final->points*sizeof(double)*3));
 				final->pointmatrix = realloc(final->pointmatrix, (final->points*sizeof(double)*3));
 				if(final->pointmatrix == NULL || final->pointmatrix2 == NULL || final->cpointmatrix == NULL) puts("NULLL???");

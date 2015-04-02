@@ -112,7 +112,7 @@ int collisions(mesh *one, mesh *two){
 			velocity[2] = -colloc[2];
 			norm(velocity);
 			speed = relMass * DOT(velocity, (&col[3]));
-			printf("speed %lf\n", speed);
+//			printf("speed %lf\n", speed);
 			velocity[0] *= speed;
 			velocity[1] *= speed;
 			velocity[2] *= speed;
@@ -166,7 +166,7 @@ int collisions(mesh *one, mesh *two){
 	}
 	SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 	SDL_RenderDrawLine(render, (int)(100*col[0]/col[2])+250, (int)(100*col[1]/col[2])+250, (int)(100*(col[3]+col[0])/(col[5]+col[2])+250), (int)(100*(col[4]+col[1])/(col[5]+col[2]))+250);
-	printf("%lf %lf %lf\n%lf\n\n", col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
+//	printf("%lf %lf %lf\n%lf\n\n", col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
 	return collides;
 }
 

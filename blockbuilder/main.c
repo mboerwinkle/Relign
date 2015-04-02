@@ -1,74 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct conj{
 	double x1, y1, z1, x2, y2, z2;
 }conj;
+	
+
+int iscube(int *searchmat, int matsize, int x, int y, int z){
+	int temp;
+	for(temp = matsize-1; temp >= 0; temp--){
+		if(searchmat[temp*3+0] == x && searchmat[temp*3+1] == y && searchmat[temp*3+2] == z) return 1;
+	}
+	return 0;
+}
 
 int main(){
 	char name[40];
-	scanf("%s", name);
+	if(EOF == scanf("%s", name)) puts("input error");
 	FILE *fp;
+	int cubes = 0;
+	int *cubematrix = NULL;
 	int x, y, z;
-	int xsize, ysize, zsize;
-	int points = 0;
-	int triangles = 0;
-	int rays = 0;
+	int xmax = 0, ymax = 0, zmax = 0;
 	double scale;
 	fp = fopen(name, "r");
-	fscanf(fp, "%d %d %d\n %lf", &xsize, &ysize, &zsize, &scale);
-	int mat[xsize][ysize][zsize];
-	int facesx[xsize+1][ysize][zsize];
-	memset(facesx, 0, sizeof(facesx));
-	int facesy[xsize][ysize+1][zsize];
-	memset(facesy, 0, sizeof(facesy));
-	int facesz[xsize][ysize][zsize+1];
-	memset(facesz, 0, sizeof(facesz));
+	if(EOF == fscanf(fp, "%lf", &scale)) puts("read error");
 	while(EOF != fscanf(fp, "%d %d %d", &x, &y, &z)){
-		mat[x][y][z] = 1;
-		if(facesx[x][y][z] == 0){
-			facesx[x][y][z] = 1;
-		}else if(facesx[x][y][z] == 1){
-			facesx[x][y][z] = 2;
-		}
-		if(facesx[x+1][y][z] == 0){
-			facesx[x+1][y][z] = 1;
-		}else if(facesx[x+1][y][z] == 1){
-			facesx[x+1][y][z] = 2;
-		}
-
-		if(facesy[x][y][z] == 0){
-			facesy[x][y][z] = 1;
-		}else if(facesy[x][y][z] == 1){
-			facesy[x][y][z] = 2;
-		}
-		if(facesy[x][y+1][z] == 0){
-			facesy[x][y+1][z] = 1;
-		}else if(facesy[x][y+1][z] == 1){
-			facesy[x][y+1][z] = 2;
-		}
-
-		if(facesz[x][y][z] == 0){
-			facesz[x][y][z] = 1;
-		}else if(facesz[x][y][z] == 1){
-			facesz[x][y][z] = 2;
-		}
-		if(facesz[x][y][z+1] == 0){
-			facesz[x][y][z+1] = 1;
-		}else if(facesz[x][y][z+1] == 1){
-			facesz[x][y][z+1] = 2;
-		}
+		cubes++;
+		cubematrix = realloc(cubematrix, sizeof(int)*3*cubes);
+		cubematrix[(cubes-1)*3+0] = x;
+		cubematrix[(cubes-1)*3+1] = y;
+		cubematrix[(cubes-1)*3+2] = z;
+		if(x > xmax) xmax = x;
+		if(y > ymax) ymax = y;
+		if(z > zmax) zmax = z;
 	}
 	fclose(fp);
-	conj faces[(xsize+1)*(ysize+1)*(zsize+1)];
-	int facescounter = 0;
-	int addNext = 0;
-	for(x = xsize; x >= 0; x--){
-		for(y = ysize-1; y >= 0; y--){
-			for(z = zsize-1; z >= 0; z--){
-				if(facesx[x][y][z] == 1){
-					if(addNext){
-						faces[facescounter-1].y2 = y;
+	conj faces[(xmax+2)*(ymax+2)*(zmax+2)];//+1 to change to size, not max, +1 for both sides of the cubes
+	int facescounter = 0, addnext = 0;
+	for(x = xmax+1; x >= 0; x--){
+		for(y = ymax; y >= 0; y--){
+			for(z = zmax; z >= 0; z--){
+				if(iscube(cubematrix, cubes, x, y, z) ^ iscube(cubematrix, cubes, x-1, y, z)){
+					if(addnext){
 						faces[facescounter-1].z2 = z;
 					}else{
 						facescounter++;
@@ -78,19 +53,18 @@ int main(){
 						faces[facescounter-1].x2 = x;
 						faces[facescounter-1].y2 = y;
 						faces[facescounter-1].z2 = z;
-						addNext = 1;
+						addnext = 1;
 					}
-				}else addNext = 0;
+				}else addnext = 0;
 			}
-		addNext = 0;
+			addnext = 0;
 		}
 	}
-	for(y = ysize; y >= 0; y--){
-		for(x = xsize-1; x >= 0; x--){
-			for(z = zsize-1; z >= 0; z--){
-				if(facesy[x][y][z] == 1){
-					if(addNext){
-						faces[facescounter-1].x2 = x;
+	for(y = ymax+1; y >= 0; y--){
+		for(x = xmax; x >= 0; x--){
+			for(z = zmax; z >= 0; z--){
+				if(iscube(cubematrix, cubes, x, y, z) ^ iscube(cubematrix, cubes, x, y-1, z)){
+					if(addnext){
 						faces[facescounter-1].z2 = z;
 					}else{
 						facescounter++;
@@ -100,19 +74,18 @@ int main(){
 						faces[facescounter-1].x2 = x;
 						faces[facescounter-1].y2 = y;
 						faces[facescounter-1].z2 = z;
-						addNext = 1;
+						addnext = 1;
 					}
-				}else addNext = 0;
+				}else addnext = 0;
 			}
-		addNext = 0;
+			addnext = 0;
 		}
 	}
-	for(z = zsize; z >= 0; z--){
-		for(x = xsize-1; x >= 0; x--){
-			for(y = ysize-1; y >= 0; y--){
-				if(facesz[x][y][z] == 1){
-					if(addNext){
-						faces[facescounter-1].x2 = x;
+	for(z = zmax+1; z >= 0; z--){
+		for(x = xmax; x >= 0; x--){
+			for(y = ymax; y >= 0; y--){
+				if(iscube(cubematrix, cubes, x, y, z) ^ iscube(cubematrix, cubes, x, y, z-1)){
+					if(addnext){
 						faces[facescounter-1].y2 = y;
 					}else{
 						facescounter++;
@@ -122,198 +95,63 @@ int main(){
 						faces[facescounter-1].x2 = x;
 						faces[facescounter-1].y2 = y;
 						faces[facescounter-1].z2 = z;
-						addNext = 1;
+						addnext = 1;
 					}
-				}else addNext = 0;
+				}else addnext = 0;
 			}
-		addNext = 0;
+			addnext = 0;
 		}
 	}
-	int temp, temp2;
-	triangles = facescounter*2;
+	int temp;
 	double x1, x2, x3, x4, y1, y2, y3, y4, z1, z2, z3, z4;
-	double pointmatrix[triangles*2][3];
-	int raymatrix[triangles*(5/2)][2];
-	int trianglematrix[triangles][3];
-	triangles = 0;
 	sprintf(name, "%s.rrm", name);
 	fp = fopen(name, "w");
-	for(temp2 = facescounter-1; temp2 >= 0; temp2--){
-		if(faces[temp2].x1 == faces[temp2].x2){
-			x1 = faces[temp2].x1;
-			x2 = faces[temp2].x1;
-			x3 = faces[temp2].x1;
-			x4 = faces[temp2].x1;
-			y1 = faces[temp2].y1;
-			y2 = faces[temp2].y2;
-			y3 = faces[temp2].y2;
-			y4 = faces[temp2].y1;
-			z1 = faces[temp2].z1;
-			z2 = faces[temp2].z1;
-			z3 = faces[temp2].z2;
-			z4 = faces[temp2].z2;
-		}else if(faces[temp2].y1 == faces[temp2].y2){
-			y1 = faces[temp2].y1;
-			y2 = faces[temp2].y1;
-			y3 = faces[temp2].y1;
-			y4 = faces[temp2].y1;
-			x1 = faces[temp2].x1;
-			x2 = faces[temp2].x2;
-			x3 = faces[temp2].x2;
-			x4 = faces[temp2].x1;
-			z1 = faces[temp2].z1;
-			z2 = faces[temp2].z1;
-			z3 = faces[temp2].z2;
-			z4 = faces[temp2].z2;
-		}else if(faces[temp2].z1 == faces[temp2].z2){
-			z1 = faces[temp2].z1;
-			z2 = faces[temp2].z1;
-			z3 = faces[temp2].z1;
-			z4 = faces[temp2].z1;
-			x1 = faces[temp2].x1;
-			x2 = faces[temp2].x2;
-			x3 = faces[temp2].x2;
-			x4 = faces[temp2].x1;
-			y1 = faces[temp2].y1;
-			y2 = faces[temp2].y1;
-			y3 = faces[temp2].y2;
-			y4 = faces[temp2].y2;
+	for(temp = facescounter-1; temp >= 0; temp--){
+		if(faces[temp].x1 == faces[temp].x2){
+			x1 = faces[temp].x1 * scale;
+			x2 = faces[temp].x1 * scale;
+			x3 = faces[temp].x1 * scale;
+			x4 = faces[temp].x1 * scale;
+			y1 = faces[temp].y1 * scale;
+			y2 = faces[temp].y2 * scale;
+			y3 = faces[temp].y2 * scale;
+			y4 = faces[temp].y1 * scale;
+			z1 = faces[temp].z1 * scale;
+			z2 = faces[temp].z1 * scale;
+			z3 = faces[temp].z2 * scale;
+			z4 = faces[temp].z2 * scale;
+		}else if(faces[temp].y1 == faces[temp].y2){
+			y1 = faces[temp].y1 * scale;
+			y2 = faces[temp].y1 * scale;
+			y3 = faces[temp].y1 * scale;
+			y4 = faces[temp].y1 * scale;
+			x1 = faces[temp].x1 * scale;
+			x2 = faces[temp].x2 * scale;
+			x3 = faces[temp].x2 * scale;
+			x4 = faces[temp].x1 * scale;
+			z1 = faces[temp].z1 * scale;
+			z2 = faces[temp].z1 * scale;
+			z3 = faces[temp].z2 * scale;
+			z4 = faces[temp].z2 * scale;
+		}else if(faces[temp].z1 == faces[temp].z2){
+			z1 = faces[temp].z1 * scale;
+			z2 = faces[temp].z1 * scale;
+			z3 = faces[temp].z1 * scale;
+			z4 = faces[temp].z1 * scale;
+			x1 = faces[temp].x1 * scale;
+			x2 = faces[temp].x2 * scale;
+			x3 = faces[temp].x2 * scale;
+			x4 = faces[temp].x1 * scale;
+			y1 = faces[temp].y1 * scale;
+			y2 = faces[temp].y1 * scale;
+			y3 = faces[temp].y2 * scale;
+			y4 = faces[temp].y2 * scale;
 		}else{
 			puts("error!");
 			 return 1;//I think this is right...
 		}
-		temp = points-1;
-		while(temp >= 0 &&  !(x1 == pointmatrix[temp][0] && y1 == pointmatrix[temp][1] && z1 == pointmatrix[temp][2])){
-			temp--;
-		}
-		if(temp < 0){
-			temp = points;
-			pointmatrix[points][0] = x1;
-			pointmatrix[points][1] = y1;
-			pointmatrix[points][2] = z1;
-			points++;
-		}
-		trianglematrix[triangles][0] = points;
-		temp = points-1;
-		while(temp >= 0 &&  !(x2 == pointmatrix[temp][0] && y2 == pointmatrix[temp][1] && z2 == pointmatrix[temp][2])){
-			temp--;
-		}
-		if(temp < 0){
-			temp = points;
-			pointmatrix[points][0] = x2;
-			pointmatrix[points][1] = y2;
-			pointmatrix[points][2] = z2;
-			points++;
-		}
-		trianglematrix[triangles][1] = points;
-		temp = points-1;
-		while(temp >= 0 &&  !(x3 == pointmatrix[temp][0] && y3 == pointmatrix[temp][1] && z3 == pointmatrix[temp][2])){
-			temp--;
-		}
-		if(temp < 0){
-			temp = points;
-			pointmatrix[points][0] = x3;
-			pointmatrix[points][1] = y3;
-			pointmatrix[points][2] = z3;
-			points++;
-		}
-		trianglematrix[triangles][2] = points;
-		temp = rays-1;
-		while(temp >= 0 && !((raymatrix[temp][0] == trianglematrix[triangles][0] && raymatrix[temp][1] == trianglematrix[triangles][1]) || (raymatrix[temp][1] == trianglematrix[triangles][0] && raymatrix[temp][0] == trianglematrix[triangles][1]))){
-			temp--;
-		}
-		if(temp < 0){
-			raymatrix[rays][0] = trianglematrix[triangles][0];
-			raymatrix[rays][1] = trianglematrix[triangles][1];
-			rays++;
-		}
-		temp = rays-1;
-		while(temp >= 0 && !((raymatrix[temp][0] == trianglematrix[triangles][1] && raymatrix[temp][1] == trianglematrix[triangles][2]) || (raymatrix[temp][1] == trianglematrix[triangles][1] && raymatrix[temp][0] == trianglematrix[triangles][2]))){
-			temp--;
-		}
-		if(temp < 0){
-			raymatrix[rays][0] = trianglematrix[triangles][1];
-			raymatrix[rays][1] = trianglematrix[triangles][2];
-			rays++;
-		}
-		temp = rays-1;
-		while(temp >= 0 && !((raymatrix[temp][0] == trianglematrix[triangles][2] && raymatrix[temp][1] == trianglematrix[triangles][0]) || (raymatrix[temp][1] == trianglematrix[triangles][2] && raymatrix[temp][0] == trianglematrix[triangles][0]))){
-			temp--;
-		}
-		if(temp < 0){
-			raymatrix[rays][0] = trianglematrix[triangles][2];
-			raymatrix[rays][1] = trianglematrix[triangles][0];
-			rays++;
-		}
-		triangles++;
-		temp = points-1;
-		while(temp >= 0 &&  !(x4 == pointmatrix[temp][0] && y4 == pointmatrix[temp][1] && z4 == pointmatrix[temp][2])){
-			temp--;
-		}
-		if(temp < 0){
-			temp = points;
-			pointmatrix[points][0] = x4;
-			pointmatrix[points][1] = y4;
-			pointmatrix[points][2] = z4;
-			points++;
-		}
-		trianglematrix[triangles][0] = points;
-		temp = points-1;
-		while(temp >= 0 &&  !(x1 == pointmatrix[temp][0] && y1 == pointmatrix[temp][1] && z1 == pointmatrix[temp][2])){
-			temp--;
-		}
-		if(temp < 0){
-			temp = points;
-			pointmatrix[points][0] = x1;
-			pointmatrix[points][1] = y1;
-			pointmatrix[points][2] = z1;
-			points++;
-		}
-		trianglematrix[triangles][1] = points;
-		temp = points-1;
-		while(temp >= 0 &&  !(x3 == pointmatrix[temp][0] && y3 == pointmatrix[temp][1] && z3 == pointmatrix[temp][2])){
-			temp--;
-		}
-		if(temp < 0){
-			temp = points;
-			pointmatrix[points][0] = x3;
-			pointmatrix[points][1] = y3;
-			pointmatrix[points][2] = z3;
-			points++;
-		}
-		trianglematrix[triangles][2] = points;
-		temp = rays-1;
-		while(temp >= 0 && !((raymatrix[temp][0] == trianglematrix[triangles][0] && raymatrix[temp][1] == trianglematrix[triangles][1]) || (raymatrix[temp][1] == trianglematrix[triangles][0] && raymatrix[temp][0] == trianglematrix[triangles][1]))){
-			temp--;
-		}
-		if(temp < 0){
-			raymatrix[rays][0] = trianglematrix[triangles][0];
-			raymatrix[rays][1] = trianglematrix[triangles][1];
-			rays++;
-		}
-		temp = rays-1;
-		while(temp >= 0 && !((raymatrix[temp][0] == trianglematrix[triangles][1] && raymatrix[temp][1] == trianglematrix[triangles][2]) || (raymatrix[temp][1] == trianglematrix[triangles][1] && raymatrix[temp][0] == trianglematrix[triangles][2]))){
-			temp--;
-		}
-		if(temp < 0){
-			raymatrix[rays][0] = trianglematrix[triangles][1];
-			raymatrix[rays][1] = trianglematrix[triangles][2];
-			rays++;
-		}
-		temp = rays-1;
-		while(temp >= 0 && !((raymatrix[temp][0] == trianglematrix[triangles][2] && raymatrix[temp][1] == trianglematrix[triangles][0]) || (raymatrix[temp][1] == trianglematrix[triangles][2] && raymatrix[temp][0] == trianglematrix[triangles][0]))){
-			temp--;
-		}
-		if(temp < 0){
-			raymatrix[rays][0] = trianglematrix[triangles][2];
-			raymatrix[rays][1] = trianglematrix[triangles][0];
-			rays++;
-		}
-		triangles++;
 		fprintf(fp, "%lf %lf %lf\n%lf %lf %lf\n%lf %lf %lf\n\n", x1, y1, z1, x2, y2, z2, x3, y3, z3);
 		fprintf(fp, "%lf %lf %lf\n%lf %lf %lf\n%lf %lf %lf\n\n", x4, y4, z4, x1, y1, z1, x3, y3, z3);
 	}
-	rewind(fp);
-	fprintf(fp, "%d %d %d\n", points, triangles, rays);
 	return 0;
 }

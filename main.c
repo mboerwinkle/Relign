@@ -15,9 +15,10 @@ int main(){
 	struct timespec t = {.tv_sec=0};
 	struct timespec lastTime = {.tv_sec = 0, .tv_nsec = 0};
 	struct timespec otherTime = {.tv_sec = 0, .tv_nsec = 0};
+	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("plus.rrm", &meshes[0], 0, 0, 5);
+	loadmesh("hi.rrm", &meshes[0], -2, -2, 13);
 	meshcount++;
 	loadmesh("ground", &meshes[1], 0, 0, 30);
 	meshcount++;
@@ -25,7 +26,7 @@ int main(){
 //	meshes[1].mass = 6000000000;
 	meshes[0].mass = 1;
 	meshes[0].vz = 0;
-	meshes[0].rot[1] = 0.6;
+	meshes[0].rot[1] = 0.1;
 //	meshes[0].moves =1;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
@@ -44,7 +45,7 @@ int main(){
 				mesh1->rot2[1] = mesh1->rot[1] * DRAG;
 				mesh1->rot2[2] = mesh1->rot[2] * DRAG;
 				movemesh(mesh1);
-				printf("V %lf %lf %lf\n", mesh1->vx, mesh1->vy, mesh1->vz);
+//				printf("V %lf %lf %lf\n", mesh1->vx, mesh1->vy, mesh1->vz);
 			}
 		}
 		for(temp = 0; temp < meshcount; temp++){
@@ -76,10 +77,9 @@ int main(){
 		}
 		drawView();
 
-		SDL_Event evnt;
-		do {
+//		do {
 			SDL_PollEvent(&evnt);
-		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+//		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if (evnt.type == SDL_QUIT){
 			running = 0;
 		}
