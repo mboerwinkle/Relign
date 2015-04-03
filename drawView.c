@@ -14,7 +14,7 @@ static void paint(){
 
 int initView(){
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
-	window = SDL_CreateWindow("Relign - Righteous.", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
+	window = SDL_CreateWindow("Relign - Righteous - Radical.", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
 	if(window == NULL){
 		SDL_Quit();
 		return 1;
@@ -41,7 +41,38 @@ void drawView(){
 			x2 = x + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3+0];
 			y2 = y + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3+1];
 			z2 = z + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3+2];
-			SDL_RenderDrawLine(render, (int)(100*x1/z1)+250, (int)(100*y1/z1)+250, (int)(100*x2/z2)+250, (int)(100*y2/z2)+250);
+			if (z1 < 0 && z2 < 0)
+				continue;
+			if (z1 < 0) { // We only want to handle one case, so switch the points quite ungracefully.
+				double tmp = z1;
+				z1 = z2;
+				z2 = tmp;
+				tmp = x1;
+				x1 = x2;
+				x2 = tmp;
+				tmp = y1;
+				y1 = y2;
+				y2 = tmp;
+			}
+			if (z2 < 0) { // In this case, we want to trace *away* from the projection of point 2, to the edge of the screen.
+				int sx = (int)(100*x1/z1)+250;
+				int sy = (int)(100*y1/z1)+250;
+				int sx2 = (int)(100*x2/z2)+250;
+				int sy2 = (int)(100*y2/z2)+250;
+				int dx = sx - sx2; //dx and dy are the vector along which we trace.
+				int dy = sy - sy2;
+				int factor;
+				if (abs(dx) > abs(dy)) { // We'll cover 500 pixels in the x direction first.
+					factor = (500/abs(dx)) + 1; // Multiply both by the same factor, which ensures at least 500 pixels of ground covered.
+				} else {
+					factor = (500/abs(dy)) + 1;
+				}
+				dx *= factor;
+				dy *= factor;
+				SDL_RenderDrawLine(render, sx, sy, sx+dx, sy+dy);
+			} else {
+				SDL_RenderDrawLine(render, (int)(100*x1/z1)+250, (int)(100*y1/z1)+250, (int)(100*x2/z2)+250, (int)(100*y2/z2)+250);
+			}
 		}
 		SDL_SetRenderDrawColor(render, 100, 100, 255, 255);
 		SDL_RenderDrawPoint(render, (int)(x*100/z+250), (int)(y*100/z+250));
