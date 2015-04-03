@@ -15,9 +15,14 @@ int iscube(int *searchmat, int matsize, int x, int y, int z){
 	return 0;
 }
 
-int main(){
+int main(int argc, char *argv[]){
 	char name[40];
-	if(EOF == scanf("%s", name)) puts("input error");
+	if(argc > 1){
+		strcpy(name, argv[1]);
+	}else{
+		puts("input filename");
+		if(EOF == scanf("%s", name)) puts("input error");
+	}
 	FILE *fp;
 	int cubes = 0;
 	int *cubematrix = NULL;

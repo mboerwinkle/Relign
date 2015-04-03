@@ -18,7 +18,7 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("hi.rrm", &meshes[0], 2.5, -2.5, 7);
+	loadmesh("geb.rrm", &meshes[0], 2.5, -2.5, 7);
 	meshcount++;
 	meshes[0].rot[1] = 0.1;
 	if(initView()){

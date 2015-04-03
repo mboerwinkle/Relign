@@ -41,6 +41,7 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 	final->raymatrix = NULL;
 	FILE *fp;
 	fp = fopen(name, "r");
+	if(fp == NULL) printf("error opening %s\n", name);
 	int temp, corner, one, two, run = 1;
 	double x3[3], y3[3], z3[3], x, y, z;
 	while(run){
