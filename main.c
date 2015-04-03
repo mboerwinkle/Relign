@@ -18,16 +18,9 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("hi.rrm", &meshes[0], -2, -2, 13);
+	loadmesh("hi.rrm", &meshes[0], 2.5, -2.5, 7);
 	meshcount++;
-	loadmesh("ground", &meshes[1], 0, 0, 30);
-	meshcount++;
-	meshes[1].moves = 0;
-//	meshes[1].mass = 6000000000;
-	meshes[0].mass = 1;
-	meshes[0].vz = 0;
 	meshes[0].rot[1] = 0.1;
-//	meshes[0].moves =1;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
 	}
