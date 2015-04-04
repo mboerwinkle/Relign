@@ -27,6 +27,7 @@ double distance(double vect[3], double point[3]){
 }
 
 int collisions(mesh *one, mesh *two){
+	if((one->radius+two->radius)<(sqrt(one->centermass2[0]-two->centermass2[0]*one->centermass2[0]-two->centermass2[0]+one->centermass2[1]-two->centermass2[1]*one->centermass2[1]-two->centermass2[1]+one->centermass2[2]-two->centermass2[2]*one->centermass2[2]-two->centermass2[2]))) return 0;
 	int collides = 0;
 	double z;//the third barycentric coordinate
 	double *pone, *ptwo, *pthree;
