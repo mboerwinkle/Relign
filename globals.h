@@ -37,6 +37,14 @@ typedef struct mesh{
 	double *pointmatrix, *pointmatrix2;
 }mesh;
 
+typedef struct force{
+	mesh *target;
+	double x, y, z;
+	double dirx, diry, dirz;
+	double power;
+	struct force *next;
+}force;
+
 extern mesh* meshes;
 
 typedef struct player{
@@ -44,6 +52,7 @@ typedef struct player{
 	double vx, vy, vz;
 	double view[3];
 }player;
+extern void addForce(force **root, mesh *target, double x, double y, double z, double dirx, double diry, double dirz, double power);
 extern void movemesh(mesh *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);
 extern int collisions(mesh *one, mesh *two);

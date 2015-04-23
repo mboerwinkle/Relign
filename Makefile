@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Wno-strict-aliasing -O2 -c -ffast-math $(DEBUG)
 LFLAGS=-lSDL2 -lm -pthread -lrt
-SOURCES=main.c loadmesh.c movemesh.c intersect.c drawView.c
+SOURCES=main.c loadmesh.c movemesh.c intersect.c drawView.c forces.c
 OBJECTS=$(SOURCES:.c=.o)
 
 .PHONY: debug remake clean
@@ -23,6 +23,9 @@ intersect.o: intersect.c globals.h
 
 drawView.o: drawView.c globals.h
 	$(CC) $(CFLAGS) drawView.c
+
+forces.o: forces.c globals.h
+	$(CC) $(CFLAGS) forces.c
 
 clean:
 	rm -f *.o run

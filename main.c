@@ -22,7 +22,10 @@ int main(){
 	meshcount++;
 	loadmesh("square", &meshes[1], 0, 5, 10);
 	meshcount++;
+//	loadmesh("square", &meshes[2], 10.5, -5, 10);
+//	meshcount++;
 	meshes[1].rot[2] = 0.1;
+//	meshes[2].rot[2] = 0.1;
 	meshes[0].moves = 0;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
