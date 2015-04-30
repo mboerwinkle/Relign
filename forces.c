@@ -14,7 +14,7 @@ void addForce(force **root, mesh *target, double x, double y, double z, double d
 	temp->power = power;
 	temp->target = target;
 	temp->next = *root;
-	root = temp;
+	*root = temp;
 }
 
 void applyForces(force *root){//http://docs.unity3d.com/Manual/ComputingNormalPerpendicularVector.html
@@ -22,6 +22,7 @@ void applyForces(force *root){//http://docs.unity3d.com/Manual/ComputingNormalPe
 	double rotation[3];
 	double rotend[3]; //vector from the center (0, 0) to root->loc+rotation. used for finding the normal.
 	double speed, rotationspeed;
+	force *temp;
 	while(root != NULL){
 		if(root->target->moves) puts("applying a force to something that doesn't move...?");
 		velocity[0] = -root->loc[0];
@@ -46,6 +47,8 @@ void applyForces(force *root){//http://docs.unity3d.com/Manual/ComputingNormalPe
 		root->target->rot2[0] += rotation[0];
 		root->target->rot2[1] += rotation[1];
 		root->target->rot2[2] += rotation[2];
-		root = root->next;
+		temp = root->next;
+		free(root);
+		root = temp;
 	}
 }
