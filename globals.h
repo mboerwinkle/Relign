@@ -37,14 +37,6 @@ typedef struct mesh{
 	double *pointmatrix, *pointmatrix2;
 }mesh;
 
-typedef struct force{
-	mesh *target;
-	double loc[3];
-	double dir[3];
-	double power;
-	struct force *next;
-}force;
-
 extern mesh* meshes;
 
 typedef struct player{
@@ -52,8 +44,7 @@ typedef struct player{
 	double vx, vy, vz;
 	double view[3];
 }player;
-extern void addForce(force **root, mesh *target, double x, double y, double z, double dirx, double diry, double dirz, double power);
-extern void dirnorm(double *target);
+extern void applyForce(mesh *target, double x, double y, double z, double dirx, double diry, double dirz, double power);
 extern void norm(double *target);
 extern void movemesh(mesh *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);

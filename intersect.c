@@ -4,31 +4,6 @@
 #include "globals.h"
 static double orig[3], dir[3], t, u, v, col[6];
 
-void dirnorm(double * target){
-	if(target[0] != 0){
-		if(target[0] < 0){
-			target[0] *= -1;
-			target[1] *= -1;
-			target[2] *= -1;
-		}
-		return;
-	}else if(target[1] != 0){
-		if(target[1] < 0){
-			target[0] *= -1;
-			target[1] *= -1;
-			target[2] *= -1;
-		}
-		return;
-	}else if(target[2] != 0){
-		if(target[2] < 0){
-			target[0] *= -1;
-			target[1] *= -1;
-			target[2] *= -1;
-		}
-		return;
-	}
-}
-
 void norm(double * target){
 /*	if(isnan(target[0]) || !isfinite(target[0]));
 	if(isnan(target[1]) || !isfinite(target[1]));
