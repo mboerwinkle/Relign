@@ -31,7 +31,7 @@ int main(){
 	}
 	int temp, temp2;
 	mesh *mesh1;
-	double *temppoint;
+	double *temppoint;	
 	while(running){
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = &meshes[temp];
