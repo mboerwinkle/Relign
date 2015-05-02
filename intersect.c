@@ -61,112 +61,59 @@ int collisions(mesh *one, mesh *two){
 	}
 	if(collides){
 		double rotationspeed;
-		double colloc[3];
+		double colloc1[3];
+		double colloc2[3];
 		col[3] = 0+one->vx-two->vx;
 		col[4] = 0+one->vy-two->vy;
 		col[5] = 0+one->vz-two->vz;
 
-		double speed;
 		double uv[3];
-		if(!(one->rot[0] == 0 && one->rot[1] == 0 && one->rot[2] == 0)){
-			rotationspeed = sqrt(one->rot[0]*one->rot[0]+one->rot[1]*one->rot[1]+one->rot[2]*one->rot[2]);
-			colloc[0] = col[0] - one->centermass[0];
-			colloc[1] = col[1] - one->centermass[1];
-			colloc[2] = col[2] - one->centermass[2];
-			speed = rotationspeed*(distance(one->rot, colloc)/one->radius);//speed of rotation of collision point
-			uv[0] = (one->rot[1]*col[2]-one->rot[2]*col[1]);
-			uv[1] = (one->rot[2]*col[0]-one->rot[0]*col[2]);
-			uv[2] = (one->rot[0]*col[1]-one->rot[1]*col[0]);
+		double *rot;
+		rot = one->rot;
+		if(!(rot[0] == 0 && rot[1] == 0 && rot[2] == 0)){
+			rotationspeed = sqrt(rot[0]*rot[0]+rot[1]*rot[1]+rot[2]*rot[2]);
+			colloc1[0] = col[0] - one->centermass[0];
+			colloc1[1] = col[1] - one->centermass[1];
+			colloc1[2] = col[2] - one->centermass[2];
+			rotationspeed *= (distance(rot, colloc1)/one->radius);//speed of rotation of collision point
+			CROSS(uv, rot, colloc1);
+			//CROSS(uv, colloc1, rot);
 			norm(uv);
-			col[3] -= uv[0]*speed;
-			col[4] -= uv[1]*speed;
-			col[5] -= uv[2]*speed;
-			if(isnan(speed) || !isfinite(speed)) puts("speed error");
+			col[3] += uv[0]*rotationspeed;
+			col[4] += uv[1]*rotationspeed;
+			col[5] += uv[2]*rotationspeed;
 			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed1 error");
 		}
 
-		if(!(two->rot[0] == 0 && two->rot[1] == 0 && two->rot[2] == 0)){
-			rotationspeed = sqrt(two->rot[0]*two->rot[0]+two->rot[1]*two->rot[1]+two->rot[2]*two->rot[2]);
-			colloc[0] = col[0] - two->centermass[0];
-			colloc[1] = col[1] - two->centermass[1];
-			colloc[2] = col[2] - two->centermass[2];
-			speed = rotationspeed*(distance(two->rot, colloc)/two->radius);
-			uv[0] = (two->rot[1]*col[2]-two->rot[2]*col[1]);
-			uv[1] = (two->rot[2]*col[0]-two->rot[0]*col[2]);
-			uv[2] = (two->rot[0]*col[1]-two->rot[1]*col[0]);
+		rot = two->rot;
+		if(!(rot[0] == 0 && rot[1] == 0 && rot[2] == 0)){
+			rotationspeed = sqrt(rot[0]*rot[0]+rot[1]*rot[1]+rot[2]*rot[2]);
+			colloc2[0] = col[0] - two->centermass[0];
+			colloc2[1] = col[1] - two->centermass[1];
+			colloc2[2] = col[2] - two->centermass[2];
+			rotationspeed *= (distance(rot, colloc2)/two->radius);
+			CROSS(uv, rot, colloc2);
+			//CROSS(uv, colloc2, rot);
 			norm(uv);
-			col[3] += uv[0]*speed;
-			col[4] += uv[1]*speed;
-			col[5] += uv[2]*speed;
-			if(isnan(speed) || !isfinite(speed)) puts("speed error");
+			col[3] -= uv[0]*rotationspeed;
+			col[4] -= uv[1]*rotationspeed;
+			col[5] -= uv[2]*rotationspeed;
 			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed2 error");
 		}
-		double velocity[3], rotation[3], relMass;
+		double relMass;
 		if(one->moves){
-			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);
-			else relMass = 1;
-			colloc[0] = col[0] - one->centermass[0];
-			colloc[1] = col[1] - one->centermass[1];
-			colloc[2] = col[2] - one->centermass[2];
-			velocity[0] = -colloc[0];
-			velocity[1] = -colloc[1];
-			velocity[2] = -colloc[2];
-			norm(velocity);
-			speed = relMass * DOT(velocity, (&col[3]));
-//			printf("speed %lf\n", speed);
-			velocity[0] *= speed;
-			velocity[1] *= speed;
-			velocity[2] *= speed;
-			rotation[0] = col[3] * relMass-velocity[0];
-			rotation[1] = col[4] * relMass-velocity[1];
-			rotation[2] = col[5] * relMass-velocity[2];
-			one->vx2 -= velocity[0];
-			one->vy2 -= velocity[1];
-			one->vz2 -= velocity[2];
-			rotationspeed = sqrt(rotation[0]*rotation[0]+rotation[1]*rotation[1]+rotation[2]*rotation[2]);
-			uv[0] = rotation[1]*colloc[2]-rotation[2]*colloc[1];
-			uv[1] = rotation[2]*colloc[0]-rotation[0]*colloc[2];
-			uv[2] = rotation[0]*colloc[1]-rotation[1]*colloc[0];
-			norm(uv);
-			one->rot2[0] += uv[0]*rotationspeed;
-			one->rot2[1] += uv[1]*rotationspeed;
-			one->rot2[2] += uv[2]*rotationspeed;
+//			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);
+//			else relMass = 1;
+			applyForce(one, colloc1[0], colloc1[1], colloc1[2], -col[3], -col[4], -col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
 		}
 		if(two->moves){
-			if(one->moves) relMass = 2*two->mass/(one->mass + two->mass);
-			else relMass = 1;
-			col[3] *= -1;
-			col[4] *= -1;
-			col[5] *= -1;
-			colloc[0] = col[0] - two->centermass[0];
-			colloc[1] = col[1] - two->centermass[1];
-			colloc[2] = col[2] - two->centermass[2];
-			velocity[0] = -colloc[0];
-			velocity[1] = -colloc[1];
-			velocity[2] = -colloc[2];
-			norm(velocity);
-			speed = relMass * DOT(velocity, (&col[3]));
-			velocity[0] *= speed;
-			velocity[1] *= speed;
-			velocity[2] *= speed;
-			rotation[0] = col[3]*relMass-velocity[0];
-			rotation[1] = col[4]*relMass-velocity[1];
-			rotation[2] = col[5]*relMass-velocity[2];
-			two->vx2 -= velocity[0];
-			two->vy2 -= velocity[1];
-			two->vz2 -= velocity[2];
-			rotationspeed = sqrt(rotation[0]*rotation[0]+rotation[1]*rotation[1]+rotation[2]*rotation[2]);
-			uv[0] = rotation[1]*colloc[2]-rotation[2]*colloc[1];
-			uv[1] = rotation[2]*colloc[0]-rotation[0]*colloc[2];
-			uv[2] = rotation[0]*colloc[1]-rotation[1]*colloc[0];
-			norm(uv);
-			two->rot2[0] += uv[0]*rotationspeed;
-			two->rot2[1] += uv[1]*rotationspeed;
-			two->rot2[2] += uv[2]*rotationspeed;
+//			if(one->moves) relMass = 2*two->mass/(one->mass + two->mass);
+//			else relMass = 1;
+			applyForce(two, colloc2[0], colloc2[1], colloc2[2], col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
 		}
 	}
 	SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
-	SDL_RenderDrawLine(render, (int)(100*col[0]/col[2])+250, (int)(100*col[1]/col[2])+250, (int)(100*(col[3]+col[0])/(col[5]+col[2])+250), (int)(100*(col[4]+col[1])/(col[5]+col[2]))+250);
+	SDL_RenderDrawLine(render, (int)(100*col[0]/col[2])+250, (int)(100*col[1]/col[2])+250, (int)(1000*(col[3]+col[0])/(col[5]+col[2])+250), (int)(1000*(col[4]+col[1])/(col[5]+col[2]))+250);
 //	printf("%lf %lf %lf\n%lf\n\n", col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
 	return collides;
 }

@@ -24,7 +24,8 @@ int main(){
 	meshcount++;
 //	loadmesh("square", &meshes[2], 10.5, -5, 10);
 //	meshcount++;
-	meshes[1].rot[2] = 0.1;
+//	meshes[0].vx = -0.1;
+	meshes[1].rot[2] = 0.05;
 //	meshes[2].rot[2] = 0.1;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");

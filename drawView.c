@@ -75,7 +75,7 @@ void drawView(){
 			}
 		}
 		SDL_SetRenderDrawColor(render, 100, 100, 255, 255);
-		SDL_RenderDrawPoint(render, (int)(x*100/z+250), (int)(y*100/z+250));
+		if(z > 0) SDL_RenderDrawPoint(render, (int)(x*100/z+250), (int)(y*100/z+250));
 	}
 	paint();
 	SDL_SetRenderDrawColor(render, 0, 0, 0, 255);

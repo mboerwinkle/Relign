@@ -14,7 +14,7 @@ void applyForce(mesh *target, double x, double y, double z, double dirx, double 
 	double rotation[3];
 	double rotend[3]; //vector from the center (0, 0) to root->loc+rotation. used for finding the normal.
 	double pushpower, rotationpower;
-	if(target->moves) puts("applying a force to something that doesn't move...?");
+	if(!target->moves) puts("applying a force to something that doesn't move...?");
 	push[0] = -x;
 	push[1] = -y;
 	push[2] = -z;
@@ -26,11 +26,13 @@ void applyForce(mesh *target, double x, double y, double z, double dirx, double 
 	rotation[0] = vec[0]-push[0];
 	rotation[1] = vec[1]-push[1];
 	rotation[2] = vec[2]-push[2];
-	rotationpower = sqrt(rotation[0]*rotation[0]+rotation[1]*rotation[1]+rotation[2]*rotation[2]);
+	rotationpower = sqrt(rotation[0]*rotation[0]+rotation[1]*rotation[1]+rotation[2]*rotation[2]);//the length of the rotation force vector
+	rotationpower *= target->radius/sqrt(loc[0]*loc[0]+loc[1]*loc[1]+loc[2]*loc[2]);//the distance from the center to the start of the force vector
 	rotend[0] = loc[0] + rotation[0];
 	rotend[1] = loc[1] + rotation[1];
 	rotend[2] = loc[2] + rotation[2];
 	CROSS(rotation, rotend, loc);//now rotation is style quaternion, not force
+//	CROSS(rotation, loc, rotend);//now rotation is style quaternion, not force
 	norm(rotation);
 	rotation[0] *= rotationpower;
 	rotation[1] *= rotationpower;
