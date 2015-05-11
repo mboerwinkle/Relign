@@ -18,14 +18,14 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("square", &meshes[0], 10.5, 0, 10);
+	loadmesh("square", &meshes[0], 2, 2, 20);
 	meshcount++;
-	loadmesh("square", &meshes[1], 0, 5, 10);
+	loadmesh("square", &meshes[1], 0, 0, 10);
 	meshcount++;
 //	loadmesh("square", &meshes[2], 10.5, -5, 10);
 //	meshcount++;
 //	meshes[0].vx = -0.1;
-	meshes[1].rot[2] = 0.05;
+	meshes[0].rot[2] = 0.05;
 //	meshes[2].rot[2] = 0.1;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
@@ -76,10 +76,14 @@ int main(){
 		}
 		drawView();
 
-		do {
+		//do {
 			SDL_PollEvent(&evnt);
-		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
-		if (evnt.type == SDL_QUIT){
+	//	} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+		if(evnt.type == SDL_KEYDOWN){
+			if(evnt.key.keysym.sym == SDLK_LEFT){
+				puts("hi");
+			}
+		}else if (evnt.type == SDL_QUIT){
 			running = 0;
 		}
 		clock_gettime(CLOCK_MONOTONIC, &otherTime);

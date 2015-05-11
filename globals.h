@@ -45,6 +45,7 @@ typedef struct player{
 	double view[3];
 }player;
 extern void applyForce(mesh *target, double x, double y, double z, double dirx, double diry, double dirz, double power);
+extern void drawLine(double one[3], double two[3]);
 extern void norm(double *target);
 extern void movemesh(mesh *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);

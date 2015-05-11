@@ -100,7 +100,7 @@ int collisions(mesh *one, mesh *two){
 			col[5] -= uv[2]*rotationspeed;
 			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed2 error");
 		}
-		double relMass;
+//		double relMass;
 		if(one->moves){
 //			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);
 //			else relMass = 1;
@@ -112,8 +112,6 @@ int collisions(mesh *one, mesh *two){
 			applyForce(two, colloc2[0], colloc2[1], colloc2[2], col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
 		}
 	}
-	SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
-	SDL_RenderDrawLine(render, (int)(100*col[0]/col[2])+250, (int)(100*col[1]/col[2])+250, (int)(1000*(col[3]+col[0])/(col[5]+col[2])+250), (int)(1000*(col[4]+col[1])/(col[5]+col[2]))+250);
 //	printf("%lf %lf %lf\n%lf\n\n", col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
 	return collides;
 }

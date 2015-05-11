@@ -43,4 +43,8 @@ void applyForce(mesh *target, double x, double y, double z, double dirx, double 
 	target->rot2[0] += rotation[0];
 	target->rot2[1] += rotation[1];
 	target->rot2[2] += rotation[2];
+
+	double absloc[3] = {loc[0] + target->centermass[0], loc[1] + target->centermass[1], loc[2] + target->centermass[2]};
+	double absend[3] = {absloc[0]+vec[0], absloc[1]+vec[1], absloc[2]+vec[2]};
+	drawLine(absloc, absend);
 }
