@@ -14,7 +14,7 @@ static void paint(){
 
 int initView(){
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
-	window = SDL_CreateWindow("Relign - Righteous - Radical.", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, 0);
+	window = SDL_CreateWindow("Relign - Righteous - Radical - Refined.", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, 0);
 	if(window == NULL){
 		SDL_Quit();
 		return 1;
@@ -54,7 +54,6 @@ void drawLine(double one[3], double two[3]){
 }
 
 void drawView(){
-	printf("%d", meshcount);
 	int temp, raycounter;
 	double x, y, z, one[3], two[3];
 	mesh * mesh1;

@@ -24,8 +24,8 @@ void applyForce(mesh *target, double x, double y, double z, double dirx, double 
 	rotend[0] = loc[0] + rotation[0];
 	rotend[1] = loc[1] + rotation[1];
 	rotend[2] = loc[2] + rotation[2];
-	CROSS(rotation, rotend, loc);//now rotation is style quaternion, not force
-//	CROSS(rotation, loc, rotend);//now rotation is style quaternion, not force
+//	CROSS(rotation, rotend, loc);//now rotation is style quaternion, not force
+	CROSS(rotation, loc, rotend);//now rotation is style quaternion, not force
 	norm(rotation);
 	rotation[0] *= rotationpower;
 	rotation[1] *= rotationpower;

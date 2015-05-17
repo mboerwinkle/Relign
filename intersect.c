@@ -94,16 +94,16 @@ int collisions(mesh *one, mesh *two){
 			col[5] -= uv[2]*rotationspeed;
 			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed2 error");
 		}
-//		double relMass;
+		double relMass;
 		if(one->moves){
-//			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);
-//			else relMass = 1;
-			applyForce(one, colloc1[0], colloc1[1], colloc1[2], -(col[3]), -(col[4]), -(col[5]), sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
+			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);
+			else relMass = 1;
+			applyForce(one, colloc1[0], colloc1[1], colloc1[2], -(col[3]), -(col[4]), -(col[5]), sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5])*relMass);
 		}
 		if(two->moves){
-//			if(one->moves) relMass = 2*two->mass/(one->mass + two->mass);
-//			else relMass = 1;
-			applyForce(two, colloc2[0], colloc2[1], colloc2[2], col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
+			if(one->moves) relMass = 2*two->mass/(one->mass + two->mass);
+			else relMass = 1;
+			applyForce(two, colloc2[0], colloc2[1], colloc2[2], col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5])*relMass);
 		}
 	}
 //	printf("%lf %lf %lf\n%lf\n\n", col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));

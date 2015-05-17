@@ -18,15 +18,17 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("square", &meshes[0], 2, 2, 20);
+	loadmesh("square", &meshes[0], 0, 0, 15);
 	meshcount++;
-	loadmesh("square", &meshes[1], 0, 0, 10);
+	loadmesh("square", &meshes[1], 13, 0, 15);
 	meshcount++;
-	loadmesh("square", &meshes[2], 10.5, -5, 10);
+	loadmesh("square", &meshes[2], -13, 0, 15);
 	meshcount++;
-//	meshes[0].vx = -0.1;
-//	meshes[0].rot[2] = 0.05;
-//	meshes[2].rot[2] = 0.1;
+	meshes[2].moves = 0;
+	meshes[1].vx = -0.1;
+	meshes[1].mass = 2;
+	meshes[1].rot[1] = 0.25;
+	meshes[0].rot[2] = 0.1;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
 	}
@@ -59,14 +61,14 @@ int main(){
 		}
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = &meshes[temp];
-//			if(!mesh1->collision){
+			if(!mesh1->collision){
 				temppoint = mesh1->pointmatrix;
 				mesh1->pointmatrix = mesh1->pointmatrix2;
 				mesh1->pointmatrix2 = temppoint;
 				temppoint = mesh1->centermass;
 				mesh1->centermass = mesh1->centermass2;
 				mesh1->centermass2 = temppoint;
-//			}
+			}
 			temppoint = mesh1->rot;
 			mesh1->rot = mesh1->rot2;
 			mesh1->rot2 = temppoint;
@@ -76,9 +78,9 @@ int main(){
 		}
 		drawView();
 
-		do {
+//		do {
 			SDL_PollEvent(&evnt);
-		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+//		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if(evnt.type == SDL_KEYDOWN){
 			if(evnt.key.keysym.sym == SDLK_LEFT){
 				puts("hi");
