@@ -4,15 +4,15 @@
 #include "globals.h"
 static double orig[3], dir[3], t, u, v, col[6];
 
-void norm(double * target){
+void norm(double target[3]){
 /*	if(isnan(target[0]) || !isfinite(target[0]));
 	if(isnan(target[1]) || !isfinite(target[1]));
 	if(isnan(target[2]) || !isfinite(target[2]));*/
 	if(target[0] == 0 && target[1] == 0 && target[2] == 0) return;
 	double howmuch = sqrt(target[0]*target[0]+target[1]*target[1]+target[2]*target[2]);
-	target[0] = target[0] / howmuch;
-	target[1] = target[1] / howmuch;
-	target[2] = target[2] / howmuch;
+	target[0] /= howmuch;
+	target[1] /= howmuch;
+	target[2] /= howmuch;
 }
 
 double distance(double vect[3], double point[3]){
@@ -61,8 +61,8 @@ int collisions(mesh *one, mesh *two){
 	}
 	if(collides){
 		double rotationspeed;
-		double colloc1[3];
-		double colloc2[3];
+		double colloc1[3] = {col[0] - one->centermass[0], col[1] - one->centermass[1], col[2] - one->centermass[2]};
+		double colloc2[3] = {col[0] - two->centermass[0], col[1] - two->centermass[1], col[2] - two->centermass[2]};
 		col[3] = 0+one->vx-two->vx;
 		col[4] = 0+one->vy-two->vy;
 		col[5] = 0+one->vz-two->vz;
@@ -72,9 +72,6 @@ int collisions(mesh *one, mesh *two){
 		rot = one->rot;
 		if(!(rot[0] == 0 && rot[1] == 0 && rot[2] == 0)){
 			rotationspeed = sqrt(rot[0]*rot[0]+rot[1]*rot[1]+rot[2]*rot[2]);
-			colloc1[0] = col[0] - one->centermass[0];
-			colloc1[1] = col[1] - one->centermass[1];
-			colloc1[2] = col[2] - one->centermass[2];
 			rotationspeed *= (distance(rot, colloc1)/one->radius);//speed of rotation of collision point
 			CROSS(uv, rot, colloc1);
 			//CROSS(uv, colloc1, rot);
@@ -88,9 +85,6 @@ int collisions(mesh *one, mesh *two){
 		rot = two->rot;
 		if(!(rot[0] == 0 && rot[1] == 0 && rot[2] == 0)){
 			rotationspeed = sqrt(rot[0]*rot[0]+rot[1]*rot[1]+rot[2]*rot[2]);
-			colloc2[0] = col[0] - two->centermass[0];
-			colloc2[1] = col[1] - two->centermass[1];
-			colloc2[2] = col[2] - two->centermass[2];
 			rotationspeed *= (distance(rot, colloc2)/two->radius);
 			CROSS(uv, rot, colloc2);
 			//CROSS(uv, colloc2, rot);
@@ -104,7 +98,7 @@ int collisions(mesh *one, mesh *two){
 		if(one->moves){
 //			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);
 //			else relMass = 1;
-			applyForce(one, colloc1[0], colloc1[1], colloc1[2], -col[3], -col[4], -col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
+			applyForce(one, colloc1[0], colloc1[1], colloc1[2], -(col[3]), -(col[4]), -(col[5]), sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
 		}
 		if(two->moves){
 //			if(one->moves) relMass = 2*two->mass/(one->mass + two->mass);

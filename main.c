@@ -22,10 +22,10 @@ int main(){
 	meshcount++;
 	loadmesh("square", &meshes[1], 0, 0, 10);
 	meshcount++;
-//	loadmesh("square", &meshes[2], 10.5, -5, 10);
-//	meshcount++;
+	loadmesh("square", &meshes[2], 10.5, -5, 10);
+	meshcount++;
 //	meshes[0].vx = -0.1;
-	meshes[0].rot[2] = 0.05;
+//	meshes[0].rot[2] = 0.05;
 //	meshes[2].rot[2] = 0.1;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
@@ -76,9 +76,9 @@ int main(){
 		}
 		drawView();
 
-		//do {
+		do {
 			SDL_PollEvent(&evnt);
-	//	} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
+		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if(evnt.type == SDL_KEYDOWN){
 			if(evnt.key.keysym.sym == SDLK_LEFT){
 				puts("hi");

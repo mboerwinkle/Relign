@@ -1,3 +1,6 @@
+#define WIDTH 320
+#define HEIGHT 240
+
 #define EPSILON 0.000001
 #define FRAMERATE 40//IN HERTZ LOL
 #define GRAVITY 0//standard earth.. 1.6 for moon. 3.7 for mars
@@ -46,7 +49,7 @@ typedef struct player{
 }player;
 extern void applyForce(mesh *target, double x, double y, double z, double dirx, double diry, double dirz, double power);
 extern void drawLine(double one[3], double two[3]);
-extern void norm(double *target);
+extern void norm(double target[3]);
 extern void movemesh(mesh *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);
 extern int collisions(mesh *one, mesh *two);

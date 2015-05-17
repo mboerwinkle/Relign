@@ -14,7 +14,7 @@ static void paint(){
 
 int initView(){
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
-	window = SDL_CreateWindow("Relign - Righteous - Radical.", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, 0);
+	window = SDL_CreateWindow("Relign - Righteous - Radical.", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, 0);
 	if(window == NULL){
 		SDL_Quit();
 		return 1;
@@ -33,10 +33,10 @@ void drawLine(double one[3], double two[3]){
 		two = tmp;
 	}
 	if (one[2] < 0) { // In this case, we want to trace *away* from the projection of point 2, to the edge of the screen.
-		int sx = (int)(100*one[0]/one[2])+250;
-		int sy = (int)(100*one[1]/one[2])+250;
-		int sx2 = (int)(100*two[0]/two[2])+250;
-		int sy2 = (int)(100*two[1]/two[2])+250;
+		int sx = (int)(100*one[0]/one[2])+0.5*WIDTH;
+		int sy = (int)(100*one[1]/one[2])+0.5*HEIGHT;
+		int sx2 = (int)(100*two[0]/two[2])+0.5*WIDTH;
+		int sy2 = (int)(100*two[1]/two[2])+0.5*HEIGHT;
 		int dx = sx - sx2; //dx and dy are the vector along which we trace.
 		int dy = sy - sy2;
 		int factor;
@@ -49,11 +49,12 @@ void drawLine(double one[3], double two[3]){
 		dy *= factor;
 		SDL_RenderDrawLine(render, sx, sy, sx+dx, sy+dy);
 	} else {
-		SDL_RenderDrawLine(render, (int)(100*one[0]/one[2])+250, (int)(100*one[1]/one[2])+250, (int)(100*two[0]/two[2])+250, (int)(100*two[1]/two[2])+250);
+		SDL_RenderDrawLine(render, (int)(100*one[0]/one[2])+0.5*WIDTH, (int)(100*one[1]/one[2])+0.5*HEIGHT, (int)(100*two[0]/two[2])+0.5*WIDTH, (int)(100*two[1]/two[2])+0.5*HEIGHT);
 	}
 }
 
 void drawView(){
+	printf("%d", meshcount);
 	int temp, raycounter;
 	double x, y, z, one[3], two[3];
 	mesh * mesh1;
@@ -75,10 +76,10 @@ void drawView(){
 		}
 		if(z > 0){
 			SDL_SetRenderDrawColor(render, 100, 100, 255, 255);
-			SDL_RenderDrawPoint(render, (int)(x*100/z+250), (int)(y*100/z+250));
+			SDL_RenderDrawPoint(render, (int)(x*100/z+0.5*WIDTH), (int)(y*100/z+0.5*HEIGHT));
 		}
+	}
 	paint();
 	SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
 	SDL_RenderClear(render);
-	}
 }
