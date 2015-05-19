@@ -97,12 +97,12 @@ int collisions(mesh *one, mesh *two){
 		double relMass;
 		if(one->moves){
 			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);
-			else relMass = 1;
+			else relMass = ELASTICITY_NOMOVE;//it is like it is hitting something it's own weight, so it will get stopped.
 			applyForce(one, colloc1[0], colloc1[1], colloc1[2], -(col[3]), -(col[4]), -(col[5]), sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5])*relMass);
 		}
 		if(two->moves){
-			if(one->moves) relMass = 2*two->mass/(one->mass + two->mass);
-			else relMass = 1;
+			if(one->moves) relMass = 2*one->mass/(one->mass + two->mass);
+			else relMass = ELASTICITY_NOMOVE;
 			applyForce(two, colloc2[0], colloc2[1], colloc2[2], col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5])*relMass);
 		}
 	}

@@ -3,7 +3,8 @@
 
 #define EPSILON 0.000001
 #define FRAMERATE 40//IN HERTZ LOL
-#define GRAVITY 0//9.8 for standard earth.. 1.6 for moon. 3.7 for mars
+#define ELASTICITY_NOMOVE 1//defines how elastic (for collisions) the ground and other non-moving objects are (mesh.moves = 0). less than 1 or more than 2 are not recommended.
+#define GRAVITY 0//9.8 for standard earth.. 1.6 for moon. 3.7 for mars. m/s/s
 #define DRAG 1 //wtf physix 0-1 higher is weakerr
 #define CROSS(dest, v1, v2)\
 	dest[0]=v1[1]*v2[2]-v1[2]*v2[1];\

@@ -78,7 +78,7 @@ int main(){
 		}
 		drawView();
 
-/*		do {
+		do {
 			SDL_PollEvent(&evnt);
 		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if(evnt.type == SDL_KEYDOWN){
@@ -87,12 +87,14 @@ int main(){
 			}
 		}else if (evnt.type == SDL_QUIT){
 			running = 0;
-		}*/
+		}
+/*
 		while(SDL_PollEvent(&evnt)){
 			if(evnt.type == SDL_QUIT){
 				running = 0;
 			}
 		}
+*/
 		clock_gettime(CLOCK_MONOTONIC, &otherTime);
 		int32_t sleep = (int32_t)(1000000000/FRAMERATE) - (otherTime.tv_nsec-lastTime.tv_nsec) - 1000000000l*(otherTime.tv_sec-lastTime.tv_sec);
 		if(sleep > 0){
