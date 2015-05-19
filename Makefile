@@ -27,6 +27,9 @@ drawView.o: drawView.c globals.h
 forces.o: forces.c globals.h
 	$(CC) $(CFLAGS) forces.c
 
+entity.o: entity.c globals.h
+	$(CC) $(CFLAGS) entity.c
+
 clean:
 	rm -f *.o run
 

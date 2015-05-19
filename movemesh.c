@@ -49,5 +49,5 @@ void movemesh(mesh *target){
 	target->centermass2[0] = target->centermass[0]+target->vx;
 	target->centermass2[1] = target->centermass[1]+target->vy;
 	target->centermass2[2] = target->centermass[2]+target->vz;
-	printf("coords: %lf %lf %lf\n", target->centermass[0], target->centermass[1], target->centermass[2]);
+//	printf("coords: %lf %lf %lf\n", target->centermass[0], target->centermass[1], target->centermass[2]);
 }
