@@ -18,15 +18,17 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("icoso", &meshes[0], 0, 0, 15);
+	loadmesh("square", &meshes[0], 1, 17, 30);
 	meshcount++;
-	loadmesh("square", &meshes[1], 13, 0, 15);
+	loadmesh("square", &meshes[1], 1, -13, 30);
 	meshcount++;
-	loadmesh("square", &meshes[2], -13, 0, 15);
+	loadmesh("square", &meshes[2], 1, 0, 30);
 	meshcount++;
-	meshes[2].moves = 0;
-	meshes[1].vx = -0.2;
-	meshes[1].mass = 0.1;
+//	loadmesh("planeY", &meshes[2], 0, 0, 30);
+//	meshcount++;
+	meshes[0].moves = 0;
+//	meshes[1].vx = -0.2;
+//	meshes[1].mass = 0.1;
 //	meshes[1].rot[1] = 0.25;
 //	meshes[0].rot[2] = 0.1;
 	if(initView()){
@@ -39,13 +41,14 @@ int main(){
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = &meshes[temp];
 			if(mesh1->moves){
-				mesh1->vz2 = (mesh1->vz - GRAVITY/FRAMERATE) * DRAG;
+				mesh1->vz2 = mesh1->vz * DRAG;
 				mesh1->vx2 = mesh1->vx * DRAG;
 				mesh1->vy2 = mesh1->vy * DRAG;
 				mesh1->rot2[0] = mesh1->rot[0] * DRAG;
 				mesh1->rot2[1] = mesh1->rot[1] * DRAG;
 				mesh1->rot2[2] = mesh1->rot[2] * DRAG;
 				movemesh(mesh1);
+				applyForce(mesh1, 0, 0, 0, 0, 1, 0, GRAVITY/FRAMERATE); 
 //				printf("V %lf %lf %lf\n", mesh1->vx, mesh1->vy, mesh1->vz);
 			}
 		}
@@ -77,7 +80,7 @@ int main(){
 			mesh1->vz = mesh1->vz2;
 		}
 		drawView();
-
+///*
 		do {
 			SDL_PollEvent(&evnt);
 		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
@@ -88,6 +91,7 @@ int main(){
 		}else if (evnt.type == SDL_QUIT){
 			running = 0;
 		}
+//*/
 /*
 		while(SDL_PollEvent(&evnt)){
 			if(evnt.type == SDL_QUIT){

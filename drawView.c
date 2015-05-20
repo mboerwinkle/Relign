@@ -33,10 +33,10 @@ void drawLine(double one[3], double two[3]){
 		two = tmp;
 	}
 	if (one[2] < 0) { // In this case, we want to trace *away* from the projection of point 2, to the edge of the screen.
-		int sx = (int)(100*one[0]/one[2])+0.5*WIDTH;
-		int sy = (int)(100*one[1]/one[2])+0.5*HEIGHT;
-		int sx2 = (int)(100*two[0]/two[2])+0.5*WIDTH;
-		int sy2 = (int)(100*two[1]/two[2])+0.5*HEIGHT;
+		int sx = (int)(VIEWZOOM*one[0]/one[2])+0.5*WIDTH;
+		int sy = (int)(VIEWZOOM*one[1]/one[2])+0.5*HEIGHT;
+		int sx2 = (int)(VIEWZOOM*two[0]/two[2])+0.5*WIDTH;
+		int sy2 = (int)(VIEWZOOM*two[1]/two[2])+0.5*HEIGHT;
 		int dx = sx - sx2; //dx and dy are the vector along which we trace.
 		int dy = sy - sy2;
 		int factor;
@@ -49,7 +49,7 @@ void drawLine(double one[3], double two[3]){
 		dy *= factor;
 		SDL_RenderDrawLine(render, sx, sy, sx+dx, sy+dy);
 	} else {
-		SDL_RenderDrawLine(render, (int)(100*one[0]/one[2])+0.5*WIDTH, (int)(100*one[1]/one[2])+0.5*HEIGHT, (int)(100*two[0]/two[2])+0.5*WIDTH, (int)(100*two[1]/two[2])+0.5*HEIGHT);
+		SDL_RenderDrawLine(render, (int)(VIEWZOOM*one[0]/one[2])+0.5*WIDTH, (int)(VIEWZOOM*one[1]/one[2])+0.5*HEIGHT, (int)(VIEWZOOM*two[0]/two[2])+0.5*WIDTH, (int)(VIEWZOOM*two[1]/two[2])+0.5*HEIGHT);
 	}
 }
 
@@ -75,7 +75,7 @@ void drawView(){
 		}
 		if(z > 0){
 			SDL_SetRenderDrawColor(render, 100, 100, 255, 255);
-			SDL_RenderDrawPoint(render, (int)(x*100/z+0.5*WIDTH), (int)(y*100/z+0.5*HEIGHT));
+			SDL_RenderDrawPoint(render, (int)(VIEWZOOM*x/z+0.5*WIDTH), (int)(VIEWZOOM*y/z+0.5*HEIGHT));
 		}
 	}
 	paint();

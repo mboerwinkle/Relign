@@ -1,11 +1,13 @@
 #define WIDTH 320
 #define HEIGHT 240
+#define VIEWZOOM 100
 
 #define EPSILON 0.000001
 #define FRAMERATE 40//IN HERTZ LOL
 #define ELASTICITY_NOMOVE 1//defines how elastic (for collisions) the ground and other non-moving objects are (mesh.moves = 0). less than 1 or more than 2 are not recommended.
-#define GRAVITY 0//9.8 for standard earth.. 1.6 for moon. 3.7 for mars. m/s/s
-#define DRAG 1 //wtf physix 0-1 higher is weakerr
+#define ELASTICITY_MOVE 1//defines how elastic normal collisions between two objects are. from 0 to 1
+#define GRAVITY 9.8//9.8 for standard earth.. 1.6 for moon. 3.7 for mars. m/s/s
+#define DRAG 1
 #define CROSS(dest, v1, v2)\
 	dest[0]=v1[1]*v2[2]-v1[2]*v2[1];\
 	dest[1]=v1[2]*v2[0]-v1[0]*v2[2];\
@@ -43,12 +45,24 @@ typedef struct mesh{
 
 extern mesh* meshes;
 
+typedef struct dataUser{//user, as in "I FIGHT FOR THE USER"
+	int impulses;//bits: jump, forward, backward, left, right ...
+	int heartbeat;//time since the last heartbeat
+//	int swagga;
+//	tweeta: hashtag include
+}dataUser;
+
 typedef struct entity{
-	double center[3];
-	double vx, vy, vz;
-	int vang;
-	int vdir;
-}player;
+	double center[3];//at the center of the feet?
+	double vx, vy, vz;//velocities
+	int hp;//hp...
+	int shield;//you know: the thing that protects you, then goes beep beep beep, and then goes booooouuuuup.
+//	int vang;//view angle   -   this should be handled uniquely by the client
+	int vdir;//view direction   -   needed for drawing sprites.
+	void *data;//persistent(between ticks) information for use by the actFunc
+	void *actFunc;//the function that will be ticked each turn with the pointer to the entity structure as the argument.
+}entity;
+
 extern void applyForce(mesh *target, double x, double y, double z, double dirx, double diry, double dirz, double power);
 extern void drawLine(double one[3], double two[3]);
 extern void norm(double target[3]);
