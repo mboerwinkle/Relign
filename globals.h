@@ -65,10 +65,12 @@ typedef struct entity{
 
 extern void applyForce(mesh *target, double x, double y, double z, double dirx, double diry, double dirz, double power);
 extern void drawLine(double one[3], double two[3]);
+extern double distance(double vect[3], double point[3]);
 extern void norm(double target[3]);
 extern void movemesh(mesh *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);
 extern int collisions(mesh *one, mesh *two);
+extern int backupCollisions(mesh *one, mesh *two);
 extern int initView();
 extern void drawView();
 extern int intersect_triangle(double orig[3], double dir[3], double vert0[3], double vert1[3], double vert2[3],  double *t, double *u, double *v, double offsetx, double offsety, double offsetz);

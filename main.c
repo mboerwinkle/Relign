@@ -47,8 +47,8 @@ int main(){
 				mesh1->rot2[0] = mesh1->rot[0] * DRAG;
 				mesh1->rot2[1] = mesh1->rot[1] * DRAG;
 				mesh1->rot2[2] = mesh1->rot[2] * DRAG;
-				movemesh(mesh1);
 				applyForce(mesh1, 0, 0, 0, 0, 1, 0, GRAVITY/FRAMERATE); 
+				movemesh(mesh1);
 //				printf("V %lf %lf %lf\n", mesh1->vx, mesh1->vy, mesh1->vz);
 			}
 		}
@@ -62,9 +62,20 @@ int main(){
 				}
 			}
 		}
+/*		for(temp = 0; temp < meshcount; temp++){
+			mesh1 = &meshes[temp];
+			if(mesh1->collision) continue;
+			for(temp2 = 0; temp2 < meshcount; temp2++){
+				if(temp2 == temp || !meshes[temp2].collision) continue;
+				if(backupCollisions(mesh1, &meshes[temp2])){
+					mesh1->collision = 1;
+				}
+			}
+		}
+*/
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = &meshes[temp];
-			if(!mesh1->collision){
+			if(!mesh1->collision && mesh1->moves){
 				temppoint = mesh1->pointmatrix;
 				mesh1->pointmatrix = mesh1->pointmatrix2;
 				mesh1->pointmatrix2 = temppoint;
