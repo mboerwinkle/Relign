@@ -1,5 +1,5 @@
-#define WIDTH 320
-#define HEIGHT 240
+#define WIDTH 640
+#define HEIGHT 480
 #define VIEWZOOM 100
 
 #define EPSILON 0.000001
@@ -62,6 +62,8 @@ typedef struct entity{
 	void *data;//persistent(between ticks) information for use by the actFunc
 	void *actFunc;//the function that will be ticked each turn with the pointer to the entity structure as the argument.
 }entity;
+
+extern void printcentermesh(mesh *target);
 
 extern void applyForce(mesh *target, double x, double y, double z, double dirx, double diry, double dirz, double power);
 extern void drawLine(double one[3], double two[3]);
