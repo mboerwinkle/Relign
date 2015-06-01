@@ -18,7 +18,7 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("square", &meshes[0], 1, 17, 30);
+	loadmesh("planeY", &meshes[0], 1, 17, 210);
 	meshcount++;
 	loadmesh("square", &meshes[1], 1, -13, 30);
 	meshcount++;
@@ -29,7 +29,7 @@ int main(){
 	meshes[0].moves = 0;
 //	meshes[1].vx = -0.2;
 //	meshes[1].mass = 0.1;
-//	meshes[1].rot[1] = 0.25;
+//	meshes[1].rot[2] = 0.25;
 //	meshes[0].rot[2] = 0.1;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
@@ -62,7 +62,8 @@ int main(){
 				}
 			}
 		}
-/*		for(temp = 0; temp < meshcount; temp++){
+
+		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = &meshes[temp];
 			if(mesh1->collision) continue;
 			for(temp2 = 0; temp2 < meshcount; temp2++){
@@ -72,7 +73,7 @@ int main(){
 				}
 			}
 		}
-*/
+
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = &meshes[temp];
 			if(!mesh1->collision && mesh1->moves){
@@ -89,9 +90,10 @@ int main(){
 			mesh1->vx = mesh1->vx2;
 			mesh1->vy = mesh1->vy2;
 			mesh1->vz = mesh1->vz2;
+			printcentermesh(mesh1);
 		}
 		drawView();
-///*
+
 		do {
 			SDL_PollEvent(&evnt);
 		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
@@ -102,7 +104,7 @@ int main(){
 		}else if (evnt.type == SDL_QUIT){
 			running = 0;
 		}
-//*/
+
 /*
 		while(SDL_PollEvent(&evnt)){
 			if(evnt.type == SDL_QUIT){
