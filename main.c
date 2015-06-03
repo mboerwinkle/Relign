@@ -18,16 +18,17 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("planeY", &meshes[0], 1, 17, 210);
+	loadmesh("square", &meshes[0], 1, 17, 30);
 	meshcount++;
-	loadmesh("square", &meshes[1], 1, -13, 30);
+	loadmesh("square", &meshes[1], 1, -33, 30);
 	meshcount++;
 	loadmesh("square", &meshes[2], 1, 0, 30);
 	meshcount++;
-//	loadmesh("planeY", &meshes[2], 0, 0, 30);
-//	meshcount++;
+	loadmesh("square", &meshes[3], 1, -44, 30);
+	meshcount++;
 	meshes[0].moves = 0;
-//	meshes[1].vx = -0.2;
+	meshes[1].vy = 0.2;
+	meshes[3].moves = 0;
 //	meshes[1].mass = 0.1;
 //	meshes[1].rot[2] = 0.25;
 //	meshes[0].rot[2] = 0.1;
@@ -47,9 +48,8 @@ int main(){
 				mesh1->rot2[0] = mesh1->rot[0] * DRAG;
 				mesh1->rot2[1] = mesh1->rot[1] * DRAG;
 				mesh1->rot2[2] = mesh1->rot[2] * DRAG;
-				applyForce(mesh1, 0, 0, 0, 0, 1, 0, GRAVITY/FRAMERATE); 
 				movemesh(mesh1);
-//				printf("V %lf %lf %lf\n", mesh1->vx, mesh1->vy, mesh1->vz);
+//				applyForce(mesh1, 0, 0, 0, 0, 1, 0, GRAVITY/FRAMERATE); 
 			}
 		}
 		for(temp = 0; temp < meshcount; temp++){
@@ -76,7 +76,7 @@ int main(){
 
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = &meshes[temp];
-			if(!mesh1->collision && mesh1->moves){
+			if(!mesh1->collision){
 				temppoint = mesh1->pointmatrix;
 				mesh1->pointmatrix = mesh1->pointmatrix2;
 				mesh1->pointmatrix2 = temppoint;
@@ -91,9 +91,11 @@ int main(){
 			mesh1->vy = mesh1->vy2;
 			mesh1->vz = mesh1->vz2;
 			printcentermesh(mesh1);
+			printvelocitymesh(mesh1);
 		}
+		printf("\n");
 		drawView();
-
+/*
 		do {
 			SDL_PollEvent(&evnt);
 		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
@@ -104,14 +106,14 @@ int main(){
 		}else if (evnt.type == SDL_QUIT){
 			running = 0;
 		}
-
-/*
+*/
+///*
 		while(SDL_PollEvent(&evnt)){
 			if(evnt.type == SDL_QUIT){
 				running = 0;
 			}
 		}
-*/
+//*/
 		clock_gettime(CLOCK_MONOTONIC, &otherTime);
 		int32_t sleep = (int32_t)(1000000000/FRAMERATE) - (otherTime.tv_nsec-lastTime.tv_nsec) - 1000000000l*(otherTime.tv_sec-lastTime.tv_sec);
 		if(sleep > 0){

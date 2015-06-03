@@ -3,8 +3,8 @@
 #define VIEWZOOM 100
 
 #define EPSILON 0.000001
-#define FRAMERATE 40//IN HERTZ LOL
-#define ELASTICITY_NOMOVE 1//defines how elastic (for collisions) the ground and other non-moving objects are (mesh.moves = 0). less than 1 or more than 2 are not recommended.
+#define FRAMERATE 60//IN HERTZ LOL
+#define ELASTICITY_NOMOVE 2//defines how elastic (for collisions) the ground and other non-moving objects are (mesh.moves = 0). less than 1 or more than 2 are not recommended.
 #define ELASTICITY_MOVE 1//defines how elastic normal collisions between two objects are. from 0 to 1
 #define GRAVITY 9.8//9.8 for standard earth.. 1.6 for moon. 3.7 for mars. m/s/s
 #define DRAG 1
@@ -64,6 +64,7 @@ typedef struct entity{
 }entity;
 
 extern void printcentermesh(mesh *target);
+extern void printvelocitymesh(mesh *target);
 
 extern void applyForce(mesh *target, double x, double y, double z, double dirx, double diry, double dirz, double power);
 extern void drawLine(double one[3], double two[3]);
