@@ -18,7 +18,7 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("planeY", &meshes[0], 1, 17, 210);
+	loadmesh("square", &meshes[0], 1, 17, 30);
 	meshcount++;
 	loadmesh("square", &meshes[1], 1, -13, 30);
 	meshcount++;
@@ -47,7 +47,7 @@ int main(){
 				mesh1->rot2[0] = mesh1->rot[0] * DRAG;
 				mesh1->rot2[1] = mesh1->rot[1] * DRAG;
 				mesh1->rot2[2] = mesh1->rot[2] * DRAG;
-				applyForce(mesh1, 0, 0, 0, 0, 1, 0, GRAVITY/FRAMERATE); 
+				applyForce(mesh1, 0, 0, 0, 0, 1, 0, GRAVITY/FRAMERATE);
 				movemesh(mesh1);
 //				printf("V %lf %lf %lf\n", mesh1->vx, mesh1->vy, mesh1->vz);
 			}
