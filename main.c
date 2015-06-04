@@ -18,17 +18,17 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("square", &meshes[0], 1, 17, 30);
+	loadmesh("square", &meshes[0], 1, 5.5, 30);
 	meshcount++;
-	loadmesh("square", &meshes[1], 1, -13, 30);
+	loadmesh("square", &meshes[1], -6, -5, 30);
 	meshcount++;
-	loadmesh("square", &meshes[2], 1, 0, 30);
-	meshcount++;
+//	loadmesh("square", &meshes[2], 1, -2, 30);
+//	meshcount++;
 //	loadmesh("planeY", &meshes[2], 0, 0, 30);
 //	meshcount++;
 	meshes[0].moves = 0;
 //	meshes[1].vx = -0.2;
-//	meshes[1].mass = 0.1;
+//	meshes[0].mass = ;
 //	meshes[1].rot[2] = 0.25;
 //	meshes[0].rot[2] = 0.1;
 	if(initView()){
@@ -62,7 +62,7 @@ int main(){
 				}
 			}
 		}
-
+/*
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = &meshes[temp];
 			if(mesh1->collision) continue;
@@ -73,7 +73,7 @@ int main(){
 				}
 			}
 		}
-
+*/
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = &meshes[temp];
 			if(!mesh1->collision && mesh1->moves){

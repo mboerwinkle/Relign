@@ -72,7 +72,7 @@ int collisions(mesh *one, mesh *two){
 		rot = one->rot;
 		if(!(rot[0] == 0 && rot[1] == 0 && rot[2] == 0)){
 			rotationspeed = sqrt(rot[0]*rot[0]+rot[1]*rot[1]+rot[2]*rot[2]);
-			rotationspeed *= (distance(rot, colloc1)/one->radius);//speed of rotation of collision point
+//			rotationspeed *= (distance(rot, colloc1)/one->radius);//speed of rotation of collision point
 			CROSS(uv, rot, colloc1);
 			//CROSS(uv, colloc1, rot);
 			norm(uv);

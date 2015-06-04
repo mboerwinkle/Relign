@@ -52,7 +52,7 @@ typedef struct dataUser{//user, as in "I FIGHT FOR THE USER"
 //	tweeta: hashtag include
 }dataUser;
 
-typedef struct entity{
+typedef struct ent{
 	double center[3];//at the center of the feet?
 	double vx, vy, vz;//velocities
 	int hp;//hp...
@@ -61,7 +61,9 @@ typedef struct entity{
 	int vdir;//view direction   -   needed for drawing sprites.
 	void *data;//persistent(between ticks) information for use by the actFunc
 	void *actFunc;//the function that will be ticked each turn with the pointer to the entity structure as the argument.
-}entity;
+}ent;
+
+extern ent* ents;
 
 extern void printcentermesh(mesh *target);
 
