@@ -6,7 +6,7 @@
 #define FRAMERATE 40//IN HERTZ LOL
 #define ELASTICITY_NOMOVE 1//defines how elastic (for collisions) the ground and other non-moving objects are (mesh.moves = 0). less than 1 or more than 2 are not recommended.
 #define ELASTICITY_MOVE 1//defines how elastic normal collisions between two objects are. from 0 to 1
-#define GRAVITY 9.8//9.8 for standard earth.. 1.6 for moon. 3.7 for mars. m/s/s
+#define GRAVITY 0//9.8 for standard earth.. 1.6 for moon. 3.7 for mars. m/s/s
 #define DRAG 1
 #define CROSS(dest, v1, v2)\
 	dest[0]=v1[1]*v2[2]-v1[2]*v2[1];\
@@ -54,7 +54,8 @@ typedef struct dataUser{//user, as in "I FIGHT FOR THE USER"
 
 typedef struct ent{
 	double center[3];//at the center of the feet?
-	double vx, vy, vz;//velocities
+	double center2[3];
+	double vx, vy, vz, vx2, vy2, vz2;//velocities
 	int hp;//hp...
 	int shield;//you know: the thing that protects you, then goes beep beep beep, and then goes booooouuuuup.
 //	int vang;//view angle   -   this should be handled uniquely by the client
@@ -62,6 +63,8 @@ typedef struct ent{
 	void *data;//persistent(between ticks) information for use by the actFunc
 	void *actFunc;//the function that will be ticked each turn with the pointer to the entity structure as the argument.
 }ent;
+
+extern void actUser(ent *target);
 
 extern ent* ents;
 
@@ -73,8 +76,10 @@ extern double distance(double vect[3], double point[3]);
 extern void norm(double target[3]);
 extern void movemesh(mesh *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);
+extern void createEnt(ent *final, char name[20], double x, double y, double z);
 extern int collisions(mesh *one, mesh *two);
 extern int backupCollisions(mesh *one, mesh *two);
+extern void getObjectVelocity(mesh* target, double colloc[3], double colforce[3]);
 extern int initView();
 extern void drawView();
 extern int intersect_triangle(double orig[3], double dir[3], double vert0[3], double vert1[3], double vert2[3],  double *t, double *u, double *v, double offsetx, double offsety, double offsetz);

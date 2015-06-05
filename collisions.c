@@ -63,7 +63,13 @@ int collisions(mesh *one, mesh *two){
 		double rotationspeed;
 		double colloc1[3] = {col[0] - c1[0], col[1] - c1[1], col[2] - c1[2]};
 		double colloc2[3] = {col[0] - c2[0], col[1] - c2[1], col[2] - c2[2]};
-		col[3] = 0+one->vx-two->vx;
+		double colforce1[3], colforce2[3];
+		getObjectVelocity(one, colloc1, colforce1);
+		getObjectVelocity(two, colloc2, colforce2);
+		col[3] = 0+colforce1[0]-colforce2[0];
+		col[4] = 0+colforce1[1]-colforce2[1];
+		col[5] = 0+colforce1[2]-colforce2[2];
+/*		col[3] = 0+one->vx-two->vx;
 		col[4] = 0+one->vy-two->vy;
 		col[5] = 0+one->vz-two->vz;
 
@@ -94,6 +100,7 @@ int collisions(mesh *one, mesh *two){
 			col[5] -= uv[2]*rotationspeed;
 			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed2 error");
 		}
+*/
 		double relMass;
 		if(one->moves){
 			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);//how much of the force is given to one, in funtion of one and two's masses. between 0 and 2.
@@ -105,6 +112,7 @@ int collisions(mesh *one, mesh *two){
 			else relMass = ELASTICITY_NOMOVE;
 			applyForce(two, colloc2[0], colloc2[1], colloc2[2], col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5])*relMass*ELASTICITY_MOVE);
 		}
+
 	}
 //	printf("%lf %lf %lf\n%lf\n\n", col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
 	return collides;

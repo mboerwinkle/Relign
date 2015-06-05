@@ -9,6 +9,7 @@ int meshcount = 0;
 SDL_Window* window = NULL;
 SDL_Renderer* render = NULL;
 mesh* meshes = NULL;
+ent* ents = NULL;
 
 int main(){
 	srandom(time(NULL));
@@ -18,16 +19,18 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh), 5);
-	loadmesh("square", &meshes[0], 1, 5.5, 30);
+	ents = calloc(sizeof(ent), 5);
+	createEnt(&ents[0], "Francois Hollande", 5, 5, 5);
+	loadmesh("planeY", &meshes[0], 0, 0, 0);
 	meshcount++;
-	loadmesh("square", &meshes[1], -6, -5, 30);
+	loadmesh("square", &meshes[1], 1, -7, 30);
 	meshcount++;
-//	loadmesh("square", &meshes[2], 1, -2, 30);
-//	meshcount++;
+	loadmesh("square", &meshes[2], -2, -20, 30);
+	meshcount++;
 //	loadmesh("planeY", &meshes[2], 0, 0, 30);
 //	meshcount++;
 	meshes[0].moves = 0;
-//	meshes[1].vx = -0.2;
+	meshes[1].vy = -0.2;
 //	meshes[0].mass = ;
 //	meshes[1].rot[2] = 0.25;
 //	meshes[0].rot[2] = 0.1;
