@@ -30,7 +30,7 @@ int main(){
 //	loadmesh("planeY", &meshes[2], 0, 0, 30);
 //	meshcount++;
 	meshes[0].moves = 0;
-	meshes[1].vy = -0.2;
+//	meshes[1].vy = -0.2;
 //	meshes[0].mass = ;
 //	meshes[1].rot[2] = 0.25;
 //	meshes[0].rot[2] = 0.1;

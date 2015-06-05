@@ -60,7 +60,6 @@ int collisions(mesh *one, mesh *two){
 		two = temppt;
 	}
 	if(collides){
-		double rotationspeed;
 		double colloc1[3] = {col[0] - c1[0], col[1] - c1[1], col[2] - c1[2]};
 		double colloc2[3] = {col[0] - c2[0], col[1] - c2[1], col[2] - c2[2]};
 		double colforce1[3], colforce2[3];
@@ -69,38 +68,6 @@ int collisions(mesh *one, mesh *two){
 		col[3] = 0+colforce1[0]-colforce2[0];
 		col[4] = 0+colforce1[1]-colforce2[1];
 		col[5] = 0+colforce1[2]-colforce2[2];
-/*		col[3] = 0+one->vx-two->vx;
-		col[4] = 0+one->vy-two->vy;
-		col[5] = 0+one->vz-two->vz;
-
-		double uv[3];
-		double *rot;
-		rot = one->rot;
-		if(!(rot[0] == 0 && rot[1] == 0 && rot[2] == 0)){
-			rotationspeed = sqrt(rot[0]*rot[0]+rot[1]*rot[1]+rot[2]*rot[2]);
-//			rotationspeed *= (distance(rot, colloc1)/one->radius);//speed of rotation of collision point
-			CROSS(uv, rot, colloc1);
-			//CROSS(uv, colloc1, rot);
-			norm(uv);
-			col[3] += uv[0]*rotationspeed;
-			col[4] += uv[1]*rotationspeed;
-			col[5] += uv[2]*rotationspeed;
-			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed1 error");
-		}
-
-		rot = two->rot;
-		if(!(rot[0] == 0 && rot[1] == 0 && rot[2] == 0)){
-			rotationspeed = sqrt(rot[0]*rot[0]+rot[1]*rot[1]+rot[2]*rot[2]);
-			rotationspeed *= (distance(rot, colloc2)/two->radius);
-			CROSS(uv, rot, colloc2);
-			//CROSS(uv, colloc2, rot);
-			norm(uv);
-			col[3] -= uv[0]*rotationspeed;
-			col[4] -= uv[1]*rotationspeed;
-			col[5] -= uv[2]*rotationspeed;
-			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed2 error");
-		}
-*/
 		double relMass;
 		if(one->moves){
 			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);//how much of the force is given to one, in funtion of one and two's masses. between 0 and 2.
@@ -172,40 +139,14 @@ int backupCollisions(mesh *one, mesh *two){
 		two = temppt;
 	}
 	if(collides){
-		double rotationspeed;
 		double colloc1[3] = {col[0] - c1[0], col[1] - c1[1], col[2] - c1[2]};
 		double colloc2[3] = {col[0] - c2[0], col[1] - c2[1], col[2] - c2[2]};
-		col[3] = 0+one->vx-two->vx;
-		col[4] = 0+one->vy-two->vy;
-		col[5] = 0+one->vz-two->vz;
-
-		double uv[3];
-		double *rot;
-		rot = one->rot;
-		if(!(rot[0] == 0 && rot[1] == 0 && rot[2] == 0)){
-			rotationspeed = sqrt(rot[0]*rot[0]+rot[1]*rot[1]+rot[2]*rot[2]);
-			rotationspeed *= (distance(rot, colloc1)/one->radius);//speed of rotation of collision point
-			CROSS(uv, rot, colloc1);
-			//CROSS(uv, colloc1, rot);
-			norm(uv);
-			col[3] += uv[0]*rotationspeed;
-			col[4] += uv[1]*rotationspeed;
-			col[5] += uv[2]*rotationspeed;
-			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed1 error");
-		}
-
-		rot = two->rot;
-		if(!(rot[0] == 0 && rot[1] == 0 && rot[2] == 0)){
-			rotationspeed = sqrt(rot[0]*rot[0]+rot[1]*rot[1]+rot[2]*rot[2]);
-			rotationspeed *= (distance(rot, colloc2)/two->radius);
-			CROSS(uv, rot, colloc2);
-			//CROSS(uv, colloc2, rot);
-			norm(uv);
-			col[3] -= uv[0]*rotationspeed;
-			col[4] -= uv[1]*rotationspeed;
-			col[5] -= uv[2]*rotationspeed;
-			if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed2 error");
-		}
+		double colforce1[3], colforce2[3];
+		getObjectVelocity(one, colloc1, colforce1);
+		getObjectVelocity(two, colloc2, colforce2);
+		col[3] = 0+colforce1[0]-colforce2[0];
+		col[4] = 0+colforce1[1]-colforce2[1];
+		col[5] = 0+colforce1[2]-colforce2[2];
 		double relMass;
 		if(one->moves){
 			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);//how much of the force is given to one, in funtion of one and two's masses. between 0 and 2.
