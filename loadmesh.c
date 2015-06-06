@@ -3,6 +3,8 @@
 #include <math.h>
 #include "globals.h"
 void loadmesh(char name[20], mesh *final, double centerx, double centery, double centerz){
+	memset(final, 0, sizeof(mesh)); //zero the mesh structure, preventing a lot of wasted lines.
+	//Only element not explicitly initialized at time of writing was drag - okay if I zero it?
 	final->centermass = calloc(sizeof(double), 3);
 	final->centermass2 = calloc(sizeof(double), 3);
 	final->centermass[0] = centerx;
@@ -11,34 +13,10 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 	final->centermass2[0] = centerx;
 	final->centermass2[1] = centery;
 	final->centermass2[2] = centerz;
-	final->rot = calloc(sizeof(double), 4);
+	final->rot = calloc(sizeof(double), 4); //calloc zeroes them for you.
 	final->rot2 = calloc(sizeof(double), 4);
-	final->rot[0] = 0;
-	final->rot[1] = 0;
-	final->rot[2] = 0;
-	final->rot[3] = 0;
-	final->rot2[0] = 0;
-	final->rot2[1] = 0;
-	final->rot2[2] = 0;
-	final->rot2[3] = 0;
-	final->vx = 0;
-	final->vy = 0;
-	final->vz = 0;
-	final->vx2 = 0;
-	final->vy2 = 0;
-	final->vz2 = 0;
 	final->moves = 1;
 	final->mass = 1;
-	final->radius = 0;
-	final->collision = 0;
-	final->points = 0;
-	final->triangles = 0;
-	final->rays = 0;
-	final->pointmatrix = NULL;
-	final->pointmatrix2 = NULL;
-	final->cpointmatrix = NULL;
-	final->trianglematrix = NULL;
-	final->raymatrix = NULL;
 	FILE *fp;
 	fp = fopen(name, "r");
 	if(fp == NULL) printf("error opening %s\n", name);
