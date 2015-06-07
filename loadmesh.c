@@ -3,9 +3,7 @@
 #include <math.h>
 #include "globals.h"
 void loadmesh(char name[20], mesh *final, double centerx, double centery, double centerz){
-	memset(final, 0, sizeof(mesh)); //zero the mesh structure, preventing a lot of wasted lines.
-	//Only element not explicitly initialized at time of writing was drag - okay if I zero it?
-	final->centermass = calloc(sizeof(double), 3);
+	memset(final, 0, sizeof(mesh));	final->centermass = calloc(sizeof(double), 3);
 	final->centermass2 = calloc(sizeof(double), 3);
 	final->centermass[0] = centerx;
 	final->centermass[1] = centery;
@@ -18,6 +16,7 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 	final->moves = 1;
 	final->mass = 1;
 	FILE *fp;
+//	sprintf(name, "meshes/%s", name);
 	fp = fopen(name, "r");
 	if(fp == NULL) printf("error opening %s\n", name);
 	int temp, corner, one, two, run = 1;
