@@ -59,7 +59,7 @@ void drawView(){
 	mesh * mesh1;
 
 	for(temp = 0; temp < meshcount; temp++){
-		mesh1 = &meshes[temp];
+		mesh1 = meshes[temp];
 		x = mesh1->centermass[0];
 		y = mesh1->centermass[1];
 		z = mesh1->centermass[2];

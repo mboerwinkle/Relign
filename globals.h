@@ -43,7 +43,7 @@ typedef struct mesh{
 	double *pointmatrix, *pointmatrix2;
 }mesh;
 
-extern mesh* meshes;
+extern mesh** meshes;
 
 typedef struct dataUser{//user, as in "I FIGHT FOR THE USER"
 	int impulses;//bits: jump, forward, backward, left, right ...

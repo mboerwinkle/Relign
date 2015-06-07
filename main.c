@@ -8,7 +8,7 @@ int running = 1;
 int meshcount = 0;
 SDL_Window* window = NULL;
 SDL_Renderer* render = NULL;
-mesh* meshes = NULL;
+mesh** meshes = NULL;
 ent* ents = NULL;
 
 int main(){
@@ -18,18 +18,21 @@ int main(){
 	struct timespec otherTime = {.tv_sec = 0, .tv_nsec = 0};
 	SDL_Event evnt;
  
-	meshes = calloc(sizeof(mesh), 5);
+	meshes = calloc(sizeof(mesh*), 5);
 	ents = calloc(sizeof(ent), 5);
 	createEnt(&ents[0], "Francois Hollande", 5, 5, 5);
-	loadmesh("planeY", &meshes[0], 0, 0, 0);
+	meshes[0] = malloc(sizeof(mesh));
+	loadmesh("planeY", meshes[0], 0, 0, 0);
 	meshcount++;
-	loadmesh("square", &meshes[1], 1, -7, 30);
+	meshes[1] = malloc(sizeof(mesh));
+	loadmesh("square", meshes[1], 1, -7, 30);
 	meshcount++;
-	loadmesh("square", &meshes[2], -2, -20, 30);
+	meshes[2] = malloc(sizeof(mesh));
+	loadmesh("square", meshes[2], -2, -20, 30);
 	meshcount++;
 //	loadmesh("planeY", &meshes[2], 0, 0, 30);
 //	meshcount++;
-	meshes[0].moves = 0;
+	meshes[0]->moves = 0;
 //	meshes[1].vy = -0.2;
 //	meshes[0].mass = ;
 //	meshes[1].rot[2] = 0.25;
@@ -42,7 +45,7 @@ int main(){
 	double *temppoint;	
 	while(running){
 		for(temp = 0; temp < meshcount; temp++){
-			mesh1 = &meshes[temp];
+			mesh1 = meshes[temp];
 			if(mesh1->moves){
 				mesh1->vz2 = mesh1->vz * DRAG;
 				mesh1->vx2 = mesh1->vx * DRAG;
@@ -56,29 +59,29 @@ int main(){
 			}
 		}
 		for(temp = 0; temp < meshcount; temp++){
-			mesh1 = &meshes[temp];
+			mesh1 = meshes[temp];
 			mesh1->collision = 0;
 			for(temp2 = temp-1; temp2 >= 0; temp2--){
-				if(collisions(mesh1, &meshes[temp2])){
+				if(collisions(mesh1, meshes[temp2])){
 					mesh1->collision = 1;
-					meshes[temp2].collision = 1;
+					meshes[temp2]->collision = 1;
 				}
 			}
 		}
-/*
+
 		for(temp = 0; temp < meshcount; temp++){
-			mesh1 = &meshes[temp];
+			mesh1 = meshes[temp];
 			if(mesh1->collision) continue;
 			for(temp2 = 0; temp2 < meshcount; temp2++){
-				if(temp2 == temp || !meshes[temp2].collision) continue;
-				if(backupCollisions(mesh1, &meshes[temp2])){
+				if(temp2 == temp || !meshes[temp2]->collision) continue;
+				if(backupCollisions(mesh1, meshes[temp2])){
 					mesh1->collision = 1;
 				}
 			}
 		}
-*/
+
 		for(temp = 0; temp < meshcount; temp++){
-			mesh1 = &meshes[temp];
+			mesh1 = meshes[temp];
 			if(!mesh1->collision && mesh1->moves){
 				temppoint = mesh1->pointmatrix;
 				mesh1->pointmatrix = mesh1->pointmatrix2;
