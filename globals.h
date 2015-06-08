@@ -66,7 +66,7 @@ typedef struct ent{
 
 extern void actUser(ent *target);
 
-extern ent* ents;
+extern ent** ents;
 
 extern void printcentermesh(mesh *target);
 

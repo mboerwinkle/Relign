@@ -9,7 +9,7 @@ int meshcount = 0;
 SDL_Window* window = NULL;
 SDL_Renderer* render = NULL;
 mesh** meshes = NULL;
-ent* ents = NULL;
+ent** ents = NULL;
 
 int main(){
 	srandom(time(NULL));
@@ -19,8 +19,9 @@ int main(){
 	SDL_Event evnt;
  
 	meshes = calloc(sizeof(mesh*), 5);
-	ents = calloc(sizeof(ent), 5);
-	createEnt(&ents[0], "Francois Hollande", 5, 5, 5);
+	ents = calloc(sizeof(ent*), 5);
+	ents[0] = malloc(sizeof(ent));
+	createEnt(ents[0], "Francois Hollande", 5, 5, 5);
 	meshes[0] = malloc(sizeof(mesh));
 	loadmesh("meshes/square", meshes[0], 1, 5, 30);
 	meshcount++;
