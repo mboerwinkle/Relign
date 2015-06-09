@@ -47,13 +47,17 @@ typedef struct mesh{
 extern mesh** meshes;
 
 typedef struct dataUser{//user, as in "I FIGHT FOR THE USER"
-	int impulses;//bits: jump, forward, backward, left, right ...
+	//ip or something
+	//chatting or something
 	int heartbeat;//time since the last heartbeat
 //	int swagga;
 //	tweeta: hashtag include
 }dataUser;
 
 typedef struct ent{
+	int impulse;//bits: jump, forward, backward, left, right ...
+	void *aiFunc;//the controlling function that changes impulse. defined by aitype
+	void *typeFunc//the moving function that actually moves the ent based on it's impulses. defined by enttype
 	double center[3];//at the center of the feet?
 	double center2[3];
 	double vx, vy, vz, vx2, vy2, vz2;//velocities
@@ -63,7 +67,6 @@ typedef struct ent{
 //	int vang;//view angle   -   this should be handled uniquely by the client
 	int vdir;//view direction   -   needed for drawing sprites.
 	void *data;//persistent(between ticks) information for use by the actFunc
-	void *actFunc;//the function that will be ticked each turn with the pointer to the entity structure as the argument.
 }ent;
 
 extern void actUser(ent *target);
@@ -78,7 +81,7 @@ extern double distance(double vect[3], double point[3]);
 extern void norm(double target[3]);
 extern void movemesh(mesh *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);
-extern void createEnt(ent *final, char name[20], double x, double y, double z);
+extern void createEnt(ent *final, int type, int aitype, char name[20], double x, double y, double z);
 extern void tickAllEnts();
 extern int collisions(mesh *one, mesh *two);
 extern int backupCollisions(mesh *one, mesh *two);

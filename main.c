@@ -22,7 +22,7 @@ int main(){
 	meshes = calloc(sizeof(mesh*), 5);
 	ents = calloc(sizeof(ent*), 5);
 	ents[0] = malloc(sizeof(ent));
-	createEnt(ents[0], "Francois Hollande", 5, 5, 5);
+	createEnt(ents[0], 0, 0, "Francois Hollande", 5, 5, 5);
 	entcount++;
 	meshes[0] = malloc(sizeof(mesh));
 	loadmesh("meshes/square", meshes[0], 1, 5, 30);

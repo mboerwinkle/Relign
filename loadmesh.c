@@ -3,7 +3,8 @@
 #include <math.h>
 #include "globals.h"
 void loadmesh(char name[20], mesh *final, double centerx, double centery, double centerz){
-	memset(final, 0, sizeof(mesh));	final->centermass = calloc(sizeof(double), 3);
+	memset(final, 0, sizeof(mesh));
+	final->centermass = calloc(sizeof(double), 3);
 	final->centermass2 = calloc(sizeof(double), 3);
 	final->centermass[0] = centerx;
 	final->centermass[1] = centery;
@@ -67,6 +68,5 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 			}
 		}
 	}
-//	final->drag = ;
 	fclose(fp);
 }

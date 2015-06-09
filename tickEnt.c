@@ -12,6 +12,7 @@ void tickAllEnts(){
 		head[1] = target->center[1]+target->height;
 		head[2] = target->center[2];
 		drawLine(target->center, head);
+		
 	}
 }
 

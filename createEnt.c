@@ -2,20 +2,14 @@
 #include <stdlib.h>
 #include "globals.h"
 
-void createEnt(ent *final, char name[20], double x, double y, double z){
+void createEnt(ent *final, int type, int aitype, char name[20], double x, double y, double z){
+	memset(final, 0, sizeof(ent));
 	final->center[0] = x;
 	final->center[1] = y;
 	final->center[2] = z;
 	final->center2[0] = x;
 	final->center2[1] = y;
 	final->center2[2] = z;
-	final->vx = 0;
-	final->vy = 0;
-	final->vz = 0;
-	final->vx2 = 0;
-	final->vy2 = 0;
-	final->vz2 = 0;
-	final->vdir = 0;
 	final->height = 5;
-	final->data = malloc(sizeof(dataUser));
+	if(aitype == 0) final->data = calloc(sizeof(dataUser), 1);
 }
