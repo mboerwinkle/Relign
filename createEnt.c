@@ -16,5 +16,6 @@ void createEnt(ent *final, char name[20], double x, double y, double z){
 	final->vy2 = 0;
 	final->vz2 = 0;
 	final->vdir = 0;
+	final->height = 5;
 	final->data = malloc(sizeof(dataUser));
 }

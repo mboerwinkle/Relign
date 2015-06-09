@@ -6,6 +6,7 @@
 
 int running = 1;
 int meshcount = 0;
+int entcount = 0;
 SDL_Window* window = NULL;
 SDL_Renderer* render = NULL;
 mesh** meshes = NULL;
@@ -22,6 +23,7 @@ int main(){
 	ents = calloc(sizeof(ent*), 5);
 	ents[0] = malloc(sizeof(ent));
 	createEnt(ents[0], "Francois Hollande", 5, 5, 5);
+	entcount++;
 	meshes[0] = malloc(sizeof(mesh));
 	loadmesh("meshes/square", meshes[0], 1, 5, 30);
 	meshcount++;
@@ -55,6 +57,7 @@ int main(){
 				mesh1->rot2[1] = mesh1->rot[1] * DRAG;
 				mesh1->rot2[2] = mesh1->rot[2] * DRAG;
 				applyForce(mesh1, 0, 0, 0, 0, 1, 0, GRAVITY/FRAMERATE);
+				tickAllEnts();
 				movemesh(mesh1);
 //				printf("V %lf %lf %lf\n", mesh1->vx, mesh1->vy, mesh1->vz);
 			}
