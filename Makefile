@@ -1,7 +1,8 @@
 CC=gcc
 CFLAGS=-Wall -Wno-strict-aliasing -O2 -c -ffast-math $(DEBUG)
 LFLAGS=-lSDL2 -lm -pthread -lrt
-SOURCES=main.c loadmesh.c movemesh.c intersect.c collisions.c drawView.c forces.c tickEnt.c createEnt.c printout.c getObjectVelocity.c
+SOURCES=main.c loadmesh.c movemesh.c intersect.c collisions.c drawView.c forces.c tickEnt.c createEnt.c printout.c getObjectVelocity.c entAis.c entTypes.c
+
 OBJECTS=$(SOURCES:.c=.o)
 
 .PHONY: debug remake clean
@@ -41,6 +42,12 @@ printout.o: printout.c globals.h
 
 getObjectVelocity.o: getObjectVelocity.c globals.h
 	$(CC) $(CFLAGS) getObjectVelocity.c
+
+entAis.o: entAis.c globals.h
+	$(CC) $(CFLAGS) entAis.c
+
+entTypes.o: entTypes.c globals.h
+	$(CC) $(CFLAGS) entTypes.c
 
 clean:
 	rm -f *.o run
