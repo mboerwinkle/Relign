@@ -56,8 +56,8 @@ typedef struct dataUser{//user, as in "I FIGHT FOR THE USER"
 
 typedef struct ent{
 	int impulse;//bits: jump, forward, backward, left, right ...
-	void *aiFunc;//the controlling function that changes impulse. defined by aitype
-	void *typeFunc//the moving function that actually moves the ent based on it's impulses. defined by enttype
+	void (*aiFunc)(struct ent*);//the controlling function that changes impulse. defined by aitype
+	void (*typeFunc)(struct ent*);//the moving function that actually moves the ent based on it's impulses. defined by enttype
 	double center[3];//at the center of the feet?
 	double center2[3];
 	double vx, vy, vz, vx2, vy2, vz2;//velocities
