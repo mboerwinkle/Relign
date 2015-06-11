@@ -2,14 +2,6 @@
 #include <stdlib.h>
 #include "globals.h"
 
-void tickAllEnts(){
-	ent* target;
-		SDL_SetRenderDrawColor(render, 255, 255, 0, 255);
-	for(int temp = entcount-1; temp >= 0; temp--){
-		tickEnt(ents[temp]);
-	}
-}
-
 void tickEnt(ent *target){
 	double head[3];
 	head[0] = target->center[0];
@@ -19,5 +11,13 @@ void tickEnt(ent *target){
 	target->aiFunc(target);
 	target->typeFunc(target);
 	
+}
+
+void tickAllEnts(){
+	ent* target;
+		SDL_SetRenderDrawColor(render, 255, 255, 0, 255);
+	for(int temp = entcount-1; temp >= 0; temp--){
+		tickEnt(ents[temp]);
+	}
 }
 
