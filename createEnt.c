@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "globals.h"
+#include "entFuncs.h"
 
 void createEnt(ent *final, int type, int aitype, char name[20], double x, double y, double z){
 	memset(final, 0, sizeof(ent));
@@ -12,4 +13,5 @@ void createEnt(ent *final, int type, int aitype, char name[20], double x, double
 	final->center2[2] = z;
 	final->height = 5;
 	if(aitype == 0) final->data = calloc(sizeof(dataUser), 1);
+	final->aiFunc = &ai0user;
 }

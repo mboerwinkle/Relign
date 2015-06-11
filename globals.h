@@ -57,7 +57,6 @@ typedef struct dataUser{//user, as in "I FIGHT FOR THE USER"
 typedef struct ent{
 	int impulse;//bits: jump, forward, backward, left, right ...
 	void (*aiFunc)(struct ent*);//the controlling function that changes impulse. defined by aitype
-	void (*typeFunc)(struct ent*);//the moving function that actually moves the ent based on it's impulses. defined by enttype
 	double center[3];//at the center of the feet?
 	double center2[3];
 	double vx, vy, vz, vx2, vy2, vz2;//velocities
@@ -68,8 +67,6 @@ typedef struct ent{
 	int vdir;//view direction   -   needed for drawing sprites.
 	void *data;//persistent(between ticks) information for use by the actFunc
 }ent;
-
-extern void actUser(ent *target);
 
 extern ent** ents;
 
@@ -83,6 +80,7 @@ extern void movemesh(mesh *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);
 extern void createEnt(ent *final, int type, int aitype, char name[20], double x, double y, double z);
 extern void tickAllEnts();
+extern void tickEnt(ent *target);
 extern int collisions(mesh *one, mesh *two);
 extern int backupCollisions(mesh *one, mesh *two);
 extern void getObjectVelocity(mesh* target, double colloc[3], double colforce[3]);
