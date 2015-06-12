@@ -9,6 +9,8 @@ void tickEnt(ent *target){
 	head[2] = target->center[2];
 	drawLine(target->center, head);
 	target->aiFunc(target);	
+//	moveEnt(target);
+//	entObjCollisions(target);
 }
 
 void tickAllEnts(){
