@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "globals.h"
-#include "entFuncs.h"
+#include "ents.h"
 
 void createEnt(ent *final, int type, int aitype, char name[20], double x, double y, double z){
 	memset(final, 0, sizeof(ent));
