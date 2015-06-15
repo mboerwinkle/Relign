@@ -105,7 +105,7 @@ int main(){
 		drawView();
 
 		do {
-			SDL_PollEvent(&evnt);
+			SDL_WaitEvent(&evnt);
 		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
 		if(evnt.type == SDL_KEYDOWN){
 			if(evnt.key.keysym.sym == SDLK_LEFT){
