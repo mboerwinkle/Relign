@@ -43,47 +43,13 @@ int main(){
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
 	}
-	int temp, temp2;
+	int temp;
 	mesh *mesh1;
 	double *temppoint;	
 	while(running){
-		for(temp = 0; temp < meshcount; temp++){
-			mesh1 = meshes[temp];
-			if(mesh1->moves){
-				mesh1->vz2 = mesh1->vz * DRAG;
-				mesh1->vx2 = mesh1->vx * DRAG;
-				mesh1->vy2 = mesh1->vy * DRAG;
-				mesh1->rot2[0] = mesh1->rot[0] * DRAG;
-				mesh1->rot2[1] = mesh1->rot[1] * DRAG;
-				mesh1->rot2[2] = mesh1->rot[2] * DRAG;
-				applyForce(mesh1, 0, 0, 0, 0, 1, 0, GRAVITY/FRAMERATE);
-				tickAllEnts();
-				movemesh(mesh1);
-//				printf("V %lf %lf %lf\n", mesh1->vx, mesh1->vy, mesh1->vz);
-			}
-		}
-		for(temp = 0; temp < meshcount; temp++){
-			mesh1 = meshes[temp];
-			mesh1->collision = 0;
-			for(temp2 = temp-1; temp2 >= 0; temp2--){
-				if(collisions(mesh1, meshes[temp2])){
-					mesh1->collision = 1;
-					meshes[temp2]->collision = 1;
-				}
-			}
-		}
-
-		for(temp = 0; temp < meshcount; temp++){
-			mesh1 = meshes[temp];
-			if(mesh1->collision) continue;
-			for(temp2 = 0; temp2 < meshcount; temp2++){
-				if(temp2 == temp || !meshes[temp2]->collision) continue;
-				if(backupCollisions(mesh1, meshes[temp2])){
-					mesh1->collision = 1;
-				}
-			}
-		}
-
+		tickAllEnts();
+		tickAllObjects();
+		collisions();
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = meshes[temp];
 			if(!mesh1->collision && mesh1->moves){
