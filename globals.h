@@ -1,12 +1,12 @@
-#define WIDTH 640
-#define HEIGHT 480
+#define WIDTH 1600
+#define HEIGHT 900
 #define VIEWZOOM 100
 
 #define EPSILON 0.000001
 #define FRAMERATE 40//IN HERTZ LOL
 #define ELASTICITY_NOMOVE 1.2//defines how elastic (for collisions) the ground and other non-moving objects are (mesh.moves = 0). less than 1 or more than 2 are not recommended.
 #define ELASTICITY_MOVE 1//defines how elastic normal collisions between two objects are. from 0 to 1
-#define GRAVITY 9.8// for standard earth.. 1.6 for moon. 3.7 for mars. m/s/s
+#define GRAVITY 0// for standard earth.. 1.6 for moon. 3.7 for mars. m/s/s
 #define DRAG 1
 #define CROSS(dest, v1, v2)\
 	dest[0]=v1[1]*v2[2]-v1[2]*v2[1];\
@@ -60,12 +60,13 @@ typedef struct ent{
 	double center[3];//at the center of the feet?
 	double center2[3];
 	double vx, vy, vz, vx2, vy2, vz2;//velocities
-	double height;
+	double radius;
 	int hp;//hp...
 	int shield;//you know: the thing that protects you, then goes beep beep beep, and then goes booooouuuuup.
 //	int vang;//view angle   -   this should be handled uniquely by the client
 	int vdir;//view direction   -   needed for drawing sprites.
 	void *data;//persistent(between ticks) information for use by the actFunc
+	int collision;
 }ent;
 
 extern ent** ents;
@@ -77,6 +78,7 @@ extern void drawLine(double one[3], double two[3]);
 extern double distance(double vect[3], double point[3]);
 extern void norm(double target[3]);
 extern void movemesh(mesh *target);
+extern void moveEnt(ent *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);
 extern void createEnt(ent *final, int type, int aitype, char name[20], double x, double y, double z);
 extern void tickAllObjects();

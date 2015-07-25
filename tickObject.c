@@ -14,7 +14,7 @@ void tickAllObjects(){
 			mesh1->rot2[0] = mesh1->rot[0] * DRAG;
 			mesh1->rot2[1] = mesh1->rot[1] * DRAG;
 			mesh1->rot2[2] = mesh1->rot[2] * DRAG;
-			applyForce(mesh1, 0, 0, 0, 0, 1, 0, GRAVITY/FRAMERATE);
+			applyForce(mesh1, 0, 0, 0, 0, 0, 1, GRAVITY/FRAMERATE);
 			movemesh(mesh1);
 		}
 	}

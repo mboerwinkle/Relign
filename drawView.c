@@ -32,7 +32,7 @@ void drawLine(double one[3], double two[3]){
 		one = two;
 		two = tmp;
 	}
-	if (one[2] < 0) { // In this case, we want to trace *away* from the projection of point 2, to the edge of the screen.
+	if (one[3] < 0) { // In this case, we want to trace *away* from the projection of point 2, to the edge of the screen.
 		int sx = (int)(VIEWZOOM*one[0]/one[2])+0.5*WIDTH;
 		int sy = (int)(VIEWZOOM*one[1]/one[2])+0.5*HEIGHT;
 		int sx2 = (int)(VIEWZOOM*two[0]/two[2])+0.5*WIDTH;

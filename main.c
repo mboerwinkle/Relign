@@ -22,34 +22,44 @@ int main(){
 	meshes = calloc(sizeof(mesh*), 5);
 	ents = calloc(sizeof(ent*), 5);
 	ents[0] = malloc(sizeof(ent));
-	createEnt(ents[0], 0, 0, "Francois Hollande", 5, 5, 5);
+	createEnt(ents[0], 0, 0, "Francois Hollande", 6, 0, 9);
 	entcount++;
 	meshes[0] = malloc(sizeof(mesh));
-	loadmesh("meshes/square", meshes[0], 1, 5, 30);
+	loadmesh("meshes/square", meshes[0], 0, 0, 10);
 	meshcount++;
-	meshes[1] = malloc(sizeof(mesh));
-	loadmesh("meshes/square", meshes[1], 1, -7, 30);
-	meshcount++;
+//	meshes[1] = malloc(sizeof(mesh));
+//	loadmesh("meshes/square", meshes[1], 0, 0, 10);
+//	meshcount++;
 //	meshes[2] = malloc(sizeof(mesh));
 //	loadmesh("meshes/square", meshes[2], -2, -20, 30);
 //	meshcount++;
 //	loadmesh("planeY", &meshes[2], 0, 0, 30);
 //	meshcount++;
-	meshes[0]->moves = 0;
-//	meshes[1].vy = -0.2;
+//	meshes[0]->moves = 0;
+//	meshes[1]->vy = -0.2;
 //	meshes[0].mass = ;
-//	meshes[1].rot[2] = 0.25;
-//	meshes[0].rot[2] = 0.1;
+//	meshes[1]->rot[1] = 0.25;
+	meshes[0]->vx = 0.1;
+	ents[0]->vx = -0.1;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
 	}
 	int temp;
 	mesh *mesh1;
+	ent *ent1;
 	double *temppoint;	
 	while(running){
 		tickAllEnts();
 		tickAllObjects();
 		collisions();
+		for(temp = 0; temp < entcount; temp++){
+			ent1 = ents[temp];
+			if(!ent1->collision){
+				ent1->center[0] = ent1->center2[0];
+				ent1->center[1] = ent1->center2[1];
+				ent1->center[2] = ent1->center2[2];
+			}
+		}
 		for(temp = 0; temp < meshcount; temp++){
 			mesh1 = meshes[temp];
 			if(!mesh1->collision && mesh1->moves){

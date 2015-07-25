@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Wno-strict-aliasing -O2 -c -ffast-math $(DEBUG)
 LFLAGS=-lSDL2 -lm -pthread -lrt
-SOURCES=main.c loadmesh.c movemesh.c intersect.c collisions.c drawView.c forces.c tickEnt.c tickObject.c createEnt.c printout.c getObjectVelocity.c entAis.c ObjObjCollisions.c EntObjCollisions.c
+SOURCES=main.c loadmesh.c movemesh.c moveEnt.c intersect.c collisions.c drawView.c forces.c tickEnt.c tickObject.c createEnt.c printout.c getObjectVelocity.c entAis.c ObjObjCollisions.c EntObjCollisions.c
 
 OBJECTS=$(SOURCES:.c=.o)
 
@@ -18,6 +18,9 @@ loadmesh.o: loadmesh.c globals.h
 
 movemesh.o: movemesh.c globals.h
 	$(CC) $(CFLAGS) movemesh.c
+
+moveEnt.o: moveEnt.c globals.h
+	$(CC) $(CFLAGS) moveEnt.c
 
 intersect.o: intersect.c globals.h
 	$(CC) $(CFLAGS) intersect.c

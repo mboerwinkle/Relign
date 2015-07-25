@@ -2,21 +2,19 @@
 #include <stdlib.h>
 #include "globals.h"
 
-void tickEnt(ent *target){
-	double head[3];
-	head[0] = target->center[0];
-	head[1] = target->center[1]+target->height;
-	head[2] = target->center[2];
-	drawLine(target->center, head);
-	target->aiFunc(target);	
-//	moveEnt(target);
-//	entObjCollisions(target);
-}
-
 void tickAllEnts(){
+	ent* target;
 	SDL_SetRenderDrawColor(render, 255, 255, 0, 255);
 	for(int temp = entcount-1; temp >= 0; temp--){
-		tickEnt(ents[temp]);
+		target = ents[temp];
+		double x = target->center[0];
+		double y = target->center[1];
+		double z = target->center[2];
+		if(z > 0){
+			SDL_RenderDrawPoint(render, (int)(VIEWZOOM*x/z+0.5*WIDTH), (int)(VIEWZOOM*y/z+0.5*HEIGHT));
+		}
+		target->aiFunc(target);	
+		moveEnt(target);
 	}
 }
 
