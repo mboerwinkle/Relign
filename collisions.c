@@ -21,16 +21,24 @@ void collisions(){
 		ent1 = ents[temp];
 		ent1->collision = 0;
 		for(temp2 = 0; temp2 < entcount; temp2++){
-			EntObjCollisions(meshes[temp2], ent1);
+			if(EntObjCollisions(meshes[temp2], ent1)){
+				meshes[temp2]->collision = 1;
+				ent1->collision = 1;
+			}
 		}
 	}
-	for(temp = 0; temp < meshcount; temp++){
-		mesh1 = meshes[temp];
-		if(mesh1->collision) continue;
-		for(temp2 = 0; temp2 < meshcount; temp2++){
-			if(temp2 == temp || !meshes[temp2]->collision) continue;
-			if(backupObjObjCollisions(mesh1, meshes[temp2])){
-				mesh1->collision = 1;
+	int moarcollisions = 1;
+	while(moarcollisions == 1){
+		moarcollisions = 0;
+		for(temp = 0; temp < meshcount; temp++){
+			mesh1 = meshes[temp];
+			if(mesh1->collision) continue;
+			for(temp2 = 0; temp2 < meshcount; temp2++){
+				if(temp2 == temp || !meshes[temp2]->collision) continue;
+				if(backupObjObjCollisions(mesh1, meshes[temp2])){
+					mesh1->collision = 1;
+					moarcollisions = 1;
+				}
 			}
 		}
 	}

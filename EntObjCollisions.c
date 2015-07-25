@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "globals.h"
 
-void EntObjCollisions(mesh* M, ent* E){
+int EntObjCollisions(mesh* M, ent* E){
 	int temptri;
 	double zeros[3] = {0, 0, 0};
 	double t, u, v, z;
@@ -12,7 +12,6 @@ void EntObjCollisions(mesh* M, ent* E){
 	double offsetx, offsety, offsetz;
 	int collides = 0;
 	triangle *tri = M->trianglematrix;
-	ray *r = M->raymatrix;
 	for(temptri = M->triangles-1; temptri >=0; temptri--){
 		offsetx = E->center2[0]-c[0];
 		offsety = E->center2[1]-c[1];
@@ -23,4 +22,5 @@ void EntObjCollisions(mesh* M, ent* E){
 			drawLine(c, E->center2);
 		}
 	}
+	return collides;
 }
