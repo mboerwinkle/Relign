@@ -49,3 +49,14 @@ void applyForce(mesh *target, double x, double y, double z, double dirx, double 
 	SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
 	drawLine(absloc, absend);
 }
+
+void applyEntForce(ent *target, double dirx, double diry, double dirz, double power){
+	double vec[3] = {dirx, diry, dirz};
+	norm(vec);
+	vec[0] *= power;
+	vec[1] *= power;
+	vec[2] *= power;
+	target->vx2 += vec[0];
+	target->vy2 += vec[1];
+	target->vz2 += vec[2];
+}

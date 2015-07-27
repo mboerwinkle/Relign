@@ -12,6 +12,7 @@ void createEnt(ent *final, int type, int aitype, char name[20], double x, double
 	final->center2[1] = y;
 	final->center2[2] = z;
 	final->radius = 5;
+	final->mass = 1;
 	if(aitype == 0) final->data = calloc(sizeof(dataUser), 1);
 	final->aiFunc = &ai0user;
 }

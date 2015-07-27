@@ -60,6 +60,7 @@ typedef struct ent{
 	double center[3];//at the center of the feet?
 	double center2[3];
 	double vx, vy, vz, vx2, vy2, vz2;//velocities
+	double mass;
 	double radius;
 	int hp;//hp...
 	int shield;//you know: the thing that protects you, then goes beep beep beep, and then goes booooouuuuup.
@@ -74,6 +75,7 @@ extern ent** ents;
 extern void printcentermesh(mesh *target);
 
 extern void applyForce(mesh *target, double x, double y, double z, double dirx, double diry, double dirz, double power);
+extern void applyEntForce(ent *target, double dirx, double diry, double dirz, double power);
 extern void drawLine(double one[3], double two[3]);
 extern double distance(double vect[3], double point[3]);
 extern void norm(double target[3]);

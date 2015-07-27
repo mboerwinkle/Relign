@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "globals.h"
-static double t, u, v, col[6], *c1, *c2, *p1, *p2;
+static double t, u, v, col[3], colvector[3], *c1, *c2, *p1, *p2;
 static triangle *t1, *t2;
 static ray *r1, *r2;
 int ObjObjCollisions(mesh *one, mesh *two){
@@ -65,19 +65,19 @@ int ObjObjCollisions(mesh *one, mesh *two){
 		double colforce1[3], colforce2[3];
 		getObjectVelocity(one, colloc1, colforce1);
 		getObjectVelocity(two, colloc2, colforce2);
-		col[3] = 0+colforce1[0]-colforce2[0];
-		col[4] = 0+colforce1[1]-colforce2[1];
-		col[5] = 0+colforce1[2]-colforce2[2];
+		colvector[0] = colforce1[0]-colforce2[0];
+		colvector[1] = colforce1[1]-colforce2[1];
+		colvector[2] = colforce1[2]-colforce2[2];
 		double relMass;
 		if(one->moves){
 			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);//how much of the force is given to one, in funtion of one and two's masses. between 0 and 2.
 			else relMass = ELASTICITY_NOMOVE;//it is like it is hitting something it's own weight, so it will get stopped.
-			applyForce(one, colloc1[0], colloc1[1], colloc1[2], -(col[3]), -(col[4]), -(col[5]), sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5])*relMass*ELASTICITY_MOVE);
+			applyForce(one, colloc1[0], colloc1[1], colloc1[2], -(colvector[0]), -(colvector[1]), -(colvector[2]), sqrt(colvector[0]*colvector[0]+colvector[1]*colvector[1]+colvector[2]*colvector[2])*relMass*ELASTICITY_MOVE);
 		}
 		if(two->moves){
 			if(one->moves) relMass = 2*one->mass/(one->mass + two->mass);
 			else relMass = ELASTICITY_NOMOVE;
-			applyForce(two, colloc2[0], colloc2[1], colloc2[2], col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5])*relMass*ELASTICITY_MOVE);
+			applyForce(two, colloc2[0], colloc2[1], colloc2[2], colvector[0], colvector[1], colvector[2], sqrt(colvector[0]*colvector[0]+colvector[1]*colvector[1]+colvector[2]*colvector[2])*relMass*ELASTICITY_MOVE);
 		}
 
 	}
@@ -144,19 +144,19 @@ int backupObjObjCollisions(mesh *one, mesh *two){
 		double colforce1[3], colforce2[3];
 		getObjectVelocity(one, colloc1, colforce1);
 		getObjectVelocity(two, colloc2, colforce2);
-		col[3] = 0+colforce1[0]-colforce2[0];
-		col[4] = 0+colforce1[1]-colforce2[1];
-		col[5] = 0+colforce1[2]-colforce2[2];
+		colvector[0] = colforce1[0]-colforce2[0];
+		colvector[1] = colforce1[1]-colforce2[1];
+		colvector[2] = colforce1[2]-colforce2[2];
 		double relMass;
 		if(one->moves){
 			if(two->moves) relMass = 2*two->mass/(one->mass + two->mass);//how much of the force is given to one, in funtion of one and two's masses. between 0 and 2.
 			else relMass = ELASTICITY_NOMOVE;//it is like it is hitting something it's own weight, so it will get stopped.
-			applyForce(one, colloc1[0], colloc1[1], colloc1[2], -(col[3]), -(col[4]), -(col[5]), sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5])*relMass*ELASTICITY_MOVE);
+			applyForce(one, colloc1[0], colloc1[1], colloc1[2], -(colvector[0]), -(colvector[1]), -(colvector[2]), sqrt(colvector[0]*colvector[0]+colvector[1]*colvector[1]+colvector[2]*colvector[2])*relMass*ELASTICITY_MOVE);
 		}
 		if(two->moves){
 			if(one->moves) relMass = 2*one->mass/(one->mass + two->mass);
 			else relMass = ELASTICITY_NOMOVE;
-			applyForce(two, colloc2[0], colloc2[1], colloc2[2], col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5])*relMass*ELASTICITY_MOVE);
+			applyForce(two, colloc2[0], colloc2[1], colloc2[2], colvector[0], colvector[1], colvector[2], sqrt(colvector[0]*colvector[0]+colvector[1]*colvector[1]+colvector[2]*colvector[2])*relMass*ELASTICITY_MOVE);
 		}
 	}
 //	printf("%lf %lf %lf\n%lf\n\n", col[3], col[4], col[5], sqrt(col[3]*col[3]+col[4]*col[4]+col[5]*col[5]));
