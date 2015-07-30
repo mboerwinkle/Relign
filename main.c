@@ -22,13 +22,13 @@ int main(){
 	meshes = calloc(sizeof(mesh*), 5);
 	ents = calloc(sizeof(ent*), 5);
 	ents[0] = malloc(sizeof(ent));
-	createEnt(ents[0], 0, 0, "Francois Hollande", 6, 0, 6);
+	createEnt(ents[0], 0, 0, "Francois Hollande", 6, 0, 10);
 	entcount++;
 	meshes[0] = malloc(sizeof(mesh));
-	loadmesh("meshes/square", meshes[0], 0, 0, 10);
+	loadmesh("meshes/planeZ", meshes[0], 0, 0, 20);
 	meshcount++;
 	meshes[1] = malloc(sizeof(mesh));
-	loadmesh("meshes/planeZ", meshes[1], 0, 0, 20);
+	loadmesh("meshes/planeZ", meshes[1], -200, 0, 18);
 	meshcount++;
 //	meshes[2] = malloc(sizeof(mesh));
 //	loadmesh("meshes/square", meshes[2], -2, -20, 30);
@@ -39,8 +39,8 @@ int main(){
 //	meshes[1]->vy = -0.2;
 //	meshes[0].mass = ;
 //	meshes[1]->rot[1] = 0.25;
-	meshes[0]->vx = -0.1;
 	ents[0]->vx = -0.1;
+	meshes[0]->moves = 0;
 	meshes[1]->moves = 0;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
@@ -80,7 +80,7 @@ int main(){
 			mesh1->vx = mesh1->vx2;
 			mesh1->vy = mesh1->vy2;
 			mesh1->vz = mesh1->vz2;
-			printcentermesh(mesh1);
+			//printcentermesh(mesh1);
 		}
 		drawView();
 

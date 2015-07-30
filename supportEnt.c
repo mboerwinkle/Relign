@@ -23,7 +23,11 @@ void supportEnt(ent *target){
 			ptwo = &meshpoint->pointmatrix[tri[temptri].points[1]*3];
 			pthree = &meshpoint->pointmatrix[tri[temptri].points[2]*3];
 			if(intersect_triangle(zeros, down, pone, ptwo, pthree, &t, &u, &v, offsetx, offsety, offsetz) && t <= 1){
-				applyEntForce(target, 0, 0, 1, 0.5);
+				printf("%lf %lf\n", t, target->center[2]);
+				double push = 0;
+				//if(target->vz > 0) push += 0.8*target->vz;
+				push += target->vz+GRAVITY/FRAMERATE+(1-t);
+				applyEntForce(target, 0, 0, 1, -push);
 				return;
 			}
 		}

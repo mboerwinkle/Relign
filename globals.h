@@ -1,5 +1,5 @@
-#define WIDTH 1600
-#define HEIGHT 900
+#define WIDTH 640
+#define HEIGHT 480
 #define VIEWZOOM 100
 
 #define EPSILON 0.000001
