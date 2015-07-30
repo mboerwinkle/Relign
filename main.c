@@ -28,7 +28,7 @@ int main(){
 	loadmesh("meshes/square", meshes[0], 0, 0, 10);
 	meshcount++;
 	meshes[1] = malloc(sizeof(mesh));
-	loadmesh("meshes/square", meshes[1], -11, 0, 10);
+	loadmesh("meshes/planeZ", meshes[1], 0, 0, 20);
 	meshcount++;
 //	meshes[2] = malloc(sizeof(mesh));
 //	loadmesh("meshes/square", meshes[2], -2, -20, 30);
@@ -41,6 +41,7 @@ int main(){
 //	meshes[1]->rot[1] = 0.25;
 	meshes[0]->vx = -0.1;
 	ents[0]->vx = -0.1;
+	meshes[1]->moves = 0;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
 	}

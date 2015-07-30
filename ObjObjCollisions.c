@@ -29,12 +29,12 @@ int ObjObjCollisions(mesh *one, mesh *two){
 		offsetz = c1[2]-c2[2];
 		for(tempray = one->rays-1; tempray >=0; tempray--){
 			for(temptri = two->triangles-1; temptri >=0; temptri--){
-				if(intersect_triangle(&p1[r1[tempray].ends[0]*3], &p1[r1[tempray].ends[1]*3], &p2[t2[temptri].points[0]*3], &p2[t2[temptri].points[1]*3], &p2[t2[temptri].points[2]*3], &t, &u, &v, offsetx, offsety, offsetz)){
+				pone = &p2[t2[temptri].points[0]*3];
+				ptwo = &p2[t2[temptri].points[1]*3];
+				pthree = &p2[t2[temptri].points[2]*3];
+				if(intersect_triangle(&p1[r1[tempray].ends[0]*3], &p1[r1[tempray].ends[1]*3], pone, ptwo, pthree, &t, &u, &v, offsetx, offsety, offsetz)){
 					collides = 1;
 					z = 1-(u+v);//find the third barycentric coordinate
-					pone = &p2[t2[temptri].points[0]*3];
-					ptwo = &p2[t2[temptri].points[1]*3];
-					pthree = &p2[t2[temptri].points[2]*3];
 					col[0] = (z*pone[0]+u*ptwo[0]+v*pthree[0]+c2[0]+col[0]*howmany)/(howmany+1);
 					col[1] = (z*pone[1]+u*ptwo[1]+v*pthree[1]+c2[1]+col[1]*howmany)/(howmany+1);
 					col[2] = (z*pone[2]+u*ptwo[2]+v*pthree[2]+c2[2]+col[2]*howmany)/(howmany+1);
@@ -108,12 +108,12 @@ int backupObjObjCollisions(mesh *one, mesh *two){
 		offsetz = c1[2]-c2[2];
 		for(tempray = one->rays-1; tempray >=0; tempray--){
 			for(temptri = two->triangles-1; temptri >=0; temptri--){
-				if(intersect_triangle(&p1[r1[tempray].ends[0]*3], &p1[r1[tempray].ends[1]*3], &p2[t2[temptri].points[0]*3], &p2[t2[temptri].points[1]*3], &p2[t2[temptri].points[2]*3], &t, &u, &v, offsetx, offsety, offsetz)){
+				pone = &p2[t2[temptri].points[0]*3];
+				ptwo = &p2[t2[temptri].points[1]*3];
+				pthree = &p2[t2[temptri].points[2]*3];
+				if(intersect_triangle(&p1[r1[tempray].ends[0]*3], &p1[r1[tempray].ends[1]*3], pone, ptwo, pthree, &t, &u, &v, offsetx, offsety, offsetz)){
 					collides = 1;
 					z = 1-(u+v);//find the third barycentric coordinate
-					pone = &p2[t2[temptri].points[0]*3];
-					ptwo = &p2[t2[temptri].points[1]*3];
-					pthree = &p2[t2[temptri].points[2]*3];
 					col[0] = (z*pone[0]+u*ptwo[0]+v*pthree[0]+c2[0]+col[0]*howmany)/(howmany+1);
 					col[1] = (z*pone[1]+u*ptwo[1]+v*pthree[1]+c2[1]+col[1]*howmany)/(howmany+1);
 					col[2] = (z*pone[2]+u*ptwo[2]+v*pthree[2]+c2[2]+col[2]*howmany)/(howmany+1);

@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Wno-strict-aliasing -O2 -c -ffast-math $(DEBUG)
 LFLAGS=-lSDL2 -lm -pthread -lrt
-SOURCES=main.c loadmesh.c movemesh.c moveEnt.c intersect.c collisions.c drawView.c forces.c tickEnt.c tickObject.c createEnt.c printout.c getObjectVelocity.c entAis.c ObjObjCollisions.c EntObjCollisions.c
+SOURCES=main.c loadmesh.c movemesh.c moveEnt.c intersect.c collisions.c drawView.c forces.c tickEnt.c tickObject.c createEnt.c printout.c getObjectVelocity.c entAis.c ObjObjCollisions.c EntObjCollisions.c supportEnt.c
 
 OBJECTS=$(SOURCES:.c=.o)
 
@@ -54,6 +54,9 @@ ObjObjCollisions.o: ObjObjCollisions.c globals.h
 
 EntObjCollisions.o: EntObjCollisions.c globals.h
 	$(CC) $(CFLAGS) EntObjCollisions.c
+
+supportEnt.o: supportEnt.c globals.h
+	$(CC) $(CFLAGS) supportEnt.c
 
 entAis.o: entAis.c globals.h ais/*
 	$(CC) $(CFLAGS) entAis.c
