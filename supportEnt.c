@@ -12,6 +12,7 @@ void supportEnt(ent *target){
 	double offsetx, offsety, offsetz;
 	mesh *meshpoint;
 	triangle *tri;
+	double record = 2;
 	for(tempmesh = meshcount-1; tempmesh >= 0; tempmesh--){
 		meshpoint = meshes[tempmesh];
 		tri = meshpoint->trianglematrix;
@@ -22,14 +23,17 @@ void supportEnt(ent *target){
 			pone = &meshpoint->pointmatrix[tri[temptri].points[0]*3];
 			ptwo = &meshpoint->pointmatrix[tri[temptri].points[1]*3];
 			pthree = &meshpoint->pointmatrix[tri[temptri].points[2]*3];
-			if(intersect_triangle(zeros, down, pone, ptwo, pthree, &t, &u, &v, offsetx, offsety, offsetz) && t <= 1){
-				printf("%lf %lf\n", t, target->center[2]);
-				double push = 0;
-				//if(target->vz > 0) push += 0.8*target->vz;
-				push += target->vz+GRAVITY/FRAMERATE+(1-t);
-				applyEntForce(target, 0, 0, 1, -push);
-				return;
+			if(intersect_triangle(zeros, down, pone, ptwo, pthree, &t, &u, &v, offsetx, offsety, offsetz) && t <= 1 && t >= 0){
+				if(t < record) record = t;
 			}
+		}
+	}
+	if(record != 2){
+		printf("%lf\n", record*target->radius);
+		double requiredvz = -(1-record);
+		if(requiredvz < target->vz){
+			double push = requiredvz - target->vz;
+			applyEntForce(target, 0, 0, 1, push);
 		}
 	}
 }

@@ -45,8 +45,9 @@ int EntObjCollisions(mesh* M, ent* E){
 		if(M->moves){
 			relMass = 2*E->mass/(M->mass+E->mass);
 			applyForce(M, colloc[0], colloc[1], colloc[2], -(colvector[0]), -(colvector[1]), -(colvector[2]), sqrt(colvector[0]*colvector[0]+colvector[1]*colvector[1]+colvector[2]*colvector[2])*relMass*ELASTICITY_MOVE);
-			relMass = 2*M->mass/(E->mass+M->mass);
-		}else relMass = ELASTICITY_NOMOVE;		
+//			relMass = 2*M->mass/(E->mass+M->mass);
+		}//else relMass = 2;		
+		relMass = 2;
 		applyEntForce(E, colvector[0], colvector[1], colvector[2], sqrt(colvector[0]*colvector[0]+colvector[1]*colvector[1]+colvector[2]*colvector[2])*relMass*ELASTICITY_MOVE);
 	}
 	return collides;
