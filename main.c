@@ -7,6 +7,9 @@
 int running = 1;
 int meshcount = 0;
 int entcount = 0;
+double drawExpansion = 0;
+double sinExpPos = 0;
+
 SDL_Window* window = NULL;
 SDL_Renderer* render = NULL;
 mesh** meshes = NULL;
@@ -21,23 +24,24 @@ int main(){
  
 	meshes = calloc(sizeof(mesh*), 5);
 	ents = calloc(sizeof(ent*), 5);
-	ents[0] = malloc(sizeof(ent));
-	createEnt(ents[0], 0, 0, "Francois Hollande", 10, 0, 0);
-	entcount++;
+//	ents[0] = malloc(sizeof(ent));
+//	createEnt(ents[0], 0, 0, "Francois Hollande", 10, 0, 0);
+//	entcount++;
 	meshes[0] = malloc(sizeof(mesh));
-	loadmesh("meshes/planeZ", meshes[0], 200, 0, 10);
+	loadmesh("meshes/square", meshes[0], 11, 2, 15);
 	meshcount++;
 	meshes[1] = malloc(sizeof(mesh));
-	loadmesh("meshes/planeZ", meshes[1], -180, 0, 15);
+	loadmesh("meshes/square", meshes[1], -10, 0, 15);
 	meshcount++;
 //	meshes[2] = malloc(sizeof(mesh));
 //	loadmesh("meshes/square", meshes[2], -2, -20, 30);
 //	meshcount++;
 //	loadmesh("planeY", &meshes[2], 0, 0, 30);
 //	meshcount++;
-	ents[0]->vx = -0.1;
-	meshes[0]->moves = 0;
-	meshes[1]->moves = 0;
+//	ents[0]->vx = -0.1;
+//	meshes[0]->moves = 0;
+//	meshes[1]->moves = 0;
+	meshes[0]->vx = -0.2;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
 	}
@@ -46,6 +50,11 @@ int main(){
 	ent *ent1;
 	double *temppoint;	
 	while(running){
+		sinExpPos += (2*M_PI)/PERIOD;
+		while(sinExpPos > (2*M_PI)) sinExpPos -= (2*M_PI);
+		drawExpansion = sin(sinExpPos)*EXPAMP;
+
+
 		tickAllEnts();
 		tickAllObjects();
 		collisions();

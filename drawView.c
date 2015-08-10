@@ -52,12 +52,12 @@ void drawLine(double one[3], double two[3]){
 		SDL_RenderDrawLine(render, (int)(VIEWZOOM*one[0]/one[2])+0.5*WIDTH, (int)(VIEWZOOM*one[1]/one[2])+0.5*HEIGHT, (int)(VIEWZOOM*two[0]/two[2])+0.5*WIDTH, (int)(VIEWZOOM*two[1]/two[2])+0.5*HEIGHT);
 	}
 }
-
 void drawView(){
 	int temp, raycounter;
 	double x, y, z, one[3], two[3];
 	mesh * mesh1;
-
+	double *point1, *point2;
+	double expansionVector[3];
 	for(temp = 0; temp < meshcount; temp++){
 		mesh1 = meshes[temp];
 		x = mesh1->centermass[0];
@@ -65,12 +65,18 @@ void drawView(){
 		z = mesh1->centermass[2];
 		SDL_SetRenderDrawColor(render, 0, 100, 10, 100);
 		for(raycounter = mesh1->rays-1; raycounter >= 0; raycounter--){
-			one[0] = x + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3+0];
-			one[1] = y + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3+1];
-			one[2] = z + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3+2];
-			two[0] = x + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3+0];
-			two[1] = y + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3+1];
-			two[2] = z + mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3+2];
+			point1 = &mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[0]*3];
+			point2 = &mesh1->pointmatrix[mesh1->raymatrix[raycounter].ends[1]*3];
+			expansionVector[0] = (*(point1+0)+*(point2+0))/2;
+			expansionVector[1] = (*(point1+1)+*(point2+1))/2;
+			expansionVector[2] = (*(point1+2)+*(point2+2))/2;
+			norm(expansionVector, drawExpansion);
+			one[0] = x + *(point1 + 0) + expansionVector[0];
+			one[1] = y + *(point1 + 1) + expansionVector[1];
+			one[2] = z + *(point1 + 2) + expansionVector[2];
+			two[0] = x + *(point2 + 0) + expansionVector[0];
+			two[1] = y + *(point2 + 1) + expansionVector[1];
+			two[2] = z + *(point2 + 2) + expansionVector[2];
 			drawLine(one, two);
 		}
 		if(z > 0){

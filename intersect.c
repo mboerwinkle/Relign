@@ -4,15 +4,15 @@
 #include "globals.h"
 static double orig[3], dir[3];
 
-void norm(double target[3]){
+void norm(double target[3], double dist){
 /*	if(isnan(target[0]) || !isfinite(target[0]));
 	if(isnan(target[1]) || !isfinite(target[1]));
 	if(isnan(target[2]) || !isfinite(target[2]));*/
 	if(target[0] == 0 && target[1] == 0 && target[2] == 0) return;
 	double howmuch = sqrt(target[0]*target[0]+target[1]*target[1]+target[2]*target[2]);
-	target[0] /= howmuch;
-	target[1] /= howmuch;
-	target[2] /= howmuch;
+	target[0] *= dist/howmuch;
+	target[1] *= dist/howmuch;
+	target[2] *= dist/howmuch;
 }
 
 double distance(double vect[3], double point[3]){

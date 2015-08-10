@@ -6,14 +6,11 @@ void applyForce(mesh *target, double x, double y, double z, double dirx, double 
 	if(!target->moves) puts("applying a force to something that doesn't move...?");//which is the reason that this is possible anyway.
 	double loc[3] = {x, y, z};
 	double vec[3] = {dirx, diry, dirz};
-	norm(vec);
-	vec[0] *= power;
-	vec[1] *= power;
-	vec[2] *= power;
+	norm(vec, power);
 //http://docs.unity3d.com/Manual/ComputingNormalPerpendicularVector.html
 	if(!((x == 0) && (y == 0) && (z == 0))){
 		double push[3] = {-x, -y, -z};
-		norm(push);
+		norm(push, 1);
 		double rotend[3]; //vector from the center (0, 0) to root->loc+rotation. used for finding the normal.
 		double pushpower = DOT(push, vec);
 		push[0] *= pushpower;
@@ -27,11 +24,7 @@ void applyForce(mesh *target, double x, double y, double z, double dirx, double 
 		rotend[2] = loc[2] + rotation[2];
 //		CROSS(rotation, rotend, loc);//now rotation is style quaternion, not force
 		CROSS(rotation, loc, rotend);//now rotation is style quaternion, not force
-		norm(rotation);
-	
-		rotation[0] *= rotationpower;
-		rotation[1] *= rotationpower;
-		rotation[2] *= rotationpower;
+		norm(rotation, rotationpower);
 		target->vx2 += push[0];
 		target->vy2 += push[1];
 		target->vz2 += push[2];
@@ -52,10 +45,7 @@ void applyForce(mesh *target, double x, double y, double z, double dirx, double 
 
 void applyEntForce(ent *target, double dirx, double diry, double dirz, double power){
 	double vec[3] = {dirx, diry, dirz};
-	norm(vec);
-	vec[0] *= power;
-	vec[1] *= power;
-	vec[2] *= power;
+	norm(vec, power);
 	target->vx2 += vec[0];
 	target->vy2 += vec[1];
 	target->vz2 += vec[2];

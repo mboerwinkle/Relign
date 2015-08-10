@@ -1,12 +1,14 @@
 #define WIDTH 640
 #define HEIGHT 480
 #define VIEWZOOM 100
+#define EXPAMP 1
+#define PERIOD 30
 
 #define EPSILON 0.000001
 #define FRAMERATE 40//IN HERTZ LOL
 #define ELASTICITY_NOMOVE 1.2//defines how elastic (for collisions) the ground and other non-moving objects are (mesh.moves = 0). less than 1 or more than 2 are not recommended.
 #define ELASTICITY_MOVE 1//defines how elastic normal collisions between two objects are. from 0 to 1
-#define GRAVITY 9.8// for standard earth.. 1.6 for moon. 3.7 for mars. m/s/s
+#define GRAVITY 0// for standard earth.. 1.6 for moon. 3.7 for mars. m/s/s
 #define DRAG 1
 #define CROSS(dest, v1, v2)\
 	dest[0]=v1[1]*v2[2]-v1[2]*v2[1];\
@@ -23,6 +25,8 @@ extern SDL_Renderer* render;
 extern int running;
 extern int meshcount;
 extern int entcount;
+extern double drawExpansion;
+extern double sinExpPos;
 
 typedef struct triangle{
 	int points[3];
@@ -78,7 +82,7 @@ extern void applyForce(mesh *target, double x, double y, double z, double dirx, 
 extern void applyEntForce(ent *target, double dirx, double diry, double dirz, double power);
 extern void drawLine(double one[3], double two[3]);
 extern double distance(double vect[3], double point[3]);
-extern void norm(double target[3]);
+extern void norm(double target[3], double dist);
 extern void movemesh(mesh *target);
 extern void moveEnt(ent *target);
 extern void loadmesh(char name[20], mesh *final, double x, double y, double z);

@@ -15,10 +15,10 @@ void getObjectVelocity(mesh *target, double colloc[3], double colforce[3]){
 //		rotationspeed *= (distance(rot, colloc1)/one->radius);//speed of rotation of collision point
 		CROSS(uv, rot, colloc);
 		//CROSS(uv, colloc1, rot);
-		norm(uv);
-		colforce[0] += uv[0]*rotationspeed;
-		colforce[1] += uv[1]*rotationspeed;
-		colforce[2] += uv[2]*rotationspeed;
+		norm(uv, rotationspeed);
+		colforce[0] += uv[0];
+		colforce[1] += uv[1];
+		colforce[2] += uv[2];
 		if(isnan(rotationspeed) || !isfinite(rotationspeed)) puts("rotationspeed1 error");
 	}
 }
