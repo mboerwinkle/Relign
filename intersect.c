@@ -26,7 +26,7 @@ double distance(double vect[3], double point[3]){
 	return ans;
 }
 
-int intersect_triangle(double end1[3], double end2[3], double vert0[3], double vert1[3], double vert2[3], double *t, double *u, double *v, double offsetx, double offsety, double offsetz){
+int intersect_triangle(double end1[3], double end2[3], double vert0[3], double vert1[3], double vert2[3], double *t, double *u, double *v, double offsetx, double offsety, double offsetz){//credit Tomas Moller and Ben Trumbore "Fast, minimum storage ray/triangle intersection"
 /*	double *orig, *dir;
 	orig = calloc(sizeof(double), 3);
 	dir = calloc(sizeof(double), 3);*/

@@ -28,10 +28,10 @@ int main(){
 //	createEnt(ents[0], 0, 0, "Francois Hollande", 10, 0, 0);
 //	entcount++;
 	meshes[0] = malloc(sizeof(mesh));
-	loadmesh("meshes/square", meshes[0], 11, 2, 15);
+	loadmesh("meshes/square", meshes[0], 20, 7, 15);
 	meshcount++;
 	meshes[1] = malloc(sizeof(mesh));
-	loadmesh("meshes/square", meshes[1], -10, 0, 15);
+	loadmesh("meshes/square", meshes[1], 0, 0, 15);
 	meshcount++;
 //	meshes[2] = malloc(sizeof(mesh));
 //	loadmesh("meshes/square", meshes[2], -2, -20, 30);
@@ -42,6 +42,9 @@ int main(){
 //	meshes[0]->moves = 0;
 //	meshes[1]->moves = 0;
 	meshes[0]->vx = -0.2;
+//	meshes[0]->rot[0] = 0.2;
+//	meshes[0]->vz = 0.1;
+//	meshes[1]->mass = 50;
 	if(initView()){
 		puts("SDL window became an SDL WIDOW");
 	}
@@ -52,7 +55,7 @@ int main(){
 	while(running){
 		sinExpPos += (2*M_PI)/PERIOD;
 		while(sinExpPos > (2*M_PI)) sinExpPos -= (2*M_PI);
-		drawExpansion = sin(sinExpPos)*EXPAMP;
+		drawExpansion = sin(sinExpPos)*EXPAMP+EXPAMP;
 
 
 		tickAllEnts();
@@ -89,6 +92,7 @@ int main(){
 		}
 		drawView();
 
+/*
 		do {
 			SDL_WaitEvent(&evnt);
 		} while (evnt.type != SDL_KEYDOWN && evnt.type != SDL_QUIT);
@@ -100,13 +104,13 @@ int main(){
 			running = 0;
 		}
 
-/*
+*/
 		while(SDL_PollEvent(&evnt)){
 			if(evnt.type == SDL_QUIT){
 				running = 0;
 			}
 		}
-*/
+
 		clock_gettime(CLOCK_MONOTONIC, &otherTime);
 		int32_t sleep = (int32_t)(1000000000/FRAMERATE) - (otherTime.tv_nsec-lastTime.tv_nsec) - 1000000000l*(otherTime.tv_sec-lastTime.tv_sec);
 		if(sleep > 0){

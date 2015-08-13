@@ -12,6 +12,9 @@ void loadmesh(char name[20], mesh *final, double centerx, double centery, double
 	final->centermass2[0] = centerx;
 	final->centermass2[1] = centery;
 	final->centermass2[2] = centerz;
+	final->rotvel[0] = 0;
+	final->rotvel[1] = 0;
+	final->rotvel[2] = 0;
 	final->rot = calloc(sizeof(double), 4); //calloc zeroes them for you.
 	final->rot2 = calloc(sizeof(double), 4);
 	final->moves = 1;

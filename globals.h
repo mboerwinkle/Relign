@@ -1,8 +1,8 @@
 #define WIDTH 640
 #define HEIGHT 480
 #define VIEWZOOM 100
-#define EXPAMP 1
-#define PERIOD 30
+#define EXPAMP 0
+#define PERIOD 50
 
 #define EPSILON 0.000001
 #define FRAMERATE 40//IN HERTZ LOL
@@ -39,6 +39,7 @@ typedef struct mesh{
 	int moves;
 	double *cpointmatrix;//constant point matrix CURRENTLY NOT USED
 	double *rot, *rot2;//rotation vector x, y, z, magnitude, current position(as each tick will be newly rotated from the pattern)
+	double rotvel[3];
 	double vx, vy, vz, vx2, vy2, vz2;//velocity
 	double mass, drag;
 	int triangles, rays, points;
